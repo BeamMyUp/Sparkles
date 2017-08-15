@@ -5,10 +5,7 @@
 	</sampler>
 
     <!-- Render the sphere with a basic shading -->
-    <integrator type="basic">
-		<integer name="nSamples"     value="1"/>
-		<string  name="samplerType"  value="cosine"/>
-	</integrator>
+    <integrator type="normals"/>
 
     <!-- Create a unit Sphere -->
 	<shape type="sphere">
@@ -18,6 +15,7 @@
 		<float name="radius" value="0.05"/>
 	</shape>
 	
+	<!--
 	<shape type= "obj">
 		<string name="filename" value="plane.obj"/>
 		<bsdf type="diffuse">
@@ -29,13 +27,16 @@
 			<translate value="0, -0.05, 0"/>
 		</transform>
 	</shape>
+	-->
 	
+	<!--
 	<emitter type="pointlight">
 		<point name="position" value="1.0, 1.0, 0"/>
 		<color name="radiance" value="1.0, 1.0, 1.0"/>
 		<vector name="direction" value="0.0, 1.0, 0.0"/>
 	</emitter>
-
+	-->
+	
 	<!-- Render the scene viewed by a perspective camera -->
 	<camera type="perspective">
         <!-- 3D origin, target point, and 'up' vector -->

@@ -59,6 +59,7 @@ add_executable(nori
   include/nori/core/vector.h
   include/nori/emitters/emitter.h
   include/nori/integrators/integrator.h
+  include/nori/integrators/normals.h
   include/nori/samplers/sampler.h
   include/nori/shapes/mesh.h
   include/nori/shapes/object.h
@@ -83,6 +84,7 @@ add_executable(nori
   src/core/proplist.cpp
   src/core/rfilter.cpp
   src/core/scene.cpp
+  src/integrators/normals.cpp
   src/samplers/independent.cpp
   src/shapes/mesh.cpp
   src/shapes/obj.cpp
