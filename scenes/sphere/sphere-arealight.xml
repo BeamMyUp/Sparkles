@@ -1,0 +1,68 @@
+<scene>
+    <!-- Independent sample generator, one sample per pixel -->
+	<sampler type="independent">
+		<integer name="sampleCount" value="4"/>
+	</sampler>
+
+    <!-- Render the sphere with a basic shading -->
+    <integrator type="direct">
+		<integer name="nSamples"     value="1"/>
+		<string  name="measure"  	 value="area"/>
+		<string  name="warp"		 value="cosine"/>
+	</integrator>
+
+    <!-- Create a Sphere -->
+	<shape type="sphere">
+		<string name="name" value="sphere1"/>
+		<bsdf type="phong">
+			<float name="shininess" value="1"/>
+			<float name="specularCoef" value="0"/>
+			<float name="diffuseCoef"  value="1"/>
+		</bsdf>
+		<point name="center" value="0, 0, 0"/>
+		<float name="radius" value="0.05"/>
+	</shape>
+	
+	<!-- Create a Plane -->
+	<shape type= "obj">
+		<string name="filename" value="plane.obj"/>
+		<bsdf type="diffuse">
+			<color name="albedo" value="1.0,1.0,1.0"/>
+		</bsdf>
+
+		<transform name="toWorld">
+			<scale value="0.18,0.18,0.18"/>
+			<translate value="0, -0.05, 0"/>
+		</transform>
+	</shape>
+
+	<!-- Create a sphere area light -->	
+	<shape type="sphere">
+		<string name="name" value="spherelightShape"/>
+		<bsdf type="diffuse">
+			<color name="albedo" value="1.0,1.0,1.0"/>
+		</bsdf>
+		<point name="center" value="0.1, 0.1, 0.0"/>
+		<float name="radius" value="0.015"/>
+		<emitter type="area">
+			<color name="radiance" value="1.0, 1.0, 1.0"/>
+		</emitter>
+	</shape>
+	
+	<!-- Render the scene viewed by a perspective camera -->
+	<camera type="perspective">
+        <!-- 3D origin, target point, and 'up' vector -->
+		<transform name="toWorld">
+            <lookat target="0.0, 0.0, 0.0"
+                    origin="0, 0.5, 1"
+                    up="0, 1, 0"/>
+		</transform>
+
+		<!-- Field of view: 30 degrees -->
+		<float name="fov" value="16"/>
+
+		<!-- 768 x 768 pixels -->
+		<integer name="width" value="768"/>
+		<integer name="height" value="768"/>
+	</camera>
+</scene>
