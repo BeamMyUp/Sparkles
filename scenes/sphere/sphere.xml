@@ -9,7 +9,6 @@
 
     <!-- Create a unit Sphere -->
 	<shape type="sphere">
-		<string name="name" value="sphere1"/>
 		<bsdf type="diffuse"/>
 		<point name="center" value="0, 0, 0"/>
 		<float name="radius" value="0.05"/>

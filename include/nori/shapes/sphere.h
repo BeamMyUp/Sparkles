@@ -23,7 +23,6 @@ public:
 	Sphere(const PropertyList &propList);
 
 protected:
-	std::string m_name;
 	float       m_radius; 
 	Vector3f    m_center; 
 };

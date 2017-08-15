@@ -8,8 +8,7 @@ NORI_NAMESPACE_BEGIN
 
 Sphere::Sphere(const PropertyList &propList)
 	: m_center(propList.getPoint("center", Point3f()))
-	, m_radius(propList.getFloat("radius", 1.f))
-	, m_name(propList.getString("name", "sphereUndef")){
+	, m_radius(propList.getFloat("radius", 1.f)){
 
 }
 
@@ -32,13 +31,11 @@ bool Sphere::quadratic(double a, double b, double c, double& t0, double& t1) con
 std::string Sphere::toString() const {
 	return tfm::format(
 		"Sphere[\n"
-		"  name = \"%s\",\n"
 		"  center = (%f, %f, %f) \n"
 		"  radius = %f \n"
 		"  bsdf = %s,\n"
 		"  emitter = %s\n"
 		"]",
-		m_name,
 		m_center.x(), m_center.y(), m_center.z(),
 		m_radius,
 		m_bsdf ? indent(m_bsdf->toString()) : std::string("null"),
