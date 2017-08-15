@@ -38,67 +38,69 @@ include_directories(
 add_executable(nori
 
   # Header files
-  include/nori/bbox.h
-  include/nori/bitmap.h
-  include/nori/block.h
-  include/nori/bsdf.h
-  include/nori/accel.h
-  include/nori/camera.h
-  include/nori/color.h
-  include/nori/common.h
-  include/nori/dpdf.h
-  include/nori/frame.h
-  include/nori/integrator.h
-  include/nori/emitter.h
-  include/nori/mesh.h
-  include/nori/object.h
-  include/nori/parser.h
-  include/nori/proplist.h
-  include/nori/ray.h
-  include/nori/rfilter.h
-  include/nori/sampler.h
-  include/nori/scene.h
-  include/nori/timer.h
-  include/nori/transform.h
-  include/nori/vector.h
-  include/nori/warp.h
+  include/nori/accelerators/accel.h
+  include/nori/bsdfs/bsdf.h
+  include/nori/cameras/camera.h
+  include/nori/core/bbox.h
+  include/nori/core/bitmap.h
+  include/nori/core/block.h
+  include/nori/core/color.h
+  include/nori/core/common.h
+  include/nori/core/dpdf.h
+  include/nori/core/frame.h
+  include/nori/core/gui.h
+  include/nori/core/parser.h
+  include/nori/core/proplist.h
+  include/nori/core/ray.h
+  include/nori/core/rfilter.h
+  include/nori/core/scene.h
+  include/nori/core/timer.h
+  include/nori/core/transform.h
+  include/nori/core/vector.h
+  include/nori/emitters/emitter.h
+  include/nori/integrators/integrator.h
+  include/nori/samplers/sampler.h
+  include/nori/shapes/mesh.h
+  include/nori/shapes/object.h
+  include/nori/warp/warp.h
 
   # Source code files
-  src/bitmap.cpp
-  src/block.cpp
-  src/accel.cpp
-  src/chi2test.cpp
-  src/common.cpp
-  src/diffuse.cpp
-  src/gui.cpp
-  src/independent.cpp
-  src/main.cpp
-  src/mesh.cpp
-  src/obj.cpp
-  src/object.cpp
-  src/parser.cpp
-  src/perspective.cpp
-  src/proplist.cpp
-  src/rfilter.cpp
-  src/scene.cpp
-  src/ttest.cpp
-  src/warp.cpp
-  src/microfacet.cpp
-  src/mirror.cpp
-  src/dielectric.cpp
+  src/accelerators/accel.cpp
+  src/bsdfs/dielectric.cpp
+  src/bsdfs/diffuse.cpp
+  src/bsdfs/microfacet.cpp
+  src/bsdfs/mirror.cpp
+  src/cameras/perspective.cpp
+  src/core/bitmap.cpp
+  src/core/block.cpp
+  src/core/chi2test.cpp
+  src/core/common.cpp
+  src/core/gui.cpp
+  src/core/main.cpp
+  src/core/parser.cpp
+  src/core/proplist.cpp
+  src/core/rfilter.cpp
+  src/core/scene.cpp
+  src/samplers/independent.cpp
+  src/shapes/mesh.cpp
+  src/shapes/obj.cpp
+  src/shapes/object.cpp
+  src/warp/ttest.cpp
+  src/warp/warp.cpp
+  
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})
 
 # The following lines build the warping test application
 add_executable(warptest
-  include/nori/warp.h
-  src/warp.cpp
-  src/warptest.cpp
-  src/microfacet.cpp
-  src/object.cpp
-  src/proplist.cpp
-  src/common.cpp
+  include/nori/warp/warp.h
+  src/warp/warp.cpp
+  src/warp/warptest.cpp
+  src/bsdfs/microfacet.cpp
+  src/shapes/object.cpp
+  src/core/proplist.cpp
+  src/core/common.cpp
 )
 
 target_link_libraries(nori tbb_static pugixml IlmImf nanogui ${NANOGUI_EXTRA_LIBS})
