@@ -18,9 +18,13 @@
 
 #pragma once
 
-#include <nori/accelerators/accel.h>
+#include <nori/shapes/object.h>
 
 NORI_NAMESPACE_BEGIN
+
+class Accel;
+class Shape;
+struct Intersection; 
 
 /**
  * \brief Main scene data structure
@@ -56,7 +60,7 @@ public:
     Sampler *getSampler() { return m_sampler; }
 
     /// Return a reference to an array containing all meshes
-    const std::vector<Mesh *> &getMeshes() const { return m_meshes; }
+    const std::vector<Shape*> &getShapes() const { return m_shapes; }
 
     /**
      * \brief Intersect a ray against all triangles stored in the scene
@@ -72,9 +76,7 @@ public:
      *
      * \return \c true if an intersection was found
      */
-    bool rayIntersect(const Ray3f &ray, Intersection &its) const {
-        return m_accel->rayIntersect(ray, its, false);
-    }
+	bool rayIntersect(const Ray3f &ray, Intersection &its) const;
 
     /**
      * \brief Intersect a ray against all triangles stored in the scene
@@ -91,15 +93,10 @@ public:
      *
      * \return \c true if an intersection was found
      */
-    bool rayIntersect(const Ray3f &ray) const {
-        Intersection its; /* Unused */
-        return m_accel->rayIntersect(ray, its, true);
-    }
+	bool rayIntersect(const Ray3f &ray) const;
 
     /// \brief Return an axis-aligned box that bounds the scene
-    const BoundingBox3f &getBoundingBox() const {
-        return m_accel->getBoundingBox();
-    }
+	const BoundingBox3f &getBoundingBox() const;
 
     /**
      * \brief Inherited from \ref NoriObject::activate()
@@ -117,7 +114,7 @@ public:
 
     EClassType getClassType() const { return EScene; }
 private:
-    std::vector<Mesh *> m_meshes;
+    std::vector<Shape*> m_shapes;
     Integrator *m_integrator = nullptr;
     Sampler *m_sampler = nullptr;
     Camera *m_camera = nullptr;

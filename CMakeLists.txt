@@ -62,6 +62,8 @@ add_executable(nori
   include/nori/samplers/sampler.h
   include/nori/shapes/mesh.h
   include/nori/shapes/object.h
+  include/nori/shapes/shape.h
+  include/nori/shapes/sphere.h
   include/nori/warp/warp.h
 
   # Source code files
@@ -85,6 +87,8 @@ add_executable(nori
   src/shapes/mesh.cpp
   src/shapes/obj.cpp
   src/shapes/object.cpp
+  src/shapes/shape.cpp
+  src/shapes/sphere.cpp
   src/warp/ttest.cpp
   src/warp/warp.cpp
   

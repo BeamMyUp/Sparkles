@@ -16,10 +16,12 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <nori/accelerators/accel.h>
 #include <nori/core/scene.h>
 #include <nori/core/bitmap.h>
 #include <nori/integrators/integrator.h>
 #include <nori/samplers/sampler.h>
+#include <nori/shapes/shape.h>
 #include <nori/cameras/camera.h>
 #include <nori/emitters/emitter.h>
 
@@ -34,6 +36,19 @@ Scene::~Scene() {
     delete m_sampler;
     delete m_camera;
     delete m_integrator;
+}
+
+bool Scene::rayIntersect(const Ray3f &ray, Intersection &its) const {
+	return m_accel->rayIntersect(ray, its, false);
+}
+
+bool Scene::rayIntersect(const Ray3f &ray) const {
+	Intersection its; // Unused
+	return m_accel->rayIntersect(ray, its, true);
+}
+
+const BoundingBox3f& Scene::getBoundingBox() const {
+	return m_accel->getBoundingBox();
 }
 
 void Scene::activate() {
@@ -57,10 +72,10 @@ void Scene::activate() {
 
 void Scene::addChild(NoriObject *obj) {
     switch (obj->getClassType()) {
-        case EMesh: {
-                Mesh *mesh = static_cast<Mesh *>(obj);
-                m_accel->addMesh(mesh);
-                m_meshes.push_back(mesh);
+        case EShape: {
+                Shape* shape = static_cast<Shape *>(obj);
+                m_accel->addShape(shape);
+                m_shapes.push_back(shape);
             }
             break;
         
@@ -97,9 +112,9 @@ void Scene::addChild(NoriObject *obj) {
 
 std::string Scene::toString() const {
     std::string meshes;
-    for (size_t i=0; i<m_meshes.size(); ++i) {
-        meshes += std::string("  ") + indent(m_meshes[i]->toString(), 2);
-        if (i + 1 < m_meshes.size())
+    for (size_t i=0; i<m_shapes.size(); ++i) {
+        meshes += std::string("  ") + indent(m_shapes[i]->toString(), 2);
+        if (i + 1 < m_shapes.size())
             meshes += ",";
         meshes += "\n";
     }
