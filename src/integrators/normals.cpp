@@ -8,9 +8,15 @@ NormalIntegrator::NormalIntegrator(const PropertyList &props) {
 }
 
 Color3f NormalIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {
-	// ECSE689: Add calculations to display an object's normals and return the result
+	// Find the surface that is visible in the requested direction
+	Intersection its;
+	if (!scene->rayIntersect(ray, its))
+		return Color3f(0.0f);
 
-	return Color3f(0.f, 1.f, 0.f);
+	// Return the component-wise absolute value of the shading normal as a color
+	Normal3f n = its.shFrame.n.cwiseAbs();
+
+	return Color3f(n.x(), n.y(), n.z());
 }
 
 std::string NormalIntegrator::toString() const {
