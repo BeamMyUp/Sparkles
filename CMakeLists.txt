@@ -39,6 +39,7 @@ add_executable(nori
 
   # Header files
   include/nori/accelerators/accel.h
+  include/nori/accelerators/bvh.h
   include/nori/bsdfs/bsdf.h
   include/nori/cameras/camera.h
   include/nori/core/bbox.h
@@ -69,6 +70,7 @@ add_executable(nori
 
   # Source code files
   src/accelerators/accel.cpp
+  src/accelerators/bvh.cpp
   src/bsdfs/dielectric.cpp
   src/bsdfs/diffuse.cpp
   src/bsdfs/microfacet.cpp

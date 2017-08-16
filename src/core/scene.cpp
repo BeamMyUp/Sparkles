@@ -17,6 +17,7 @@
 */
 
 #include <nori/accelerators/accel.h>
+#include <nori/accelerators/bvh.h>
 #include <nori/core/scene.h>
 #include <nori/core/bitmap.h>
 #include <nori/integrators/integrator.h>
@@ -27,8 +28,13 @@
 
 NORI_NAMESPACE_BEGIN
 
-Scene::Scene(const PropertyList &) {
-    m_accel = new Accel();
+Scene::Scene(const PropertyList & propList) {
+	std::string accel = propList.getString("accelerator", "bvh");
+
+	if (accel == "bvh")
+		m_accel = new BVH();
+	else
+		m_accel = new Accel(); 
 }
 
 Scene::~Scene() {

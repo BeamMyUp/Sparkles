@@ -78,6 +78,9 @@ public:
 	//// Return an axis-aligned bounding box of the entire object
 	virtual const BoundingBox3f &getBoundingBox() const { return m_bbox; }
 
+	//// Return Centroid of the Shape
+	virtual Point3f getCentroid() const; 
+
 	/** \brief Intersection test
 	* 
 	* \param ray
@@ -118,6 +121,9 @@ public:
 
 	/// Return a human-readable summary of this instance
 	virtual std::string toString() const;
+
+	/// Return whether the Shape is a mesh or not
+	virtual bool isMesh() const { return false; }
 
 	/**
 	* \brief Return the type of object (i.e. Mesh/BSDF/etc.)

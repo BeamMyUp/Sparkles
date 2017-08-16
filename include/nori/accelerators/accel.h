@@ -40,13 +40,13 @@ public:
 	*
 	* This function can only be used before \ref build() is called
 	*/
-	void addShape(Shape* shape);
+	virtual void addShape(Shape* shape);
 
 	/// Build the acceleration data structure (currently a no-op)
-	void build();
+	virtual void build();
 
 	/// Return an axis-aligned box that bounds the scene
-	const BoundingBox3f &getBoundingBox() const { return m_bbox; }
+	virtual const BoundingBox3f &getBoundingBox() const { return m_bbox; }
 
 	/**
 	* \brief Intersect a ray against all triangles stored in the scene and
@@ -67,9 +67,10 @@ public:
 	*
 	* \return \c true if an intersection was found
 	*/
-	bool rayIntersect(const Ray3f& ray, Intersection& its, bool shadowRay) const;
+	virtual bool rayIntersect(const Ray3f& ray, Intersection& its, bool shadowRay) const;
 
-private:
+protected:
+
 	std::vector<Shape*> m_shapes;   ///< Objects
 	BoundingBox3f m_bbox;	    ///< Bounding box of the entire scene
 };

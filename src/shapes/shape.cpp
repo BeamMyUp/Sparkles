@@ -32,6 +32,11 @@ Shape::~Shape() {
 	delete m_emitter;
 }
 
+Point3f Shape::getCentroid() const {
+	throw NoriException("Not implemented for this shape. Using center of bbox.");
+	return m_bbox.getCenter(); 
+}
+
 void Shape::activate() {
 	if (!m_bsdf) {
 		/* If no material was assigned, instantiate a diffuse BRDF */

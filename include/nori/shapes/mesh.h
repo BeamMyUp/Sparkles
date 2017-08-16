@@ -105,6 +105,9 @@ public:
 	/// Return a human-readable summary of this instance
 	std::string toString() const override;
 
+	/// Return whether the shape is a mesh or not
+	virtual bool isMesh() const override { return true; }
+
 protected:
 	/// Create an empty mesh
 	Mesh();
