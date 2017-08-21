@@ -14,7 +14,7 @@
 		<float name="radius" value="0.05"/>
 	</shape>
 	
-	<!--
+	<!-- Create a Plane -->
 	<shape type= "obj">
 		<string name="filename" value="plane.obj"/>
 		<bsdf type="diffuse">
@@ -26,7 +26,7 @@
 			<translate value="0, -0.05, 0"/>
 		</transform>
 	</shape>
-	-->
+	
 	
 	<!--
 	<emitter type="pointlight">

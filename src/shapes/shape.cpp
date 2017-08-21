@@ -38,6 +38,8 @@ Point3f Shape::getCentroid() const {
 }
 
 void Shape::activate() {
+	calculateBoundingBox(); 
+
 	if (!m_bsdf) {
 		/* If no material was assigned, instantiate a diffuse BRDF */
 		m_bsdf = static_cast<BSDF *>(

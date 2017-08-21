@@ -439,14 +439,11 @@ bool BVH::rayIntersect(const Ray3f &_ray, Intersection &its, bool shadowRay) con
 				uint32_t idx = m_indices[i];
 				const Shape *shape = m_shapes[findShape(idx)];
 
-				Intersection aIt; 
-				bool objHit = shape->rayIntersect(ray, aIt, shadowRay); 
+				if(shape->rayIntersect(ray, its, shadowRay)){
 				
-				if (objHit && shadowRay)
-					return true;
+					if (shadowRay)
+						return true;
 
-				if (objHit && aIt.t < its.t) {
-					its = aIt;
 					ray.maxt = its.t; 
 					its.shape = shape; 
 					foundIntersection = true;
