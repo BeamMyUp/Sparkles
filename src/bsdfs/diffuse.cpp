@@ -72,7 +72,9 @@ public:
 
         /* Warp a uniformly distributed sample on [0,1]^2
            to a direction on a cosine-weighted hemisphere */
-        bRec.wo = Warp::squareToCosineHemisphere(sample);
+		Warp::WarpQueryRecord wqr; 
+		Warp::warp(wqr, Warp::EWarpType::ECosineHemisphere, sample); 
+        bRec.wo = wqr.warpedPoint;
 
         /* Relative index of refraction: no change */
         bRec.eta = 1.0f;

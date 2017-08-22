@@ -26,6 +26,26 @@ NORI_NAMESPACE_BEGIN
 /// A collection of useful warping functions for importance sampling
 class Warp {
 public:
+
+	enum class EWarpType {
+		ENone = 0x00,
+		EUniformSquare,
+		ETent,
+		EUniformDisk,
+		EUniformSphere,
+		EUniformHemisphere,
+		ECosineHemisphere, 
+		EBeckmann,
+		EUniformCone,	
+		EMicrofacetBRDF,
+	};
+
+	struct WarpQueryRecord {
+		Vector3f warpedPoint;
+		float	 pdf; 
+	};
+
+protected:
     /// Dummy warping function: takes uniformly distributed points in a square and just returns them
     static Point2f squareToUniformSquare(const Point2f &sample);
 
@@ -67,6 +87,36 @@ public:
 
     /// Probability density of \ref squareToBeckmann()
     static float squareToBeckmannPdf(const Vector3f &m, float alpha);
+
+	/// Warp a uniformly distributed square sample to a solid angle's cone
+	static Vector3f squareToUniformCone(const Point2f &sample, float cosThetaMax);
+
+	/// Probability density of \ref squareToUniformCone
+	static float squareToUniformConePdf(float cosThetaMax);
+
+public:
+	/// Warp a point according to the EWarp given
+	static void warp(WarpQueryRecord& outWqr, const EWarpType warpFunction, const Point2f& sample, float param = 0);
+
+	/// Get strictly the pdf for a given point
+	static float pdf(const EWarpType warpFunction, const Vector3f& point, float param = 0); 
+
+	/// Returns the EWarp warp type associated with the given EMeasure and optionally a passed string when a measure can handle more than one warptype
+	static EWarpType getWarpType(const EMeasure measure, const std::string& warpType = "");
+
+protected:
+
+	/// Returns the EWarp warp type associated with a given string
+	static EWarpType getWarpType(const std::string& warpType); 
+
+	static const std::string s_uniformSquare;
+	static const std::string s_tent;
+	static const std::string s_uniformDisk;
+	static const std::string s_uniformSphere;
+	static const std::string s_uniformHemisphere; 
+	static const std::string s_cosineHemisphere;
+	static const std::string s_beckmann;
+	static const std::string s_uniformCone;
 };
 
 NORI_NAMESPACE_END

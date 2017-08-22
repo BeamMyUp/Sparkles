@@ -65,51 +65,38 @@ public:
         Stratified
     };
 
-    enum WarpType {
-        Square = 0,
-        Tent,
-        Disk,
-        UniformSphere,
-        UniformHemisphere,
-        CosineHemisphere,
-        Beckmann,
-        MicrofacetBRDF
-    };
-
     WarpTest(): Screen(Vector2i(800, 600), "Assignment 3: Sampling and Warping"), m_bRec(Vector3f()) {
         initializeGUI();
         m_drawHistogram = false;
     }
 
-    static float mapParameter(WarpType warpType, float parameterValue) {
-        if (warpType == Beckmann || warpType == MicrofacetBRDF)
+    static float mapParameter(Warp::EWarpType warpType, float parameterValue) {
+        if (warpType == Warp::EWarpType::EBeckmann || warpType == Warp::EWarpType::EMicrofacetBRDF)
             parameterValue = std::exp(std::log(0.05f) * (1 - parameterValue) +
                                       std::log(1.f)   *  parameterValue);
         return parameterValue;
     }
 
-    std::pair<Point3f, float> warpPoint(WarpType warpType, const Point2f &sample, float parameterValue) {
+    std::pair<Point3f, float> warpPoint(Warp::EWarpType warpType, const Point2f &sample, float parameterValue) {
         Point3f result;
 
+		Warp::WarpQueryRecord WQR;
+		Warp::warp(WQR, warpType, sample, parameterValue); 
+
         switch (warpType) {
-            case Square: result << Warp::squareToUniformSquare(sample), 0; break;
-            case Tent: result << Warp::squareToTent(sample), 0; break;
-            case Disk: result << Warp::squareToUniformDisk(sample), 0; break;
-            case UniformSphere: result << Warp::squareToUniformSphere(sample); break;
-            case UniformHemisphere: result << Warp::squareToUniformHemisphere(sample); break;
-            case CosineHemisphere: result << Warp::squareToCosineHemisphere(sample); break;
-            case Beckmann: result << Warp::squareToBeckmann(sample, parameterValue); break;
-            case MicrofacetBRDF: {
+            case Warp::EWarpType::EMicrofacetBRDF: {
                 BSDFQueryRecord bRec(m_bRec);
                 float value = m_brdf->sample(bRec, sample).getLuminance();
                 return std::make_pair(bRec.wo, value == 0 ? 0.f : m_brdf->eval(bRec)[0]);
              }
+			default:
+				result << WQR.warpedPoint; break;
         }
 
         return std::make_pair(result, 1.f);
     }
 
-    void generatePoints(int &pointCount, PointType pointType, WarpType warpType,
+    void generatePoints(int &pointCount, PointType pointType, Warp::EWarpType warpType,
                         float parameterValue, MatrixXf &positions,
                         MatrixXf &weights) {
         /* Determine the number of points that should be sampled */
@@ -149,11 +136,11 @@ public:
 
     void refresh() {
         PointType pointType = (PointType) m_pointTypeBox->selectedIndex();
-        WarpType warpType = (WarpType) m_warpTypeBox->selectedIndex();
+        Warp::EWarpType warpType = (Warp::EWarpType) m_warpTypeBox->selectedIndex();
         float parameterValue = mapParameter(warpType, m_parameterSlider->value());
         m_pointCount = (int) std::pow(2.f, 15 * m_pointCountSlider->value() + 5);
 
-        if (warpType == MicrofacetBRDF) {
+        if (warpType == Warp::EWarpType::EMicrofacetBRDF) {
             PropertyList list;
             list.setFloat("alpha", parameterValue);
             list.setColor("kd", Color3f(0.f));
@@ -181,10 +168,10 @@ public:
             value_scale = std::max(value_scale, values(0, i));
         value_scale = 1.f/value_scale;
 
-        if (!m_brdfValueCheckBox->checked() || warpType != MicrofacetBRDF)
+        if (!m_brdfValueCheckBox->checked() || warpType != Warp::EWarpType::EMicrofacetBRDF)
             value_scale = 0.f;
 
-        if (warpType != Square) {
+        if (warpType != Warp::EWarpType::EUniformSquare) {
             for (int i=0; i<m_pointCount; ++i) {
                 if (values(0, i) == 0.0f) {
                     positions.col(i) = Vector3f::Constant(std::numeric_limits<float>::quiet_NaN());
@@ -226,7 +213,7 @@ public:
                     positions.col(idx++) = value_scale == 0.f ? pt.first : (pt.first * pt.second * value_scale);
                 }
             }
-            if (warpType != Square) {
+            if (warpType != Warp::EWarpType::EUniformSquare) {
                 for (int i=0; i<m_lineCount; ++i)
                     positions.col(i) = positions.col(i) * 0.5f + Vector3f(0.5f, 0.5f, 0.0f);
             }
@@ -264,12 +251,12 @@ public:
         m_pointCountBox->setValue(str);
         m_parameterBox->setValue(tfm::format("%.1g", parameterValue));
         m_angleBox->setValue(tfm::format("%.1f", m_angleSlider->value() * 180-90));
-        m_parameterSlider->setEnabled(warpType == Beckmann || warpType == MicrofacetBRDF);
-        m_parameterBox->setEnabled(warpType == Beckmann || warpType == MicrofacetBRDF);
-        m_angleBox->setEnabled(warpType == MicrofacetBRDF);
-        m_angleSlider->setEnabled(warpType == MicrofacetBRDF);
-        m_parameterBox->setEnabled(warpType == MicrofacetBRDF);
-        m_brdfValueCheckBox->setEnabled(warpType == MicrofacetBRDF);
+        m_parameterSlider->setEnabled(warpType == Warp::EWarpType::EBeckmann || warpType == Warp::EWarpType::EMicrofacetBRDF);
+        m_parameterBox->setEnabled(warpType == Warp::EWarpType::EBeckmann || warpType == Warp::EWarpType::EMicrofacetBRDF);
+        m_angleBox->setEnabled(warpType == Warp::EWarpType::EMicrofacetBRDF);
+        m_angleSlider->setEnabled(warpType == Warp::EWarpType::EMicrofacetBRDF);
+        m_parameterBox->setEnabled(warpType == Warp::EWarpType::EMicrofacetBRDF);
+        m_brdfValueCheckBox->setEnabled(warpType == Warp::EWarpType::EMicrofacetBRDF);
         m_pointCountSlider->setValue((std::log((float) m_pointCount) / std::log(2.f) - 5) / 15);
     }
 
@@ -320,10 +307,10 @@ public:
 
         if (m_drawHistogram) {
             /* Render the histograms */
-            WarpType warpType = (WarpType) m_warpTypeBox->selectedIndex();
+            Warp::EWarpType warpType = (Warp::EWarpType) m_warpTypeBox->selectedIndex();
             const int spacer = 20;
             const int histWidth = (width() - 3*spacer) / 2;
-            const int histHeight = (warpType == Square || warpType == Disk || warpType == Tent) ? histWidth : histWidth / 2;
+            const int histHeight = (warpType == Warp::EWarpType::EUniformSquare || warpType == Warp::EWarpType::EUniformDisk || warpType == Warp::EWarpType::ETent) ? histWidth : histWidth / 2;
             const int verticalOffset = (height() - histHeight) / 2;
 
             drawHistogram(Point2i(spacer, verticalOffset), Vector2i(histWidth, histHeight), m_textures[0]);
@@ -378,7 +365,7 @@ public:
                 m_gridShader->drawArray(GL_LINES, 0, m_lineCount);
                 glDisable(GL_BLEND);
             }
-            if (m_warpTypeBox->selectedIndex() == MicrofacetBRDF) {
+            if (m_warpTypeBox->selectedIndex() == static_cast<int>(Warp::EWarpType::EMicrofacetBRDF)) {
                 m_arrowShader->bind();
                 m_arrowShader->setUniform("mvp", mvp);
                 m_arrowShader->drawArray(GL_LINES, 0, 106);
@@ -402,10 +389,10 @@ public:
 
     void runTest() {
         int xres = 51, yres = 51;
-        WarpType warpType = (WarpType) m_warpTypeBox->selectedIndex();
+        Warp::EWarpType warpType = (Warp::EWarpType) m_warpTypeBox->selectedIndex();
         float parameterValue = mapParameter(warpType, m_parameterSlider->value());
 
-        if (warpType != Square && warpType != Disk && warpType != Tent)
+        if (warpType != Warp::EWarpType::EUniformSquare && warpType != Warp::EWarpType::EUniformDisk && warpType != Warp::EWarpType::ETent)
             xres *= 2;
 
         int res = yres*xres, sampleCount = 1000 * res;
@@ -424,10 +411,10 @@ public:
             Vector3f sample = points.col(i);
             float x, y;
 
-            if (warpType == Square) {
+            if (warpType == Warp::EWarpType::EUniformSquare) {
                 x = sample.x();
                 y = sample.y();
-            } else if (warpType == Disk || warpType == Tent) {
+            } else if (warpType == Warp::EWarpType::EUniformDisk || warpType == Warp::EWarpType::ETent) {
                 x = sample.x() * 0.5f + 0.5f;
                 y = sample.y() * 0.5f + 0.5f;
             } else {
@@ -443,15 +430,16 @@ public:
         }
 
         auto integrand = [&](double y, double x) -> double {
-            if (warpType == Square) {
-                return Warp::squareToUniformSquarePdf(Point2f(x, y));
-            } else if (warpType == Disk) {
+			Warp::WarpQueryRecord WQR; 
+
+            if (warpType == Warp::EWarpType::EUniformSquare) {
+				return Warp::pdf(warpType, (Vector3f(x, y, 0)));
+            } 
+			else if (warpType == Warp::EWarpType::EUniformDisk || warpType == Warp::EWarpType::ETent) {
                 x = x * 2 - 1; y = y * 2 - 1;
-                return Warp::squareToUniformDiskPdf(Point2f(x, y));
-            } else if (warpType == Tent) {
-                x = x * 2 - 1; y = y * 2 - 1;
-                return Warp::squareToTentPdf(Point2f(x, y));
-            } else {
+				return Warp::pdf(warpType, (Vector3f(x, y, 0)));
+            } 
+			else {
                 x *= 2 * M_PI;
                 y = y * 2 - 1;
 
@@ -463,29 +451,21 @@ public:
                            (float) (sinTheta * sinPhi),
                            (float) y);
 
-                if (warpType == UniformSphere)
-                    return Warp::squareToUniformSpherePdf(v);
-                else if (warpType == UniformHemisphere)
-                    return Warp::squareToUniformHemispherePdf(v);
-                else if (warpType == CosineHemisphere)
-                    return Warp::squareToCosineHemispherePdf(v);
-                else if (warpType == Beckmann)
-                    return Warp::squareToBeckmannPdf(v, parameterValue);
-                else if (warpType == MicrofacetBRDF) {
-                    BSDFQueryRecord bRec(m_bRec);
-                    bRec.wo = v;
-                    bRec.measure = nori::ESolidAngle;
-                    return m_brdf->pdf(bRec);
-                } else {
-                    throw NoriException("Invalid warp type");
-                }
+				if (warpType == Warp::EWarpType::EMicrofacetBRDF) {
+					BSDFQueryRecord bRec(m_bRec);
+					bRec.wo = v;
+					bRec.measure = nori::ESolidAngle;
+					return m_brdf->pdf(bRec);
+				}
+
+				return Warp::pdf(warpType, v, parameterValue); 
             }
         };
 
         double scale = sampleCount;
-        if (warpType == Square)
+        if (warpType == Warp::EWarpType::EUniformSquare)
             scale *= 1;
-        else if (warpType == Disk || warpType == Tent)
+        else if (warpType == Warp::EWarpType::EUniformDisk || warpType == Warp::EWarpType::ETent)
             scale *= 4;
         else
             scale *= 4*M_PI;

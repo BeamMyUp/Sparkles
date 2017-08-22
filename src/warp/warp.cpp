@@ -22,6 +22,23 @@
 
 NORI_NAMESPACE_BEGIN
 
+/*------------------------------*/
+/* Static variables definitions */
+/*------------------------------*/
+
+const std::string Warp::s_uniformSquare = "uniform-square";
+const std::string Warp::s_tent = "tent";
+const std::string Warp::s_uniformDisk = "uniform-disk";
+const std::string Warp::s_uniformSphere = "uniform-sphere";
+const std::string Warp::s_uniformHemisphere = "uniform-hemisphere";
+const std::string Warp::s_cosineHemisphere = "cosine-hemisphere";
+const std::string Warp::s_beckmann = "beckmann";
+const std::string Warp::s_uniformCone = "uniform-cone";
+
+/*-------------------*/
+/* Warping functions */
+/*-------------------*/
+
 Point2f Warp::squareToUniformSquare(const Point2f &sample) {
     return sample;
 }
@@ -77,5 +94,128 @@ Vector3f Warp::squareToBeckmann(const Point2f &sample, float alpha) {
 float Warp::squareToBeckmannPdf(const Vector3f &m, float alpha) {
     throw NoriException("Warp::squareToBeckmannPdf() is not yet implemented!");
 }
+
+Vector3f Warp::squareToUniformCone(const Point2f &sample, float cosThetaMax) {
+	throw NoriException("Warp::squareToUniformCone() is not yet implemented!");
+}
+
+float Warp::squareToUniformConePdf(float cosThetaMax) {
+	throw NoriException("Warp::squareToUniformConePdf() is not yet implemented!");
+}
+
+/*-----------------*/
+/* Query functions */
+/*-----------------*/
+
+void Warp::warp(WarpQueryRecord& outWQR, const EWarpType warpFunction, const Point2f& sample, float param /* = 0 */) {
+
+	switch (warpFunction) {
+	case EWarpType::EUniformSquare: {
+		Point2f p = squareToUniformSquare(sample);
+		outWQR.warpedPoint = Vector3f(p.x(), p.y(), 0);
+		outWQR.pdf = squareToUniformSquarePdf(sample);
+		break;
+	}
+	case EWarpType::ETent: {
+		Point2f p = squareToTent(sample);
+		outWQR.warpedPoint = Vector3f(p.x(), p.y(), 0);
+		outWQR.pdf = squareToTentPdf(p);
+		break;
+	}
+	case EWarpType::EUniformDisk: {
+		Point2f p = squareToUniformDisk(sample);
+		outWQR.warpedPoint = Vector3f(p.x(), p.y(), 0);
+		outWQR.pdf = squareToUniformDiskPdf(p);
+		break;
+	}
+	case EWarpType::EUniformSphere:
+		outWQR.warpedPoint = squareToUniformSphere(sample);
+		outWQR.pdf = squareToUniformSpherePdf(outWQR.warpedPoint);
+		break;
+	case EWarpType::EUniformHemisphere:
+		outWQR.warpedPoint = squareToUniformHemisphere(sample);
+		outWQR.pdf = squareToUniformHemispherePdf(outWQR.warpedPoint);
+		break;
+	case EWarpType::ECosineHemisphere:
+		outWQR.warpedPoint = squareToCosineHemisphere(sample);
+		outWQR.pdf = squareToCosineHemispherePdf(outWQR.warpedPoint);
+		break;
+	case EWarpType::EBeckmann:
+		outWQR.warpedPoint = squareToBeckmann(sample, param);
+		outWQR.pdf = squareToBeckmannPdf(outWQR.warpedPoint, param);
+		break;
+	case EWarpType::EUniformCone:
+		outWQR.warpedPoint = squareToUniformCone(sample, param);
+		outWQR.pdf = squareToUniformConePdf(param);
+		break;
+	}
+}
+
+float Warp::pdf(const EWarpType warpFunction, const Vector3f& point, float param/* = 0*/) {
+
+	switch (warpFunction) {
+	case EWarpType::EUniformSquare:
+		return squareToUniformSquarePdf(Point2f(point.x(), point.y()));
+	case EWarpType::ETent:
+		return squareToTentPdf(Point2f(point.x(), point.y()));
+	case EWarpType::EUniformDisk:
+		return squareToUniformDiskPdf(Point2f(point.x(), point.y()));
+	case EWarpType::EUniformSphere:
+		return squareToUniformSpherePdf(point);
+	case EWarpType::EUniformHemisphere:
+		return squareToUniformHemispherePdf(point);
+	case EWarpType::ECosineHemisphere:
+		return squareToCosineHemispherePdf(point);
+	case EWarpType::EBeckmann:
+		return squareToBeckmannPdf(point, param);
+	case EWarpType::EUniformCone:
+		return squareToUniformConePdf(param);
+	}
+}
+
+Warp::EWarpType Warp::getWarpType(const std::string& warpType) {
+	if (warpType == "")
+		return EWarpType::ENone;
+	else if (warpType == s_uniformSquare)
+		return EWarpType::EUniformSquare;
+	else if (warpType == s_tent)
+		return EWarpType::ETent;
+	else if (warpType == s_uniformDisk)
+		return EWarpType::EUniformDisk;
+	else if (warpType == s_uniformSphere)
+		return EWarpType::EUniformSphere;
+	else if (warpType == s_uniformHemisphere)
+		return EWarpType::EUniformHemisphere;
+	else if (warpType == s_cosineHemisphere)
+		return EWarpType::ECosineHemisphere;
+	else if (warpType == s_beckmann)
+		return EWarpType::EBeckmann;
+	else if (warpType == s_uniformCone)
+		return EWarpType::EUniformCone;
+	else
+		throw NoriException("Warp type requested unknown");
+}
+
+Warp::EWarpType Warp::getWarpType(const EMeasure measure, const std::string& warpType/* = ""*/) {
+	EWarpType result = EWarpType::ENone;
+
+	switch (measure)
+	{
+	case EMeasure::EUnknownMeasure:
+		result = getWarpType(warpType); 
+	case EMeasure::ESolidAngle:
+		result = EWarpType::EUniformCone;
+	case EMeasure::EArea:
+		result = EWarpType::EUniformSphere;
+	case EMeasure::EHemisphere:
+		if (warpType == "cosine-hemisphere")
+			result = EWarpType::ECosineHemisphere;
+		else if (warpType == "uniform-hemisphere")
+			result = EWarpType::EUniformHemisphere;
+	}
+
+	return result; 
+}
+
 
 NORI_NAMESPACE_END
