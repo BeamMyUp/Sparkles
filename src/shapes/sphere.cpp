@@ -3,6 +3,7 @@
 #include <nori/bsdfs/bsdf.h>
 #include <nori/emitters/emitter.h>
 #include <nori/shapes/sphere.h>
+#include <nori/core/common.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -68,40 +69,6 @@ bool Sphere::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) 
 	double phi = acos(cosPhi);
 
 	its.uv = Point2f((float)phi * INV_TWOPI, (float)theta * INV_PI);
-
-	return true;
-}
-
-bool Sphere::quadratic(double a, double b, double c, double& t0, double& t1) const {
-	// Linear case
-	if (a == 0) {
-		if (b != 0) {
-			t0 = t1 = -c / b;
-			return true;
-		}
-	}
-
-	// Find quadratic discriminant
-	double discrim = b*b - 4.0f * a*c;
-
-	if (discrim < 0.0)
-		return false;
-
-	double rootDiscrim = sqrt(discrim);
-
-	// Compute quadratic t values
-	double q;
-	if (b < 0.0)
-		q = -0.5 * (b - rootDiscrim);
-
-	else
-		q = -0.5 * (b + rootDiscrim);
-
-	t0 = q / a;
-	t1 = c / q;
-
-	if (t0 > t1)
-		std::swap(t0, t1);
 
 	return true;
 }

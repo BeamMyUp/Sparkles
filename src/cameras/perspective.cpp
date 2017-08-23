@@ -18,6 +18,7 @@
 
 #include <nori/cameras/camera.h>
 #include <nori/core/rfilter.h>
+#include <nori/core/math.h>
 #include <nori/warp/warp.h>
 #include <Eigen/Geometry>
 

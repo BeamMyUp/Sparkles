@@ -18,6 +18,7 @@
 
 #include <nori/core/parser.h>
 #include <nori/core/proplist.h>
+#include <nori/core/math.h>
 #include <Eigen/Geometry>
 #include <pugixml.hpp>
 #include <fstream>

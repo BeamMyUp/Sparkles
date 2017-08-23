@@ -19,6 +19,7 @@
 #include <nori/core/scene.h>
 #include <nori/bsdfs/bsdf.h>
 #include <nori/cameras/camera.h>
+#include <nori/core/math.h>
 #include <nori/integrators/integrator.h>
 #include <nori/samplers/sampler.h>
 #include <hypothesis.h>

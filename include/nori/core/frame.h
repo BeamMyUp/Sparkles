@@ -19,6 +19,7 @@
 #pragma once
 
 #include <nori/core/vector.h>
+#include <nori/core/math.h>
 
 NORI_NAMESPACE_BEGIN
 

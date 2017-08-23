@@ -13,9 +13,6 @@ public:
 	//// Return Centroid of the Shape
 	virtual Point3f getCentroid() const override { return m_center; }
 
-	// Compute the quadratic solution of a sphere
-	bool quadratic(double a, double b, double c, double& t0, double& t1) const;
-
 	// Return whether a ray intersects with the sphere or not
 	bool rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) const override;
 

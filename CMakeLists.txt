@@ -50,6 +50,7 @@ add_executable(nori
   include/nori/core/dpdf.h
   include/nori/core/frame.h
   include/nori/core/gui.h
+  include/nori/core/math.h
   include/nori/core/parser.h
   include/nori/core/proplist.h
   include/nori/core/ray.h
@@ -82,6 +83,7 @@ add_executable(nori
   src/core/common.cpp
   src/core/gui.cpp
   src/core/main.cpp
+  src/core/math.cpp
   src/core/parser.cpp
   src/core/proplist.cpp
   src/core/rfilter.cpp

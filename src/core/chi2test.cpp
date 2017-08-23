@@ -18,6 +18,7 @@
 
 #include <nori/bsdfs/bsdf.h>
 #include <nori/warp/warp.h>
+#include <nori/core/math.h>
 #include <pcg32.h>
 #include <hypothesis.h>
 #include <fstream>
