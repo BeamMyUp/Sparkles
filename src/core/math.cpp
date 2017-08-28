@@ -1,6 +1,8 @@
 #include <nori/core/math.h>
 #include <nori/core/vector.h>
 
+#include <Eigen/Geometry>
+
 NORI_NAMESPACE_BEGIN 
 
 Vector3f sphericalDirection(float theta, float phi) {
