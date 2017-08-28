@@ -50,6 +50,19 @@ struct Intersection {
 	std::string toString() const;
 };
 
+/**
+* \brief Structure containing data which must be passed to Intersection Query
+*
+* This structure contains the information that the rayIntersection function
+* needs to optimize the evaluation of the intersection query in the case
+* that the shape is made of many primitives (i.e. mesh) and or to avoid
+* re-calculating some information at the time of the Intersection update, once
+* the closest intersection has been found.
+*
+*/
+struct IntersectionQueryRecord {
+	/// Is empty by default
+};
 
 /**
 * \brief Scene Object
@@ -99,7 +112,9 @@ public:
 	* \return
 	*   \c true if an intersection has been detected
 	*/
-	virtual bool rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) const = 0;
+	virtual bool rayIntersect(const Ray3f &ray_, float &outT, IntersectionQueryRecord* IQR = nullptr) const = 0;
+
+	virtual void updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR = nullptr) const = 0;
 
 	/// Is this object an area emitter?
 	virtual bool isEmitter() const { return m_emitter != nullptr; }

@@ -23,6 +23,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 NORI_NAMESPACE_BEGIN
 
 /**
+* \brief Structure containing data which must be passed to Intersection Query
+*
+* This structure contains the information that the rayIntersection function
+* needs to optimize the evaluation of the intersection query (avoid testing against
+* all triangles, using a proper acceleration structure, and avoid  re-calculating
+* texture information at the time of the Intersection update, once the closest
+* intersection has been found.
+*
+*/
+struct MeshIntersectionQueryRecord : public IntersectionQueryRecord {
+	uint32_t idx; ///< current triangle index tested for intersection
+	uint32_t f;   ///< closest triangle index for which an intersection was found
+	Point2f uv; 
+};
+
+/**
 * \brief Triangle mesh
 *
 * This class stores a triangle mesh object and provides numerous functions
@@ -48,7 +64,7 @@ public:
 	/// Return the surface area of the given triangle
 	float surfaceArea(uint32_t index) const;
 
-	////
+	//// 
 	void calculateBoundingBox() override { /* TODO: */ }
 
 	//// Return an axis-aligned bounding box of the entire mesh
@@ -61,7 +77,7 @@ public:
 	Point3f getCentroid(uint32_t index) const;
 
 	//// Return whether a ray intersects with the mesh or not
-	bool rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) const override; 
+	bool rayIntersect(const Ray3f &ray_, float &outT, IntersectionQueryRecord* IQR = nullptr) const override;
 
 	/** \brief Ray-triangle intersection test
 	*
@@ -89,6 +105,8 @@ public:
 	*   \c true if an intersection has been detected
 	*/
 	bool rayIntersect(uint32_t index, const Ray3f &ray, float &u, float &v, float &t) const;
+
+	void updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR = nullptr) const override;
 
 	/// Return a pointer to the vertex positions
 	const MatrixXf &getVertexPositions() const { return m_V; }

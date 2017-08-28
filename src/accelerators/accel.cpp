@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include <nori/accelerators/accel.h>
 #include <nori/Shapes/Shape.h>
+#include <nori/shapes/mesh.h>
 
 #include <Eigen/Geometry>
 
@@ -33,21 +34,35 @@ void Accel::build() {
 }
 
 bool Accel::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) const {
-
-	Intersection aIt;
-	bool objHit = false;
 	bool hit = false;
+
+	Ray3f ray(ray_); 
+	float t = std::numeric_limits<float>::infinity(); 
+
 	for (int i = 0; i < m_shapes.size(); ++i) {
-		objHit = m_shapes[i]->rayIntersect(ray_, aIt, shadowRay);
+		uint32_t nPrimitives = 1; 
+		if (m_shapes[i]->isMesh())
+			nPrimitives = static_cast<Mesh*>(m_shapes[i])->getTriangleCount(); 
+		
+		MeshIntersectionQueryRecord miqr;
 
-		if (objHit && shadowRay)
-			return true;
+		for (int j = 0; j < nPrimitives; ++j) {
+			
+			miqr.idx = j;
 
-		if (objHit && aIt.t < its.t) {
-			its = aIt;
-			hit = true;
+			if (m_shapes[i]->rayIntersect(ray, t, &miqr)) {
+				if (shadowRay)
+					return true;
+
+				ray.maxt = t; 
+				hit = true; 
+				miqr.f = miqr.idx; 
+				its.shape = m_shapes[i]; 
+			}
 		}
-		objHit = false;
+
+		if (hit)
+			its.shape->updateIntersection(ray, its, &miqr);
 	}
 
 	return hit;

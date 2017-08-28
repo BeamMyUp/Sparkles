@@ -22,7 +22,7 @@ void Sphere::calculateBoundingBox(){
 	m_bbox = BoundingBox3f(min, max);
 }
 
-bool Sphere::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) const{
+bool Sphere::rayIntersect(const Ray3f &ray_, float &outT, IntersectionQueryRecord* IQR /*= nullptr*/) const{
 	Ray3f ray = ray_;
 
 	// Calculate quadratic coefficients
@@ -50,9 +50,15 @@ bool Sphere::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) 
 	}
 
 	// Intersection found
-	Vector3f itsp = ray(tHit);
+	outT = tHit;
+	
+	return true;
+}
 
-	its.t = tHit;
+void Sphere::updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR /*= nullptr*/) const {
+	its.t = ray.maxt; 
+	Vector3f itsp = ray(its.t);
+
 	its.p = itsp;
 	its.shape = this;
 
@@ -69,8 +75,6 @@ bool Sphere::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) 
 	double phi = acos(cosPhi);
 
 	its.uv = Point2f((float)phi * INV_TWOPI, (float)theta * INV_PI);
-
-	return true;
 }
 
 std::string Sphere::toString() const {

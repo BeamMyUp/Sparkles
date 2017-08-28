@@ -7,14 +7,16 @@ NORI_NAMESPACE_BEGIN
 class Sphere : public Shape {
 public:
 
-	// Calculate/Update Axis Aligned Bounding Box
+	/// Calculate/Update Axis Aligned Bounding Box
 	void calculateBoundingBox() override;
 
-	//// Return Centroid of the Shape
+	/// Return Centroid of the Shape
 	virtual Point3f getCentroid() const override { return m_center; }
 
-	// Return whether a ray intersects with the sphere or not
-	bool rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) const override;
+	/// Return whether a ray intersects with the sphere or not
+	bool rayIntersect(const Ray3f &ray_, float &outT, IntersectionQueryRecord* IQR = nullptr) const override;
+
+	void updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR = nullptr) const override;
 
 	/// Return a human-readable summary of this instance
 	std::string toString() const override;

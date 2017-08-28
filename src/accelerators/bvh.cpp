@@ -405,9 +405,7 @@ std::pair<float, uint32_t> BVH::statistics(uint32_t node_idx) const {
 }
 
 bool BVH::rayIntersect(const Ray3f &_ray, Intersection &its, bool shadowRay) const {
-	uint32_t node_idx = 0, stack_idx = 0, stack[64];
-
-	its.t = std::numeric_limits<float>::infinity();
+	uint32_t node_idx = 0, stack_idx = 0, stack[64]; 
 
 	/* Use an adaptive ray epsilon */
 	Ray3f ray(_ray);
@@ -418,6 +416,9 @@ bool BVH::rayIntersect(const Ray3f &_ray, Intersection &its, bool shadowRay) con
 		return false;
 
 	bool foundIntersection = false;
+	MeshIntersectionQueryRecord miqr;
+	miqr.f = (uint32_t)-1;
+	float t = std::numeric_limits<float>::infinity();
 
 	while (true) {
 		const BVHNode &node = m_nodes[node_idx];
@@ -436,16 +437,17 @@ bool BVH::rayIntersect(const Ray3f &_ray, Intersection &its, bool shadowRay) con
 		}
 		else {
 			for (uint32_t i = node.start(), end = node.end(); i < end; ++i) {
-				uint32_t idx = m_indices[i];
-				const Shape *shape = m_shapes[findShape(idx)];
+				miqr.idx = m_indices[i];
+				const Shape *shape = m_shapes[findShape(miqr.idx)];
 
-				if(shape->rayIntersect(ray, its, shadowRay)){
+				if(shape->rayIntersect(ray, t, &miqr)){
 				
 					if (shadowRay)
 						return true;
 
-					ray.maxt = its.t; 
+					ray.maxt = t; 
 					its.shape = shape; 
+					miqr.f = miqr.idx; 
 					foundIntersection = true;
 				}
 			}
@@ -454,6 +456,10 @@ bool BVH::rayIntersect(const Ray3f &_ray, Intersection &its, bool shadowRay) con
 			node_idx = stack[--stack_idx];
 			continue;
 		}
+	}
+
+	if (foundIntersection){
+		its.shape->updateIntersection(ray, its, &miqr);
 	}
 
 	return foundIntersection;
