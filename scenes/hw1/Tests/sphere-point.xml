@@ -28,8 +28,8 @@
 	</shape>
 	
 	<emitter type="point">
-		<point name="position" value="1.0, 1.0, 0"/>
-		<color name="radiance" value="5, 5, 5"/>
+		<point name="position" value="0.2, 0.2, 0"/>
+		<color name="radiance" value="0.1, 0.1, 0.1"/>
 	</emitter>
 	
 	<!-- Render the scene viewed by a perspective camera -->

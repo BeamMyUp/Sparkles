@@ -23,7 +23,7 @@ Color3f SimpleIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 	const BSDF* bsdf = its.shape->getBSDF();
 
 	for (const auto &emitter : scene->getEmitters()) {
-		// Query the light's radiance and 
+		// Query the light's radiance and direction
 		EmitterQueryRecord eqr;
 		Color3f Le = emitter->eval(eqr, its.p); 
 
