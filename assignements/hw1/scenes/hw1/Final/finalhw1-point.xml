@@ -9,8 +9,8 @@
 
 	<!-- Illuminate using a point light -->
 	<emitter type="point">
-		<color name="radiance" value="150,150,150"/>
-		<point name="position" value="5,0,10"/>
+		<color name="radiance" value="100,100,100"/>
+		<point name="position" value="3,0,5"/>
 	</emitter>
 
 	<!-- Teapot mesh -->

@@ -27,6 +27,7 @@
 		</transform>
 	</shape>
 	
+	<!-- Illuminate using a directional/distant light -->
 	<emitter type="directional">
 		<vector name="direction" value="1.0, 1.0, 0"/>
 		<color name="radiance" value="2, 2, 2"/>
