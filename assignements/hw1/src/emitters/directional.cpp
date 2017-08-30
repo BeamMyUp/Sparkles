@@ -5,13 +5,13 @@ NORI_NAMESPACE_BEGIN
 DirectionalLight::DirectionalLight(const PropertyList& propList)
 	: Emitter(propList)
 	, m_direction(propList.getVector("direction", Vector3f())) {
-	m_direction.normalize();
+	m_direction.normalize(); 
 }
 
 Color3f DirectionalLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
-	eqr.wi = m_direction.normalized();
+	// ECSE689: Implement Directional Light's eval function and fill the EmitterQueryRecord
 
-	return m_radiance;
+	return Color3f();
 }
 
 std::string DirectionalLight::toString() const {

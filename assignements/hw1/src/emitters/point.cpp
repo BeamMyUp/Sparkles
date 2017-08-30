@@ -9,12 +9,9 @@ PointLight::PointLight(const PropertyList& propList)
 }
 
 Color3f PointLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
-	eqr.wi = Vector3f(m_position - p);
-	eqr.wi.normalize();
+	// ECSE689: Implement Point Light's eval function and fill the EmitterQueryRecord
 
-	Color3f res = m_radiance / distSquared(m_position, p);
-
-	return res;
+	return Color3f();
 }
 
 std::string PointLight::toString() const {
