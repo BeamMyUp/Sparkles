@@ -105,4 +105,12 @@ bool quadratic(double a, double b, double c, double& t0, double& t1) {
 	return true;
 }
 
+float squaredDist(Point3f p, Point3f q){
+	float x = (q.x() - p.x());
+	float y = (q.y() - p.y());
+	float z = (q.z() - p.z());
+
+	return x * x + y * y + z * z;
+}
+
 NORI_NAMESPACE_END

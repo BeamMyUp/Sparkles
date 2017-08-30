@@ -1,11 +1,11 @@
 <scene>
     <!-- Independent sample generator, one sample per pixel -->
 	<sampler type="independent">
-		<integer name="sampleCount" value="1"/>
+		<integer name="sampleCount" value="4"/>
 	</sampler>
 
     <!-- Render the sphere with a basic shading -->
-    <integrator type="normals"/>
+    <integrator type="simple"/>
 
     <!-- Create a unit Sphere -->
 	<shape type="sphere">
@@ -22,26 +22,22 @@
 		</bsdf>
 
 		<transform name="toWorld">
-			<scale value="0.1,0.1,0.1"/>
+			<scale value="0.2,0.1,0.2"/>
 			<translate value="0, -0.05, 0"/>
 		</transform>
 	</shape>
 	
-	
-	<!--
-	<emitter type="pointlight">
+	<emitter type="point">
 		<point name="position" value="1.0, 1.0, 0"/>
-		<color name="radiance" value="1.0, 1.0, 1.0"/>
-		<vector name="direction" value="0.0, 1.0, 0.0"/>
+		<color name="radiance" value="5, 5, 5"/>
 	</emitter>
-	-->
 	
 	<!-- Render the scene viewed by a perspective camera -->
 	<camera type="perspective">
         <!-- 3D origin, target point, and 'up' vector -->
 		<transform name="toWorld">
             <lookat target="0.0, 0.0, 0.0"
-                    origin="0, 0.5, 1"
+                    origin="0, 0.5, -1"
                     up="0, 1, 0"/>
 		</transform>
 

@@ -22,6 +22,12 @@
 
 NORI_NAMESPACE_BEGIN
 
+class PropertyList;
+
+struct EmitterQueryRecord {
+	Vector3f wi;
+};
+
 /**
  * \brief Superclass of all emitters
  */
@@ -32,7 +38,21 @@ public:
      * \brief Return the type of object (i.e. Mesh/Emitter/etc.) 
      * provided by this instance
      * */
-    EClassType getClassType() const { return EEmitter; }
+    EClassType getClassType() const override { return EEmitter; }
+
+	/// Return a brief string summary of the instance (for debugging purpose)
+	virtual std::string toString() const override;
+
+	/// Returns the emitter's radiance
+	virtual const Color3f& getRadiance() const { return m_radiance; }
+
+	/// Returns the radiance arriving at the queried point from the emitter, assuming no occlusion
+	virtual Color3f eval(EmitterQueryRecord& eqr, const Point3f& p) const = 0;
+
+	Emitter(const PropertyList& propList); 
+
+protected:
+	Color3f m_radiance; 
 };
 
 NORI_NAMESPACE_END
