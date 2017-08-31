@@ -544,8 +544,8 @@ public:
         m_pointTypeBox->setCallback([&](int) { refresh(); });
 
         new Label(m_window, "Warping method", "sans-bold");
-        m_warpTypeBox = new ComboBox(m_window, { "Square", "Tent", "Disk", "Sphere", "Hemisphere (unif.)",
-                "Hemisphere (cos)", "Beckmann distr.", "Microfacet BRDF" });
+        m_warpTypeBox = new ComboBox(m_window, { "None", "Square", "Tent", "Uniform Disk", "Concentric Disk", "Sphere", "Hemisphere (unif.)",
+                "Hemisphere (cos)", "Beckmann distr.", "Cone", "Microfacet BRDF" });
         m_warpTypeBox->setCallback([&](int) { refresh(); });
 
         panel = new Widget(m_window);

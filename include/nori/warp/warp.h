@@ -32,6 +32,7 @@ public:
 		EUniformSquare,
 		ETent,
 		EUniformDisk,
+		EConcentricDisk,
 		EUniformSphere,
 		EUniformHemisphere,
 		ECosineHemisphere, 
@@ -63,6 +64,12 @@ protected:
 
     /// Probability density of \ref squareToUniformDisk()
     static float squareToUniformDiskPdf(const Point2f &p);
+
+	/// Sample a concentric disk 
+	static Point2f squareToConcentricDisk(const Point2f &sample);
+
+	/// Probability density of \ref squareToConcentricDisk
+	static float squareToConcentricDiskPdf(const Point2f &p);
 
     /// Uniformly sample a vector on the unit sphere with respect to solid angles
     static Vector3f squareToUniformSphere(const Point2f &sample);
@@ -112,6 +119,7 @@ protected:
 	static const std::string s_uniformSquare;
 	static const std::string s_tent;
 	static const std::string s_uniformDisk;
+	static const std::string s_concentricDisk;
 	static const std::string s_uniformSphere;
 	static const std::string s_uniformHemisphere; 
 	static const std::string s_cosineHemisphere;
