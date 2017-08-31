@@ -109,6 +109,6 @@ extern bool quadratic(double a, double b, double c, double& t0, double& t1);
 /**
 * \brief Returns the squared distance of the segment pq
 */
-extern float squaredDist(Point3f p, Point3f q);
+extern float distSquared(Point3f p, Point3f q);
 
 NORI_NAMESPACE_END
