@@ -1,13 +1,13 @@
 <scene>
     <!-- Independent sample generator, one sample per pixel -->
 	<sampler type="independent">
-		<integer name="sampleCount" value="1"/>
+		<integer name="sampleCount" value="32"/>
 	</sampler>
 
     <!-- Render the sphere with a basic shading -->
-    <integrator type="AO">
-		<integer name="nSamples"     value="1"/>
-		<string  name="samplerType"  value="cosine"/>
+    <integrator type="ao">
+		<integer name="nSamples"  value="1"/>
+		<string  name="sampling"  value="cosine"/>
 	</integrator>
 
     <!-- Create a unit Sphere -->

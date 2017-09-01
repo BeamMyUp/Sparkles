@@ -62,6 +62,7 @@ add_executable(nori
   include/nori/emitters/directional.h
   include/nori/emitters/emitter.h
   include/nori/emitters/point.h
+  include/nori/integrators/ao.h
   include/nori/integrators/integrator.h
   include/nori/integrators/normals.h
   include/nori/integrators/simple.h
@@ -94,6 +95,7 @@ add_executable(nori
   src/emitters/directional.cpp
   src/emitters/emitter.cpp
   src/emitters/point.cpp
+  src/integrators/ao.cpp
   src/integrators/normals.cpp
   src/integrators/simple.cpp
   src/samplers/independent.cpp

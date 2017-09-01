@@ -256,10 +256,10 @@ Warp::EWarpType Warp::getWarpType(const EMeasure measure, const std::string& war
 	case EMeasure::EArea:
 		result = EWarpType::EUniformSphere;
 	case EMeasure::EHemisphere:
-		if (warpType == s_cosineHemisphere)
-			result = EWarpType::ECosineHemisphere;
-		else if (warpType == s_uniformHemisphere)
+		if (warpType == s_uniformHemisphere)
 			result = EWarpType::EUniformHemisphere;
+		else
+			result = EWarpType::ECosineHemisphere;
 	}
 
 	return result; 

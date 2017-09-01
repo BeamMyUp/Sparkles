@@ -25,7 +25,7 @@ NORI_NAMESPACE_BEGIN
 class PropertyList;
 
 struct EmitterQueryRecord {
-	Vector3f wi;
+	Vector3f wi; //< Normalized incident direction of light
 };
 
 /**
