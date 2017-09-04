@@ -59,10 +59,12 @@ add_executable(nori
   include/nori/core/timer.h
   include/nori/core/transform.h
   include/nori/core/vector.h
+  include/nori/emitters/area.h
   include/nori/emitters/directional.h
   include/nori/emitters/emitter.h
   include/nori/emitters/point.h
   include/nori/integrators/ao.h
+  include/nori/integrators/direct.h
   include/nori/integrators/integrator.h
   include/nori/integrators/normals.h
   include/nori/integrators/simple.h
@@ -92,10 +94,12 @@ add_executable(nori
   src/core/proplist.cpp
   src/core/rfilter.cpp
   src/core/scene.cpp
+  src/emitters/area.cpp
   src/emitters/directional.cpp
   src/emitters/emitter.cpp
   src/emitters/point.cpp
   src/integrators/ao.cpp
+  src/integrators/direct.cpp
   src/integrators/normals.cpp
   src/integrators/simple.cpp
   src/samplers/independent.cpp
