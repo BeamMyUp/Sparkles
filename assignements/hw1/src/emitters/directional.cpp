@@ -14,6 +14,10 @@ Color3f DirectionalLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const 
 	return Color3f();
 }
 
+void DirectionalLight::sample(SampleQueryRecord &sqr, EMeasure measure, const Point2f &sample) const {
+	sqr.sample.v = m_direction; 
+}
+
 std::string DirectionalLight::toString() const {
 	return tfm::format(
 		"DirectionalLight[\n"

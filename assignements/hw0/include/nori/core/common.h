@@ -112,7 +112,6 @@ class ImageBlock;
 class Integrator;
 class KDTree;
 class Emitter;
-struct EmitterQueryRecord;
 class Mesh;
 class NoriObject;
 class NoriObjectFactory;
@@ -184,8 +183,6 @@ enum EMeasure {
 };
 
 
-
-
 /**
  * \brief Return the global file resolver instance
  *
@@ -193,7 +190,6 @@ enum EMeasure {
  * texture files) referenced by a scene being loaded
  */
 extern filesystem::resolver *getFileResolver();
-
 
 
 NORI_NAMESPACE_END

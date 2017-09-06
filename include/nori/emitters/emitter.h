@@ -40,14 +40,21 @@ public:
      * */
     EClassType getClassType() const override { return EEmitter; }
 
-	/// Return a brief string summary of the instance (for debugging purpose)
-	virtual std::string toString() const override;
-
 	/// Returns the emitter's radiance
 	virtual const Color3f& getRadiance() const { return m_radiance; }
 
+	/// Return if the emitter's an area light
+	virtual bool isArea() const { return false; }
+
 	/// Returns the radiance arriving at the queried point from the emitter, assuming no occlusion
 	virtual Color3f eval(EmitterQueryRecord& eqr, const Point3f& p) const = 0;
+
+	/// Sample an Emitter according to the measure given in argument
+	virtual void sample(SampleQueryRecord& esqr, EMeasure measure, const Point2f &sample) const = 0; 
+
+	/// Return a brief string summary of the instance (for debugging purpose)
+	virtual std::string toString() const override;
+
 
 	Emitter(const PropertyList& propList); 
 

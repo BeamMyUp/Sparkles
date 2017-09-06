@@ -23,6 +23,24 @@
 NORI_NAMESPACE_BEGIN
 
 /**
+* \brief Generic sampling record
+*
+* This sampling record is used to package the result of techniques that draw
+* a position from a point, line, surface, or volume domain in 3D
+*/
+struct SampleQueryRecord {
+	union Sample {
+		Vector3f v;		//< Direction resulting from the sampling	
+		Point3f  p;		//< Position of the surface point (final sample)
+	};
+	Sample sample;		//< The sample found
+	float t;			//< Unoccluded distance along the ray
+	Point2f uv;			//< UV coordinates at point p, if any
+	Normal3f n;			//< Surface normal at point p
+	float pdf;			//< pdf of the sample query
+};
+
+/**
  * \brief Base class of all objects
  *
  * A Nori object represents an instance that is part of

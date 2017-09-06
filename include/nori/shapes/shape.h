@@ -64,11 +64,6 @@ struct IntersectionQueryRecord {
 	/// Is empty by default
 };
 
-struct SampleQueryRecord {
-	float pdf; 
-	Vector3f sample; 
-};
-
 /**
 * \brief Scene Object
 *
@@ -121,13 +116,13 @@ public:
 	/*------------------*/
 
 	/// Returns a sample point on the shape according to EMeasure
-	virtual void sample(SampleQueryRecord& outSQR, EMeasure measure, Point2f &sample) const;
+	virtual void sample(SampleQueryRecord &outSQR, EMeasure measure, const Point2f &sample) const;
 
 	/// Returns a sample point using surface area sampling
-	virtual void sampleArea(SampleQueryRecord& outSQR, Point2f &sample) const = 0;
+	virtual void sampleArea(SampleQueryRecord &outSQR, const Point2f &sample) const = 0;
 
 	/// Returns a sample point using subtended solid angle sampling
-	virtual void sampleSolidAngle(SampleQueryRecord& outSQR, Point2f &sample) const = 0;
+	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample) const = 0;
 	
 	/*-----------------*/
 	/* Utility methods */

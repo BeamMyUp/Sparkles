@@ -49,34 +49,13 @@ struct MeshIntersectionQueryRecord : public IntersectionQueryRecord {
 class Mesh : public Shape {
 public:
 
-	/// Return the total number of triangles in this hsape
-	uint32_t getTriangleCount() const { return (uint32_t)m_F.cols(); }
-
-	/// Return the total number of vertices in this hsape
-	uint32_t getVertexCount() const { return (uint32_t)m_V.cols(); }
-
-	/**
-	* \brief Uniformly sample a position on the mesh with
-	* respect to surface area. Returns both position and normal
-	*/
-	//void samplePosition(const Point2f &sample, Point3f &p, Normal3f &n) const;
-
 	/// Return the surface area of the given triangle
 	float surfaceArea(uint32_t index) const;
 
-	//// 
+	/// Return the bounding box of the full mesh
 	void calculateBoundingBox() override { /* TODO: */ }
 
-	//// Return an axis-aligned bounding box of the entire mesh
-	const BoundingBox3f &getBoundingBox() const { return m_bbox; }
-
-	//// Return an axis-aligned bounding box containing the given triangle
-	BoundingBox3f getBoundingBox(uint32_t index) const;
-
-	//// Return the centroid of the given triangle
-	Point3f getCentroid(uint32_t index) const;
-
-	//// Return whether a ray intersects with the mesh or not
+	/// Return whether a ray intersects with the mesh or not
 	bool rayIntersect(const Ray3f &ray_, float &outT, IntersectionQueryRecord* IQR = nullptr) const override;
 
 	/** \brief Ray-triangle intersection test
@@ -108,6 +87,21 @@ public:
 
 	void updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR = nullptr) const override;
 
+	/// Returns a sample point using surface area sampling
+	virtual void sampleArea(SampleQueryRecord &outSQR, const Point2f &sample) const override;
+
+	/// Returns a sample point using subtended solid angle sampling
+	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample) const override;
+
+	/// Return an axis-aligned bounding box of the entire mesh
+	const BoundingBox3f &getBoundingBox() const { return m_bbox; }
+
+	/// Return an axis-aligned bounding box containing the given triangle
+	BoundingBox3f getBoundingBox(uint32_t index) const;
+
+	/// Return the centroid of the given triangle
+	Point3f getCentroid(uint32_t index) const;
+
 	/// Return a pointer to the vertex positions
 	const MatrixXf &getVertexPositions() const { return m_V; }
 
@@ -119,6 +113,12 @@ public:
 
 	/// Return a pointer to the triangle vertex index list
 	const MatrixXu &getIndices() const { return m_F; }
+
+	/// Return the total number of triangles in this shape
+	uint32_t getTriangleCount() const { return (uint32_t)m_F.cols(); }
+
+	/// Return the total number of vertices in this shape
+	uint32_t getVertexCount() const { return (uint32_t)m_V.cols(); }
 
 	/// Return a human-readable summary of this instance
 	std::string toString() const override;

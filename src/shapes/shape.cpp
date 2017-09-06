@@ -20,6 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <nori/core/bbox.h>
 #include <nori/bsdfs/bsdf.h>
 #include <nori/emitters/emitter.h>
+#include <nori/emitters/area.h>
 #include <nori/warp/warp.h>
 #include <Eigen/Geometry>
 
@@ -40,7 +41,7 @@ void Shape::activate() {
 	}
 }
 
-void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, Point2f &sample) const {
+void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample) const {
 	switch (measure)
 	{
 	case nori::EUnknownMeasure:
@@ -84,8 +85,13 @@ void Shape::addChild(NoriObject *obj) {
 			throw NoriException(
 				"Shape: tried to register multiple Emitter instances!");
 		m_emitter = emitter;
+		
+		if (m_emitter->isArea()) {
+			auto areaEmitter = static_cast<AreaLight*>(m_emitter);
+			areaEmitter->setShape(this);
+		}
+		break;
 	}
-				   break;
 
 	default:
 		throw NoriException("Shape::addChild(<%s>) is not supported!",

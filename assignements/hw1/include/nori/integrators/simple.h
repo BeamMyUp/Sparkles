@@ -6,7 +6,6 @@ NORI_NAMESPACE_BEGIN
 
 class SimpleIntegrator : public Integrator {
 public:
-	SimpleIntegrator(const PropertyList &props);
 
 	/**
 	* \brief Direct Illumination Integrator computing reflected radiance for diffuse surfaces
@@ -24,6 +23,8 @@ public:
 
 	/// Return a brief string summary of the instance (for debugging purpose)
 	std::string toString() const override;
+
+	SimpleIntegrator(const PropertyList &props);
 };
 
 NORI_NAMESPACE_END

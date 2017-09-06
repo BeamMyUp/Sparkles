@@ -23,8 +23,7 @@ DirectIntegrator::DirectIntegrator(const PropertyList &props)
 Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {
 	// ECSE689: Implement a Monte Carlo Direct Integrator
 	
-	Color3f Li(0.f);
-	return Li;
+	return Color3f(0.f);
 }
 
 std::string DirectIntegrator::toString() const {

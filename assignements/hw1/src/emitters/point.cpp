@@ -14,6 +14,10 @@ Color3f PointLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
 	return Color3f();
 }
 
+void PointLight::sample(SampleQueryRecord& sqr, EMeasure measure, const Point2f &sample) const {
+	sqr.sample.p = m_position; 
+}
+
 std::string PointLight::toString() const {
 	return tfm::format(
 		"PointLight[\n"

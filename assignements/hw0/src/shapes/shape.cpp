@@ -25,16 +25,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 NORI_NAMESPACE_BEGIN
 
-Shape::Shape() { }
-
 Shape::~Shape() {
 	delete m_bsdf;
 	delete m_emitter;
-}
-
-Point3f Shape::getCentroid() const {
-	throw NoriException("Not implemented for this shape. Using center of bbox.");
-	return m_bbox.getCenter(); 
 }
 
 void Shape::activate() {
@@ -45,6 +38,35 @@ void Shape::activate() {
 		m_bsdf = static_cast<BSDF *>(
 			NoriObjectFactory::createInstance("diffuse", PropertyList()));
 	}
+}
+
+void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample) const {
+	switch (measure)
+	{
+	case nori::EUnknownMeasure:
+		throw NoriException("Measure received by Shape::sample was nori::EUnknownMeasure. Cannot sample according to the measure");
+		break;
+	case nori::ESolidAngle:
+		sampleSolidAngle(outSQR, sample);
+		break;
+	case nori::EDiscrete:
+		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
+		break;
+	case nori::EArea:
+		sampleArea(outSQR, sample);
+		break;
+	case nori::EHemisphere:
+		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
+		break;
+	default:
+		throw NoriException("Measure received by is not supported.");
+		break;
+	}
+}
+
+Point3f Shape::getCentroid() const {
+	throw NoriException("Not implemented for this shape. Using center of bbox.");
+	return m_bbox.getCenter();
 }
 
 void Shape::addChild(NoriObject *obj) {
@@ -62,8 +84,8 @@ void Shape::addChild(NoriObject *obj) {
 			throw NoriException(
 				"Shape: tried to register multiple Emitter instances!");
 		m_emitter = emitter;
+		break;
 	}
-				   break;
 
 	default:
 		throw NoriException("Shape::addChild(<%s>) is not supported!",

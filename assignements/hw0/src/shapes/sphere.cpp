@@ -27,6 +27,14 @@ void Sphere::updateIntersection(const Ray3f &ray, Intersection &its, const Inter
 	// ECSE689 : update the intersection structure its with the final information. Use ray.maxt for its.t.
 }
 
+void Sphere::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const {
+	throw NoriException("Sphere::sampleArea is not yet implemented");
+}
+
+void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
+	throw NoriException("Sphere::sampleSolidAngle is not yet implemented");
+}
+
 std::string Sphere::toString() const {
 	return tfm::format(
 		"Sphere[\n"

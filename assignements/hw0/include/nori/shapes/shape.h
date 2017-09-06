@@ -71,31 +71,26 @@ struct IntersectionQueryRecord {
 */
 class Shape : public NoriObject {
 public:
+
+	/*-------------------------------------------*/
+	/* Public Initialization/Destruction methods */
+	/*-------------------------------------------*/
+
 	/// Release all memory
 	virtual ~Shape();
 
 	/// Initialize internal data structures (called once by the XML parser)
 	virtual void activate();
 
-	/**
-	* \brief Uniformly sample a position on the object with
-	* respect to surface area. Returns both position and normal
-	*/
-	//virtual void samplePosition(const Point2f &sample, Point3f &p, Normal3f &n) const;
+	/*---------------------*/
+	/* Calculation methods */
+	/*---------------------*/
 
-	/**
-	* \brief Calculate/Update the axis-aligned bounding box of the object
-	*/
+	/// Calculate/Update the axis-aligned bounding box of the object
 	virtual void calculateBoundingBox() = 0; 
 
-	//// Return an axis-aligned bounding box of the entire object
-	virtual const BoundingBox3f &getBoundingBox() const { return m_bbox; }
-
-	//// Return Centroid of the Shape
-	virtual Point3f getCentroid() const; 
-
 	/** \brief Intersection test
-	* 
+	*
 	* \param ray
 	*    A 3-dimensional ray data structure with minimum/maximum extent
 	*    information
@@ -116,6 +111,32 @@ public:
 
 	virtual void updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR = nullptr) const = 0;
 
+	/*------------------*/
+	/* Sampling methods */
+	/*------------------*/
+
+	/// Returns a sample point on the shape according to EMeasure
+	virtual void sample(SampleQueryRecord &outSQR, EMeasure measure, const Point2f &sample) const;
+
+	/// Returns a sample point using surface area sampling
+	virtual void sampleArea(SampleQueryRecord &outSQR, const Point2f &sample) const = 0;
+
+	/// Returns a sample point using subtended solid angle sampling
+	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample) const = 0;
+	
+	/*-----------------*/
+	/* Utility methods */
+	/*-----------------*/
+
+	/// Return an axis-aligned bounding box of the entire object
+	virtual const BoundingBox3f &getBoundingBox() const { return m_bbox; }
+
+	/// Return Centroid of the Shape
+	virtual Point3f getCentroid() const; 
+
+	/// Return whether the Shape is a mesh or not
+	virtual bool isMesh() const { return false; }
+
 	/// Is this object an area emitter?
 	virtual bool isEmitter() const { return m_emitter != nullptr; }
 
@@ -128,17 +149,14 @@ public:
 	/// Return a pointer to the BSDF associated with this object
 	virtual const BSDF *getBSDF() const { return m_bsdf; }
 
-	/// Register a child object (e.g. a BSDF) with the object
-	virtual void addChild(NoriObject *child);
-
 	/// Return the name of this object
 	virtual const std::string &getName() const { return m_name; }
 
+	/// Register a child object (e.g. a BSDF) with the object
+	virtual void addChild(NoriObject *child);
+
 	/// Return a human-readable summary of this instance
 	virtual std::string toString() const;
-
-	/// Return whether the Shape is a mesh or not
-	virtual bool isMesh() const { return false; }
 
 	/**
 	* \brief Return the type of object (i.e. Mesh/BSDF/etc.)
@@ -148,7 +166,7 @@ public:
 
 protected:
 	/// Create an empty Object
-	Shape();
+	Shape() {}
 
 protected:
 	std::string m_name;                  ///< Identifying name

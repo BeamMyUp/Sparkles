@@ -8,10 +8,14 @@ DirectionalLight::DirectionalLight(const PropertyList& propList)
 	m_direction.normalize();
 }
 
-Color3f DirectionalLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
+Color3f DirectionalLight::eval(EmitterQueryRecord &eqr, const Point3f &p) const {
 	eqr.wi = m_direction.normalized();
 
 	return m_radiance;
+}
+
+void DirectionalLight::sample(SampleQueryRecord &sqr, EMeasure measure, const Point2f &sample) const {
+	sqr.sample.v = m_direction; 
 }
 
 std::string DirectionalLight::toString() const {

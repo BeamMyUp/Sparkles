@@ -143,6 +143,14 @@ void Mesh::updateIntersection(const Ray3f &ray, Intersection &its, const Interse
 	}
 }
 
+void Mesh::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const {
+	throw NoriException("Mesh::sampleArea is not yet implemented");
+}
+
+void Mesh::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
+	throw NoriException("Mesh::sampleSolidAngle is not yet implemented");
+}
+
 BoundingBox3f Mesh::getBoundingBox(uint32_t index) const {
 	BoundingBox3f result(m_V.col(m_F(0, index)));
 	result.expandBy(m_V.col(m_F(1, index)));

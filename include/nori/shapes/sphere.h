@@ -16,10 +16,10 @@ public:
 	void updateIntersection(const Ray3f &ray, Intersection &its, const IntersectionQueryRecord* IQR = nullptr) const override;
 
 	/// Returns a sample point using surface area sampling
-	virtual void sampleArea(SampleQueryRecord& outSQR, Point2f &sample) const override;
+	virtual void sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const override;
 
 	/// Returns a sample point using subtended solid angle sampling
-	virtual void sampleSolidAngle(SampleQueryRecord& outSQR, Point2f &sample) const override;
+	virtual void sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const override;
 
 	/// Return Centroid of the Shape
 	virtual Point3f getCentroid() const override { return m_center; }

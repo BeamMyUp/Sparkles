@@ -77,11 +77,11 @@ void Sphere::updateIntersection(const Ray3f &ray, Intersection &its, const Inter
 	its.uv = Point2f((float)phi * INV_TWOPI, (float)theta * INV_PI);
 }
 
-void Sphere::sampleArea(SampleQueryRecord& outSQR, Point2f &sample) const {
+void Sphere::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const {
 	throw NoriException("Sphere::sampleArea is not yet implemented");
 }
 
-void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, Point2f &sample) const {
+void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
 	throw NoriException("Sphere::sampleSolidAngle is not yet implemented");
 }
 

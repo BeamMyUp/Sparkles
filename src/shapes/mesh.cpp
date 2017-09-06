@@ -143,11 +143,11 @@ void Mesh::updateIntersection(const Ray3f &ray, Intersection &its, const Interse
 	}
 }
 
-void Mesh::sampleArea(SampleQueryRecord& outSQR, Point2f &sample) const {
+void Mesh::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const {
 	throw NoriException("Mesh::sampleArea is not yet implemented");
 }
 
-void Mesh::sampleSolidAngle(SampleQueryRecord& outSQR, Point2f &sample) const {
+void Mesh::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
 	throw NoriException("Mesh::sampleSolidAngle is not yet implemented");
 }
 
