@@ -41,7 +41,7 @@ void Shape::activate() {
 	}
 }
 
-void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample) const {
+void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample, const Point3f* const x /*= nullptr*/) const {
 	switch (measure)
 	{
 	case nori::EUnknownMeasure:

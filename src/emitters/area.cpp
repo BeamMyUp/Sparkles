@@ -20,8 +20,7 @@ void AreaLight::sample(SampleQueryRecord& sqr, EMeasure measure, const Point2f &
 }
 
 float AreaLight::pdf(EMeasure measure, const Point3f& sample, const Point3f* const x /* = nullptr*/) const {
-	throw NoriException("AreaLight::pdf is not yet implemented");
-	return 0.0f;
+	return m_shape->pdf(measure, sample, x);
 }
 
 std::string AreaLight::toString() const {

@@ -113,7 +113,7 @@ Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 
 std::string DirectIntegrator::toString() const {
 	return tfm::format(
-		"SimpleIntegrator[]"
+		"DirectIntegrator[]"
 	);
 }
 

@@ -7,14 +7,20 @@ AreaLight::AreaLight(const PropertyList& propList)
 
 }
 
-Color3f AreaLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
-	// ECSE689: Implement Area Light's eval function and fill the EmitterQueryRecord
+void AreaLight::eval(EmitterQueryRecord& outERec, const Point3f& p, const Point3f* const ref /*= nullptr*/) const {
+	if(!ref)
+		throw NoriException("Can't evaluate areaLight without reference");
 
-	return Color3f(0.f);
+	// ECSE689: Implement Area Light's eval function and fill the EmitterQueryRecord
 }
 
-void AreaLight::sample(SampleQueryRecord& sqr, EMeasure measure, const Point2f &sample) const {
-	m_shape->sample(sqr, measure, sample); 
+void AreaLight::sample(SampleQueryRecord& sqr, EMeasure measure, const Point2f &sample, const Point3f* x /*= nullptr*/) const {
+	// ECSE689: Implement Area Light's sample function, filling the SampleQueryRecord
+}
+
+float AreaLight::pdf(EMeasure measure, const Point3f& sample, const Point3f* const x /* = nullptr*/) const {
+	// ECSE689: Implement Area Light's pdf function
+	return 0.f; 
 }
 
 std::string AreaLight::toString() const {

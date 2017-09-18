@@ -3,7 +3,7 @@
 NORI_NAMESPACE_BEGIN
 
 Emitter::Emitter(const PropertyList& propList)
-	: m_radiance(propList.getColor("radiance", Color3f())){
+	: m_radiance(propList.getColor("radiance", Color3f())) {
 
 }
 

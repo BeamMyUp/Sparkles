@@ -14,10 +14,16 @@ DirectIntegrator::DirectIntegrator(const PropertyList &props)
 		m_measure = EArea;
 	else if (measure == "solid-angle")
 		m_measure = ESolidAngle;
-	else
+	else if (measure == "hemisphere")
 		m_measure = EHemisphere;
+	else
+		throw NoriException("DirectIntegrator::DirectIntegrator : Cannot support given measure");
 
-	m_warpType = Warp::getWarpType(m_measure);
+	std::string warpType = "";
+	if (m_measure == EHemisphere)
+		warpType = props.getString("warp-type", "");
+
+	m_warpType = Warp::getWarpType(m_measure, warpType);
 }
 
 Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {
@@ -28,7 +34,7 @@ Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 
 std::string DirectIntegrator::toString() const {
 	return tfm::format(
-		"SimpleIntegrator[]"
+		"DirectIntegrator[]"
 	);
 }
 

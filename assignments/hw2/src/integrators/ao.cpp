@@ -7,7 +7,7 @@ NORI_NAMESPACE_BEGIN
 
 AmbientOcclusion::AmbientOcclusion(const PropertyList &props) 
 	: m_nSamples(props.getInteger("nSamples", 1)){
-	std::string samplingMethod = props.getString("sampling", ""); 
+	std::string samplingMethod = props.getString("warp-type", ""); 
 
 	m_warpType = Warp::getWarpType(EHemisphere, samplingMethod); 
 }
@@ -20,7 +20,7 @@ Color3f AmbientOcclusion::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 
 std::string AmbientOcclusion::toString() const {
 	return tfm::format(
-		"SimpleIntegrator[]"
+		"AmbientOcclusionIntegrator[]"
 	);
 }
 

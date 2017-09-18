@@ -8,14 +8,17 @@ DirectionalLight::DirectionalLight(const PropertyList& propList)
 	m_direction.normalize(); 
 }
 
-Color3f DirectionalLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
+void DirectionalLight::eval(EmitterQueryRecord& outERec, const Point3f& p, const Point3f* const samplePoint /*= nullptr*/) const {
 	// ECSE689: Implement Directional Light's eval function and fill the EmitterQueryRecord
-
-	return Color3f();
 }
 
-void DirectionalLight::sample(SampleQueryRecord &sqr, EMeasure measure, const Point2f &sample) const {
+void DirectionalLight::sample(SampleQueryRecord &sqr, EMeasure measure, const Point2f &sample, const Point3f* const x /*= nullptr*/) const {
 	sqr.sample.v = m_direction; 
+}
+
+float DirectionalLight::pdf(EMeasure measure, const Point3f& sample, const Point3f* const x /* = nullptr*/) const {
+	throw NoriException("DirectionalLight::pdf is not yet implemented");
+	return 0.0f;
 }
 
 std::string DirectionalLight::toString() const {
