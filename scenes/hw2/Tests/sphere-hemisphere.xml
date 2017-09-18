@@ -7,7 +7,8 @@
 	<!-- Use a direct illumination integrator -->
 	<integrator type="direct">
 		<integer name="nSamples" value="1"/>
-		<string name="measure" value="solid-angle"/>
+		<string name="measure" value="hemisphere"/>
+		<string name="warp-type" value="cosine-hemisphere" />
 	</integrator>
 
 	<!-- Illuminate using an area light -->
