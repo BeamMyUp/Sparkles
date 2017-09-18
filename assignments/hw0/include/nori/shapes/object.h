@@ -32,6 +32,8 @@ struct SampleQueryRecord {
 	union Sample {
 		Vector3f v;		//< Direction resulting from the sampling	
 		Point3f  p;		//< Position of the surface point (final sample)
+		
+		Sample() { memset(this, 0, sizeof(Sample)); }; 
 	};
 	Sample sample;		//< The sample found
 	float t;			//< Unoccluded distance along the ray

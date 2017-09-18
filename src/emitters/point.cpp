@@ -8,17 +8,20 @@ PointLight::PointLight(const PropertyList& propList)
 
 }
 
-Color3f PointLight::eval(EmitterQueryRecord& eqr, const Point3f& p) const {
-	eqr.wi = Vector3f(m_position - p);
-	eqr.wi.normalize();
+void PointLight::eval(EmitterQueryRecord& outERec, const Point3f& p, const Point3f* const samplePoint /*= nullptr*/) const{
+	outERec.wi = Vector3f(m_position - p);
+	outERec.wi.normalize();
 
-	Color3f res = m_radiance / distSquared(m_position, p);
-
-	return res;
+	outERec.Le = m_radiance / distSquared(m_position, p);
 }
 
-void PointLight::sample(SampleQueryRecord& sqr, EMeasure measure, const Point2f &sample) const {
+void PointLight::sample(SampleQueryRecord& sqr, EMeasure measure, const Point2f &sample, const Point3f* const x /*= nullptr*/) const {
 	sqr.sample.p = m_position; 
+}
+
+float PointLight::pdf(EMeasure measure, const Point3f& sample, const Point3f* const x /*= nullptr*/) const {
+	throw NoriException("PointLight::pdf is not yet implemented");
+	return 0.0f;
 }
 
 std::string PointLight::toString() const {

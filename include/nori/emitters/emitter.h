@@ -25,6 +25,7 @@ NORI_NAMESPACE_BEGIN
 class PropertyList;
 
 struct EmitterQueryRecord {
+	Color3f Le; 
 	Vector3f wi; //< Normalized incident direction of light
 };
 
@@ -47,10 +48,13 @@ public:
 	virtual bool isArea() const { return false; }
 
 	/// Returns the radiance arriving at the queried point from the emitter, assuming no occlusion
-	virtual Color3f eval(EmitterQueryRecord& eqr, const Point3f& p) const = 0;
+	virtual void eval(EmitterQueryRecord& outERec, const Point3f& p, const Point3f* const samplePoint = nullptr) const = 0;
 
-	/// Sample an Emitter according to the measure given in argument
-	virtual void sample(SampleQueryRecord& esqr, EMeasure measure, const Point2f &sample) const = 0; 
+	/// Sample an Emitter according to the measure given in argument and eval for the resulting point
+	virtual void sample(SampleQueryRecord& outSRec, EMeasure measure, const Point2f &sample, const Point3f* const x = nullptr) const = 0; 
+
+	/// Returns the pdf of a 3D point on the emitter according to EMeasure
+	virtual float pdf(EMeasure measure, const Point3f& sample, const Point3f* const x = nullptr) const = 0;
 
 	/// Return a brief string summary of the instance (for debugging purpose)
 	virtual std::string toString() const override;

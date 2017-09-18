@@ -4,6 +4,7 @@
 #include <nori/emitters/emitter.h>
 #include <nori/shapes/sphere.h>
 #include <nori/core/common.h>
+#include <nori/warp/warp.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -11,6 +12,7 @@ Sphere::Sphere(const PropertyList &propList)
 	: m_center(propList.getPoint("center", Point3f()))
 	, m_radius(propList.getFloat("radius", 1.f)){
 
+	m_invSurfaceArea = 1.f / (4.f * M_PI * m_radius * m_radius); 
 }
 
 void Sphere::calculateBoundingBox(){
@@ -78,11 +80,45 @@ void Sphere::updateIntersection(const Ray3f &ray, Intersection &its, const Inter
 }
 
 void Sphere::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const {
-	throw NoriException("Sphere::sampleArea is not yet implemented");
+	// Sample uniform sphere
+	Warp::WarpQueryRecord wqr; 
+	Warp::warp(wqr, Warp::EWarpType::EUniformSphere, sample);
+
+	// Fill Sample Query Record
+	outSQR.sample.p = Point3f(wqr.warpedPoint * m_radius) + m_center; // scale sample to sphere
+	outSQR.n = Normal3f(wqr.warpedPoint); 
+	outSQR.pdf = pdfArea(outSQR.sample.p);
 }
 
-void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
-	throw NoriException("Sphere::sampleSolidAngle is not yet implemented");
+void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample, const Point3f& x) const {
+	Vector3f centerToX(m_center - x);
+
+	// Calculate subtended solid angle 
+	float sinThetaMax2 = m_radius * m_radius / centerToX.squaredNorm();
+	float cosThetaMax = safeSqrt(1.f - sinThetaMax2); 
+
+	// Warping to Uniform cone. Not using Warp to keep cosTheta, sinTheta and Phi and avoid recalculating
+	Warp::WarpQueryRecord wqr;
+	Warp::warp(wqr, Warp::EWarpType::EUniformCone, sample, cosThetaMax);
+	Vector3f d = Frame(centerToX.normalized()).toWorld(wqr.warpedPoint); 
+
+	// Find the point on the sphere
+	outSQR.sample.v = d; 
+	outSQR.pdf = wqr.pdf; 
+}
+
+float Sphere::pdfArea(const Point3f &sample) const {
+	return m_invSurfaceArea;
+}
+
+float Sphere::pdfSolidAngle(const Point3f &sample, const Point3f& x) const {
+	Vector3f centerToX(m_center - x);
+	
+	// Calculate subtended solid angle 
+	float sinThetaMax2 = m_radius * m_radius / centerToX.squaredNorm();
+	float cosThetaMax = safeSqrt(1.f - sinThetaMax2);
+
+	return Warp::pdf(Warp::EWarpType::EUniformCone, sample, cosThetaMax);
 }
 
 std::string Sphere::toString() const {

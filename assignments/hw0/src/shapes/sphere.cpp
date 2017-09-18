@@ -11,6 +11,7 @@ Sphere::Sphere(const PropertyList &propList)
 	: m_center(propList.getPoint("center", Point3f()))
 	, m_radius(propList.getFloat("radius", 1.f)){
 
+	m_invSurfaceArea = 1.f / (4.f * M_PI * m_radius * m_radius); 
 }
 
 void Sphere::calculateBoundingBox(){
@@ -31,8 +32,18 @@ void Sphere::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const 
 	throw NoriException("Sphere::sampleArea is not yet implemented");
 }
 
-void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
+void Sphere::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample, const Point3f& x) const {
 	throw NoriException("Sphere::sampleSolidAngle is not yet implemented");
+}
+
+float Sphere::pdfArea(const Point3f &sample) const {
+	throw NoriException("Sphere::pdfArea is not yet implemented");
+	return 0.f;
+}
+
+float Sphere::pdfSolidAngle(const Point3f &sample, const Point3f& x) const {
+	throw NoriException("Sphere::pdfSolidAngle is not yet implemented");
+	return 0.f;
 }
 
 std::string Sphere::toString() const {

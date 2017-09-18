@@ -82,6 +82,9 @@ void Scene::addChild(NoriObject *obj) {
                 Shape* shape = static_cast<Shape *>(obj);
                 m_accel->addShape(shape);
                 m_shapes.push_back(shape);
+
+				if (shape->isEmitter())
+					m_emitters.push_back(shape->getEmitter()); 
             }
             break;
         

@@ -147,8 +147,18 @@ void Mesh::sampleArea(SampleQueryRecord& outSQR, const Point2f &sample) const {
 	throw NoriException("Mesh::sampleArea is not yet implemented");
 }
 
-void Mesh::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample) const {
+void Mesh::sampleSolidAngle(SampleQueryRecord& outSQR, const Point2f &sample, const Point3f& x) const {
 	throw NoriException("Mesh::sampleSolidAngle is not yet implemented");
+}
+
+float Mesh::pdfArea(const Point3f &sample) const {
+	throw NoriException("Mesh::pdfArea is not yet implemented");
+	return 0.f;
+}
+
+float Mesh::pdfSolidAngle(const Point3f &sample, const Point3f& x) const {
+	throw NoriException("Mesh::pdfSolidAngle is not yet implemented");
+	return 0.f;
 }
 
 BoundingBox3f Mesh::getBoundingBox(uint32_t index) const {

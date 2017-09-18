@@ -132,13 +132,16 @@ float Warp::squareToBeckmannPdf(const Vector3f &m, float alpha) {
     throw NoriException("Warp::squareToBeckmannPdf() is not yet implemented!");
 }
 
-
 Vector3f Warp::squareToUniformCone(const Point2f &sample, float cosThetaMax) {
-	throw NoriException("Warp::squareToUniformCone() is not yet implemented!");
+	float cosTheta = (1.f - sample.x()) + sample.x() * cosThetaMax;
+	float sinTheta = std::sqrt(1.f - cosTheta * cosTheta); 
+	float phi = sample.y() * 2.f * M_PI; 
+
+	return Vector3f(std::cos(phi) * sinTheta, std::sin(phi) * sinTheta, cosTheta); 
 }
 
 float Warp::squareToUniformConePdf(float cosThetaMax) {
-	throw NoriException("Warp::squareToUniformConePdf() is not yet implemented!");
+	return 1.f / (2.f * M_PI * (1.f - cosThetaMax));
 }
 
 /*-----------------*/

@@ -116,13 +116,22 @@ public:
 	/*------------------*/
 
 	/// Returns a sample point on the shape according to EMeasure
-	virtual void sample(SampleQueryRecord &outSQR, EMeasure measure, const Point2f &sample) const;
+	virtual void sample(SampleQueryRecord &outSQR, EMeasure measure, const Point2f &sample, const Point3f* const x = nullptr) const;
 
 	/// Returns a sample point using surface area sampling
 	virtual void sampleArea(SampleQueryRecord &outSQR, const Point2f &sample) const = 0;
 
 	/// Returns a sample point using subtended solid angle sampling
-	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample) const = 0;
+	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample, const Point3f& x) const = 0;
+
+	/// Returns the pdf of a 3D point on the shape according to EMeasure
+	virtual float pdf(EMeasure measure, const Point3f &sample, const Point3f* const x = nullptr) const;
+
+	/// Returns a pdf of a 3D point on the shape using surface area sampling
+	virtual float pdfArea(const Point3f &sample) const = 0;
+
+	/// Returns a pdf of a 3D point on the shape using subtended solid angle sampling
+	virtual float pdfSolidAngle(const Point3f &sample, const Point3f& x) const = 0;
 	
 	/*-----------------*/
 	/* Utility methods */

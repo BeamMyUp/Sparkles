@@ -41,14 +41,16 @@ void Shape::activate() {
 	}
 }
 
-void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample) const {
+void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample, const Point3f* const x /*= nullptr*/) const {
 	switch (measure)
 	{
 	case nori::EUnknownMeasure:
 		throw NoriException("Measure received by Shape::sample was nori::EUnknownMeasure. Cannot sample according to the measure");
 		break;
 	case nori::ESolidAngle:
-		sampleSolidAngle(outSQR, sample);
+		if (!x)
+			throw NoriException("Cannot sample Solid angle without point x (current point to shade)");
+		sampleSolidAngle(outSQR, sample, *x);
 		break;
 	case nori::EDiscrete:
 		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
@@ -56,6 +58,30 @@ void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &s
 	case nori::EArea:
 		sampleArea(outSQR, sample);
 		break;
+	case nori::EHemisphere:
+		throw NoriException("Measure received by Shape::sample was nori::EHemisphere which is no yet implemented");
+		break;
+	default:
+		throw NoriException("Measure received by is not supported.");
+		break;
+	}
+}
+
+float Shape::pdf(EMeasure measure, const Point3f &sample, const Point3f* const x /*= nullptr*/) const {
+	switch (measure)
+	{
+	case nori::EUnknownMeasure:
+		throw NoriException("Measure received by Shape::sample was nori::EUnknownMeasure. Cannot sample according to the measure");
+		break;
+	case nori::ESolidAngle:
+		if (!x)
+			throw NoriException(NoriException("Cannot get pdf Solid angle without point x (current point to shade)"));
+		return pdfSolidAngle(sample, *x);
+	case nori::EDiscrete:
+		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
+		break;
+	case nori::EArea:
+		return pdfArea(sample);
 	case nori::EHemisphere:
 		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
 		break;

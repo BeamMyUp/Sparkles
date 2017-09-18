@@ -91,7 +91,13 @@ public:
 	virtual void sampleArea(SampleQueryRecord &outSQR, const Point2f &sample) const override;
 
 	/// Returns a sample point using subtended solid angle sampling
-	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample) const override;
+	virtual void sampleSolidAngle(SampleQueryRecord &outSQR, const Point2f &sample, const Point3f& x) const override;
+
+	/// Returns a pdf of a 3D point on the shape using surface area sampling
+	virtual float pdfArea(const Point3f &sample) const override;
+
+	/// Returns a pdf of a 3D point on the shape using subtended solid angle sampling
+	virtual float pdfSolidAngle(const Point3f &sample, const Point3f& x) const override;
 
 	/// Return an axis-aligned bounding box of the entire mesh
 	const BoundingBox3f &getBoundingBox() const { return m_bbox; }

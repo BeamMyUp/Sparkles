@@ -32,12 +32,24 @@ struct SampleQueryRecord {
 	union Sample {
 		Vector3f v;		//< Direction resulting from the sampling	
 		Point3f  p;		//< Position of the surface point (final sample)
+
+		Sample() { memset(this, 0, sizeof(Sample)); }; 
 	};
 	Sample sample;		//< The sample found
 	float t;			//< Unoccluded distance along the ray
 	Point2f uv;			//< UV coordinates at point p, if any
 	Normal3f n;			//< Surface normal at point p
 	float pdf;			//< pdf of the sample query
+};
+
+/**
+
+*/
+struct TwoPointsSampleQueryRecord : public SampleQueryRecord {
+	Point3f ref;		//< Reference point for direct sampling
+	Vector3f d;			//< Unit direction from reference point to target direction
+	Normal3f refN;		//< Surface normal at target direction
+	float dist;			//< distance from reference point to target direction
 };
 
 /**

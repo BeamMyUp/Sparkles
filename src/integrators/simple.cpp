@@ -25,7 +25,7 @@ Color3f SimpleIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 	for (const auto &emitter : scene->getEmitters()) {
 		// Query the light's radiance and direction
 		EmitterQueryRecord eqr; 
-		Color3f Le = emitter->eval(eqr, its.p); 
+		emitter->eval(eqr, its.p); 
 
 		// If point is visible from light source
 		Ray3f visibilityRay(its.p, eqr.wi); 
@@ -34,7 +34,7 @@ Color3f SimpleIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 
 			float cosTheta = zeroClamp(n.dot(eqr.wi));
 
-			Li += Le * bsdf->eval(bqr) * cosTheta; 
+			Li += eqr.Le * bsdf->eval(bqr) * cosTheta; 
 		}
 	}
 
