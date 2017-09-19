@@ -1,0 +1,329 @@
+<scene>
+	<!-- Independent sample generator, user-selected samples per pixel -->
+	<sampler type="independent">
+		<integer name="sampleCount" value="64"/>
+	</sampler>
+
+	<!-- Use a direct illumination integrator -->
+	<integrator type="direct">
+		<integer name="nSamples" value="1"/>
+		<string name="measure" value="area"/>
+	</integrator>
+
+	<!-- Illuminate using an area light -->
+	<shape type="sphere">
+		<point name="center" value="2,-1,1"/>
+        <float name="radius" value="0.15"/>
+		<emitter type="area">
+			<color name="radiance" value="200,0,10"/>
+		</emitter>
+	</shape>
+	
+	<shape type="sphere">
+		<point name="center" value="-2,-1,1"/>
+        <float name="radius" value="0.15"/>
+		<emitter type="area">
+			<color name="radiance" value="10,0,200"/>
+		</emitter>
+	</shape>
+
+	<!-- Ground plane -->
+	<shape type="obj">
+		<string name="filename" value="plane.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="100,1,100"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="0,0,0"/>
+		</transform>
+	</shape>
+	
+	<!-- Left Bars -->
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="0,0,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="0.2,0.2,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="0.4,0.4,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="0.6,0.6,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="0.8,0.8,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="1,1,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="1.2,1.2,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="1.4,1.4,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="1.6,1.6,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="1.8,1.8,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="2.0,2.0,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="2.2,2.2,0"/>
+		</transform>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="2.4,2.4,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="2.6,2.6,0"/>
+		</transform>
+	</shape>
+	
+	<!-- Right Bars -->
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-0.2,0.2,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-0.4,0.4,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-0.6,0.6,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-0.8,0.8,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-1,1,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-1.2,1.2,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-1.4,1.4,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-1.6,1.6,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-1.8,1.8,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-2.0,2.0,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-2.2,2.2,0"/>
+		</transform>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-2.4,2.4,0"/>
+		</transform>
+	</shape>
+	
+	<shape type="obj">
+		<string name="filename" value="cube.obj"/>
+		<bsdf type="diffuse"/>
+		<transform name="toWorld">
+			<scale value="0.1,8,0.1"/>
+			<rotate axis="1,0,0" angle="90"/>
+			<translate value="-2.6,2.6,0"/>
+		</transform>
+	</shape>
+	
+	
+	<!-- Render the scene as viewed by a perspective camera -->
+	<camera type="perspective">
+		<transform name="toWorld">
+			<lookat target="0,0,0" origin="0,8,3" up="0,0,1"/>
+		</transform>
+
+		<!-- Field of view: 40 degrees -->
+		<float name="fov" value="40"/>
+
+		<!-- 768 x 768 pixels -->
+		<integer name="width" value="768"/>
+		<integer name="height" value="768"/>
+	</camera>
+</scene>
+
+
