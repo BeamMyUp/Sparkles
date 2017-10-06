@@ -60,12 +60,12 @@ public:
            Note that the directions in 'bRec' are in local coordinates,
            so Frame::cosTheta() actually just returns the 'z' component.
         */
-        return INV_PI * Frame::cosTheta(bRec.wo);
+        return INV_PI * Frame::cosTheta(bRec.wi);
     }
 
     /// Draw a a sample from the BRDF model
     Color3f sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
-        if (Frame::cosTheta(bRec.wi) <= 0)
+        if (Frame::cosTheta(bRec.wo) <= 0)
             return Color3f(0.0f);
 
         bRec.measure = ESolidAngle;
@@ -74,7 +74,7 @@ public:
            to a direction on a cosine-weighted hemisphere */
 		Warp::WarpQueryRecord wqr; 
 		Warp::warp(wqr, Warp::EWarpType::ECosineHemisphere, sample); 
-        bRec.wo = wqr.warpedPoint;
+        bRec.wi = wqr.warpedPoint;
 
         /* Relative index of refraction: no change */
         bRec.eta = 1.0f;

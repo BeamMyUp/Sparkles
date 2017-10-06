@@ -18,7 +18,7 @@ Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
 }
 
 Color3f Phong::eval(const BSDFQueryRecord &bRec) const {
-	// ECSE689: Implement Phong evaluation - remember wo is outgoing radiance and wi is the camera ray
+	// ECSE689: Implement Phong evaluation
 
 	return Color3f(0.f);
 }

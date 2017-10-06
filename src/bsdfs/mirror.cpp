@@ -37,14 +37,14 @@ public:
     }
 
     Color3f sample(BSDFQueryRecord &bRec, const Point2f &) const {
-        if (Frame::cosTheta(bRec.wi) <= 0) 
+        if (Frame::cosTheta(bRec.wo) <= 0) 
             return Color3f(0.0f);
 
         // Reflection in local coordinates
-        bRec.wo = Vector3f(
-            -bRec.wi.x(),
-            -bRec.wi.y(),
-             bRec.wi.z()
+        bRec.wi = Vector3f(
+            -bRec.wo.x(),
+            -bRec.wo.y(),
+             bRec.wo.z()
         );
         bRec.measure = EDiscrete;
 
