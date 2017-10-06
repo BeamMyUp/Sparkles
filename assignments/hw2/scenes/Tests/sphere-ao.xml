@@ -1,7 +1,7 @@
 <scene>
     <!-- Independent sample generator, one sample per pixel -->
 	<sampler type="independent">
-		<integer name="sampleCount" value="256"/>
+		<integer name="sampleCount" value="1024"/>
 	</sampler>
 
     <!-- Render the sphere with a basic shading -->
