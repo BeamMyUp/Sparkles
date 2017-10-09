@@ -3,15 +3,16 @@
 NORI_NAMESPACE_BEGIN
 
 float MIS::balanceHeuristic(float pdf1, float pdf2, uint32_t n1, uint32_t n2) {
-	// ECSE689: Implement balance Heuristic
-	throw NoriException("Not implemented yet");
-	return 0;
+	return (n1 * pdf1) / (n1 * pdf1 + n2 * pdf2); 
 }
 
 float MIS::powerHeuristic(float pdf1, float pdf2, uint32_t n1, uint32_t n2, uint32_t beta /*= 2*/) {
-	// ECSE689: You don't have to implement this heuristic, but you can if you'd like
-	throw NoriException("Not implemented yet");
-	return 0;
+	float f = n1 * pdf1;
+	float g = n2 * pdf2; 
+	float fpow = std::pow(f, beta);
+	float gpow = std::pow(g, beta);
+	
+	return fpow / (fpow + gpow); 
 }
 
 float MIS::heurisitic(EMISType type, float pdf1, float pdf2, uint32_t n1, uint32_t n2, float param /*= 0*/) {
