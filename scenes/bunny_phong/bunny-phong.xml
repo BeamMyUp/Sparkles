@@ -1,7 +1,7 @@
 <scene>
 	<!-- Independent sample generator, user-selected samples per pixel -->
 	<sampler type="independent">
-		<integer name="sampleCount" value="16"/>
+		<integer name="sampleCount" value="32"/>
 	</sampler>
 
 	<!-- Use a direct illumination integrator -->

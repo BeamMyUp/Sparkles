@@ -41,6 +41,7 @@ add_executable(nori
   include/nori/accelerators/accel.h
   include/nori/accelerators/bvh.h
   include/nori/bsdfs/bsdf.h
+  include/nori/bsdfs/phong.h
   include/nori/cameras/camera.h
   include/nori/core/bbox.h
   include/nori/core/bitmap.h
@@ -73,6 +74,7 @@ add_executable(nori
   include/nori/shapes/object.h
   include/nori/shapes/shape.h
   include/nori/shapes/sphere.h
+  include/nori/warp/mis.h
   include/nori/warp/warp.h
 
   # Source code files
@@ -82,6 +84,7 @@ add_executable(nori
   src/bsdfs/diffuse.cpp
   src/bsdfs/microfacet.cpp
   src/bsdfs/mirror.cpp
+  src/bsdfs/phong.cpp
   src/cameras/perspective.cpp
   src/core/bitmap.cpp
   src/core/block.cpp
@@ -109,6 +112,7 @@ add_executable(nori
   src/shapes/shape.cpp
   src/shapes/sphere.cpp
   src/warp/ttest.cpp
+  src/warp/mis.cpp
   src/warp/warp.cpp
 )
 
