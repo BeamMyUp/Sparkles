@@ -26,21 +26,9 @@ Vector3f Phong::reflect(const Vector3f &wo) const {
 }
 
 Color3f Phong::eval(const BSDFQueryRecord &bRec) const {
-	Color3f f(0.f);
+	// ECSE689: Implement Phong evaluation
 
-	if (bRec.measure != ESolidAngle
-		|| Frame::cosTheta(bRec.wi) <= 0
-		|| Frame::cosTheta(bRec.wo) <= 0) {
-		return f;
-	}
-
-	float cosAlpha = bRec.wi.dot(reflect(bRec.wo));
-	if(cosAlpha > 0.0f)
-		f += m_ks * (m_exponent + 2.f)  * INV_TWOPI * std::pow(cosAlpha, m_exponent);
-
-	f += m_kd * INV_PI;
-
-	return f;
+	return Color3f(0.0f);
 }
 
 float Phong::pdf(const BSDFQueryRecord &bRec) const {
