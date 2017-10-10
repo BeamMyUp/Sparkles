@@ -259,6 +259,7 @@ Warp::EWarpType Warp::getWarpType(const EMeasure measure, const std::string& war
 	case EMeasure::EArea:
 		result = EWarpType::EUniformSphere;
 	case EMeasure::EHemisphere:
+	case EMeasure::EBSDF:
 		if (warpType == s_uniformHemisphere)
 			result = EWarpType::EUniformHemisphere;
 		else
