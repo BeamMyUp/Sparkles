@@ -34,6 +34,7 @@ protected:
 	EMeasure m_measure2;			//<< Measure 2 used for MIS (Warning : no compatibility tests between measures is made)
 	Warp::EWarpType m_warpType1;	//<< Warp type used for measure 1 (if needed)
 	Warp::EWarpType m_warpType2;	//<< Warp type used for measure 2 (if needed)
+	MIS::EHeuristic m_heuristic;	//<< MIS heuristic used 
 };
 
 NORI_NAMESPACE_END

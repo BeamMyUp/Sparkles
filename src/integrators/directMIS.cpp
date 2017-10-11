@@ -4,7 +4,9 @@ NORI_NAMESPACE_BEGIN
 
 DirectMISIntegrator::DirectMISIntegrator(const PropertyList &props)
 	: m_nSamples1(props.getInteger("nSamples1", 1))
-	, m_nSamples2(props.getInteger("nSamples2", 1)){
+	, m_nSamples2(props.getInteger("nSamples2", 1))
+	, m_heuristic(MIS::getHeuristic(props.getString("heuristic", ""))){
+
 	std::string measure1 = props.getString("measure1", "");
 	std::string measure2 = props.getString("measure2", "");
 

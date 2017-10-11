@@ -7,12 +7,18 @@ Phong::Phong(const PropertyList& propList)
 	: m_kd(propList.getColor("diffuse-coefficients", Color3f()))
 	, m_ks(propList.getColor("specular-coefficients", Color3f(1.f)))
 	, m_exponent(propList.getInteger("exponent", 1))
+	, m_samplingRatio(0.f)
 {
 	// Ensure Energy conservation
 	Color3f sumK = m_kd + m_ks; 
 	float maxVal = std::max({sumK.x(), sumK.y(), sumK.z()});
-	m_kd /= maxVal;
-	m_ks /= maxVal;
+	
+	if (maxVal != 0) {
+		m_kd /= maxVal;
+		m_ks /= maxVal;
+	}
+	
+	// ECSE689: Compute m_samplingRatio
 }
 
 Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {

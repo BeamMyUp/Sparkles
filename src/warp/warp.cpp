@@ -223,9 +223,8 @@ float Warp::pdf(const EWarpType warpFunction, const Vector3f& point, float param
 }
 
 Warp::EWarpType Warp::getWarpType(const std::string& warpType) {
-	if (warpType == "")
-		return EWarpType::ENone;
-	else if (warpType == s_uniformSquare)
+
+	if (warpType == s_uniformSquare)
 		return EWarpType::EUniformSquare;
 	else if (warpType == s_tent)
 		return EWarpType::ETent;
@@ -243,8 +242,10 @@ Warp::EWarpType Warp::getWarpType(const std::string& warpType) {
 		return EWarpType::EBeckmann;
 	else if (warpType == s_uniformCone)
 		return EWarpType::EUniformCone;
-	else
+	else {
+		return EWarpType::ENone;
 		throw NoriException("Warp type requested unknown");
+	}
 }
 
 Warp::EWarpType Warp::getWarpType(const EMeasure measure, const std::string& warpType/* = ""*/) {

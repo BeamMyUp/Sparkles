@@ -16,6 +16,7 @@ private:
 	Color3f m_kd; //>> Diffuse reflection constants for each colors
 	Color3f m_ks; //>> Specular reflection constants for each colors
 	uint32_t m_exponent; //>> Phong's shininess exponent 
+	float m_samplingRatio; //>> probability of sampling specular 
 
 	Vector3f reflect(const Vector3f &wo) const;
 };
