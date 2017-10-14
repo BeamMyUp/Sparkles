@@ -1,5 +1,6 @@
 #include <nori/bsdfs/phong.h>
 #include <nori/core/frame.h>
+#include <nori/warp/warp.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -48,10 +49,38 @@ Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
 			s.x() = (s.x() - m_samplingRatio) / (1.f - m_samplingRatio);
 			sampleSpec = false; 
 		}
-
 	}
 
-	return f;
+	if (sampleSpec) {
+		Vector3f r = reflect(bRec.wo);
+		
+		float sinAlpha = std::sqrt(1.f - std::pow(sample.y(), 2.f / (m_exponent + 1.f))); 
+		float cosAlpha = std::pow(sample.y(), 1.f / (m_exponent + 1.f));
+		float phi = (2.f * M_PI) * sample.x();
+		Vector3f localDir = Vector3f(
+			sinAlpha * std::cos(phi),
+			sinAlpha * std::sin(phi),
+			cosAlpha
+		);
+
+		// Rotate into correct coordinate system
+		bRec.wi = Frame(r).toWorld(localDir);
+		if (Frame::cosTheta(bRec.wi) <= 0)
+			return f; 
+	}
+	else {
+		Warp::WarpQueryRecord wqr;
+		Warp::warp(wqr, Warp::EWarpType::ECosineHemisphere, sample); 
+		bRec.wi = wqr.warpedPoint; 
+	}
+
+	bRec.eta = 1.f;
+
+	float _pdf = pdf(bRec);
+	if (_pdf == 0)
+		return f; 
+
+	return eval(bRec) / _pdf;
 }
 
 Vector3f Phong::reflect(const Vector3f &wo) const {
@@ -77,9 +106,37 @@ Color3f Phong::eval(const BSDFQueryRecord &bRec) const {
 }
 
 float Phong::pdf(const BSDFQueryRecord &bRec) const {
-	// ECSE689: Implement Phong pdf
+	if (bRec.measure != ESolidAngle
+		|| Frame::cosTheta(bRec.wi) <= 0
+		|| Frame::cosTheta(bRec.wo) <= 0) {
+		return 0.f;
+	}
 
-	return 0;
+	bool hasSpec = m_ks.x() > 0 || m_ks.y() > 0 || m_ks.z() > 0;
+	bool hasDiff = m_kd.x() > 0 || m_kd.y() > 0 || m_kd.z() > 0;
+
+	float diffuseProb = 0;
+	float specProb = 0;
+
+	if (hasDiff) {
+		diffuseProb = Warp::pdf(Warp::EWarpType::ECosineHemisphere, bRec.wi, 0.f);
+	}
+
+	if (hasSpec) {
+		float alpha = bRec.wi.dot(reflect(bRec.wo));
+		
+		if (alpha > 0)
+			specProb = std::pow(alpha, m_exponent) * (m_exponent + 1.0f) / (2.0f * M_PI); 
+	}
+
+	if (hasDiff && hasSpec)
+		return m_samplingRatio * specProb + (1 - m_samplingRatio) * diffuseProb;
+	else if (hasDiff)
+		return diffuseProb;
+	else if (hasSpec)
+		return specProb;
+	else
+		return 0.0f;
 }
 
 
