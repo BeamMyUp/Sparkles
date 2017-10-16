@@ -35,7 +35,7 @@ public:
     Color3f eval(const BSDFQueryRecord &bRec) const {
         /* This is a smooth BRDF -- return zero if the measure
            is wrong, or when queried for illumination on the backside */
-        if (bRec.measure != ESolidAngle
+        if (bRec.measure != EMeasure::ESolidAngle
             || Frame::cosTheta(bRec.wi) <= 0
             || Frame::cosTheta(bRec.wo) <= 0)
             return Color3f(0.0f);
@@ -48,7 +48,7 @@ public:
     float pdf(const BSDFQueryRecord &bRec) const {
         /* This is a smooth BRDF -- return zero if the measure
            is wrong, or when queried for illumination on the backside */
-        if (bRec.measure != ESolidAngle
+        if (bRec.measure != EMeasure::ESolidAngle
             || Frame::cosTheta(bRec.wi) <= 0
             || Frame::cosTheta(bRec.wo) <= 0)
             return 0.0f;
@@ -68,7 +68,7 @@ public:
         if (Frame::cosTheta(bRec.wo) <= 0)
             return Color3f(0.0f);
 
-        bRec.measure = ESolidAngle;
+        bRec.measure = EMeasure::ESolidAngle;
 
         /* Warp a uniformly distributed sample on [0,1]^2
            to a direction on a cosine-weighted hemisphere */
@@ -96,7 +96,7 @@ public:
             "]", m_albedo.toString());
     }
 
-    EClassType getClassType() const { return EBSDF; }
+    EClassType getClassType() const { return EClassType::EBSDF; }
 private:
     Color3f m_albedo;
 };

@@ -115,7 +115,7 @@ public:
     /// Return a string summary of the scene (for debugging purposes)
     std::string toString() const;
 
-    EClassType getClassType() const { return EScene; }
+    EClassType getClassType() const { return EClassType::EScene; }
 private:
     std::vector<Shape*> m_shapes;
 	std::vector<Emitter*> m_emitters; 

@@ -26,14 +26,12 @@ Phong::Phong(const PropertyList& propList)
 }
 
 Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
-	Color3f f(0.f);
-
 	bool hasSpec = m_ks.x() > 0 || m_ks.y() > 0 || m_ks.z() > 0;
 	bool hasDiff = m_kd.x() > 0 || m_kd.y() > 0 || m_kd.z() > 0;
 
 	// Verifiy that m_ks + m_kd != 0
 	if (!hasSpec && !hasDiff)
-		return f; 
+		return Color3f(0.f); 
 
 	/* Choose to sample either specular or diffuse based on sample.x()value 
 	*  relative to samplingWeigth. Rescale the value so it ends up still covering 
@@ -52,11 +50,9 @@ Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
 	}
 
 	if (sampleSpec) {
-		Vector3f r = reflect(bRec.wo);
-		
-		float sinAlpha = std::sqrt(1.f - std::pow(sample.y(), 2.f / (m_exponent + 1.f))); 
-		float cosAlpha = std::pow(sample.y(), 1.f / (m_exponent + 1.f));
-		float phi = (2.f * M_PI) * sample.x();
+		float sinAlpha = std::sqrt(1.f - std::pow(1.f - s.x(), 2.f / (m_exponent + 1.f))); 
+		float cosAlpha = std::pow(s.x(), 1.f / (m_exponent + 2.f));
+		float phi = (2.f * M_PI) * s.y();
 		Vector3f localDir = Vector3f(
 			sinAlpha * std::cos(phi),
 			sinAlpha * std::sin(phi),
@@ -64,13 +60,15 @@ Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
 		);
 
 		// Rotate into correct coordinate system
+		Vector3f r = reflect(bRec.wo);
 		bRec.wi = Frame(r).toWorld(localDir);
+		
 		if (Frame::cosTheta(bRec.wi) <= 0)
-			return f; 
+			return Color3f(0.0f); 
 	}
 	else {
 		Warp::WarpQueryRecord wqr;
-		Warp::warp(wqr, Warp::EWarpType::ECosineHemisphere, sample); 
+		Warp::warp(wqr, Warp::EWarpType::ECosineHemisphere, s); 
 		bRec.wi = wqr.warpedPoint; 
 	}
 
@@ -78,7 +76,7 @@ Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
 
 	float _pdf = pdf(bRec);
 	if (_pdf == 0)
-		return f; 
+		return Color3f(0.0f); 
 
 	return eval(bRec) / _pdf;
 }
@@ -90,7 +88,7 @@ Vector3f Phong::reflect(const Vector3f &wo) const {
 Color3f Phong::eval(const BSDFQueryRecord &bRec) const {
 	Color3f f(0.f);
 
-	if (bRec.measure != ESolidAngle
+	if (bRec.measure != EMeasure::ESolidAngle
 		|| Frame::cosTheta(bRec.wi) <= 0
 		|| Frame::cosTheta(bRec.wo) <= 0) {
 		return f;
@@ -106,7 +104,7 @@ Color3f Phong::eval(const BSDFQueryRecord &bRec) const {
 }
 
 float Phong::pdf(const BSDFQueryRecord &bRec) const {
-	if (bRec.measure != ESolidAngle
+	if (bRec.measure != EMeasure::ESolidAngle
 		|| Frame::cosTheta(bRec.wi) <= 0
 		|| Frame::cosTheta(bRec.wo) <= 0) {
 		return 0.f;

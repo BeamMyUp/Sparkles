@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
             std::unique_ptr<NoriObject> root(loadFromXML(argv[1]));
 
             /* When the XML root object is a scene, start rendering it .. */
-            if (root->getClassType() == NoriObject::EScene)
+            if (root->getClassType() == NoriObject::EClassType::EScene)
                 render(static_cast<Scene *>(root.get()), argv[1]);
         } else if (path.extension() == "exr") {
             /* Alternatively, provide a basic OpenEXR image viewer */

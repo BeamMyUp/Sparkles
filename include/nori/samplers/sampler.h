@@ -101,7 +101,7 @@ public:
      * \brief Return the type of object (i.e. Mesh/Sampler/etc.) 
      * provided by this instance
      * */
-    EClassType getClassType() const { return ESampler; }
+    EClassType getClassType() const { return EClassType::ESampler; }
 protected:
     size_t m_sampleCount;
 };

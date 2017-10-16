@@ -13,13 +13,13 @@ DirectMISIntegrator::DirectMISIntegrator(const PropertyList &props)
 	m_measure1 = getMeasure(measure1);
 	m_measure2 = getMeasure(measure2);
 
-	assert(m_measure1 != measure2 && "DirectMISIntegrator::DirectMISIntegrator : The given measures are the same. Use direct integrator instead");
+	assert(m_measure1 != m_measure2 && "DirectMISIntegrator::DirectMISIntegrator : The given measures are the same. Use direct integrator instead");
 
 	std::string warpType1 = "", warpType2 = "";
-	if (m_measure1 == EHemisphere)
+	if (m_measure1 == EMeasure::EHemisphere)
 		warpType1 = props.getString("warp-type1", "");
 
-	if (m_measure2 == EHemisphere)
+	if (m_measure2 == EMeasure::EHemisphere)
 		warpType2 = props.getString("warp-type2", "");
 
 	m_warpType1 = Warp::getWarpType(m_measure1, warpType1);

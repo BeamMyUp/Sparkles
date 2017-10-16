@@ -60,7 +60,7 @@ struct TwoPointsSampleQueryRecord : public SampleQueryRecord {
  */
 class NoriObject {
 public:
-    enum EClassType {
+    enum class EClassType {
         EScene = 0,
         EShape,
         EBSDF,
@@ -120,14 +120,14 @@ public:
     /// Turn a class type into a human-readable string
     static std::string classTypeName(EClassType type) {
         switch (type) {
-            case EScene:      return "scene";
-            case EShape:      return "shape";
-            case EBSDF:       return "bsdf";
-            case EEmitter:    return "emitter";
-            case ECamera:     return "camera";
-            case EIntegrator: return "integrator";
-            case ESampler:    return "sampler";
-            case ETest:       return "test";
+            case EClassType::EScene:      return "scene";
+            case EClassType::EShape:      return "shape";
+            case EClassType::EBSDF:       return "bsdf";
+            case EClassType::EEmitter:    return "emitter";
+            case EClassType::ECamera:     return "camera";
+            case EClassType::EIntegrator: return "integrator";
+            case EClassType::ESampler:    return "sampler";
+            case EClassType::ETest:       return "test";
             default:          return "<unknown>";
         }
     }

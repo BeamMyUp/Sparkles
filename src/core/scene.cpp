@@ -78,7 +78,7 @@ void Scene::activate() {
 
 void Scene::addChild(NoriObject *obj) {
     switch (obj->getClassType()) {
-        case EShape: {
+        case EClassType::EShape: {
                 Shape* shape = static_cast<Shape *>(obj);
                 m_accel->addShape(shape);
                 m_shapes.push_back(shape);
@@ -88,25 +88,25 @@ void Scene::addChild(NoriObject *obj) {
             }
             break;
         
-        case EEmitter: {
+        case EClassType::EEmitter: {
                 Emitter *emitter = static_cast<Emitter *>(obj);
 				m_emitters.push_back(emitter);
             }
             break;
 
-        case ESampler:
+        case EClassType::ESampler:
             if (m_sampler)
                 throw NoriException("There can only be one sampler per scene!");
             m_sampler = static_cast<Sampler *>(obj);
             break;
 
-        case ECamera:
+        case EClassType::ECamera:
             if (m_camera)
                 throw NoriException("There can only be one camera per scene!");
             m_camera = static_cast<Camera *>(obj);
             break;
         
-        case EIntegrator:
+        case EClassType::EIntegrator:
             if (m_integrator)
                 throw NoriException("There can only be one integrator per scene!");
             m_integrator = static_cast<Integrator *>(obj);

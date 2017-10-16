@@ -39,7 +39,7 @@ public:
      * \brief Return the type of object (i.e. Mesh/Emitter/etc.) 
      * provided by this instance
      * */
-    EClassType getClassType() const override { return EEmitter; }
+    EClassType getClassType() const override { return EClassType::EEmitter; }
 
 	/// Returns the emitter's radiance
 	virtual const Color3f& getRadiance() const { return m_radiance; }

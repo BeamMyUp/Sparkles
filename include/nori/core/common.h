@@ -174,7 +174,7 @@ extern std::string timeString(double time, bool precise = false);
 extern std::string memString(size_t size, bool precise = false);
 
 /// Measures associated with probability distributions
-enum EMeasure {
+enum class EMeasure {
     EUnknownMeasure = 0,
     ESolidAngle,
     EDiscrete,

@@ -46,7 +46,7 @@ public:
             -bRec.wo.y(),
              bRec.wo.z()
         );
-        bRec.measure = EDiscrete;
+        bRec.measure = EMeasure::EDiscrete;
 
         /* Relative index of refraction: no change */
         bRec.eta = 1.0f;

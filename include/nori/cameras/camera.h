@@ -67,7 +67,8 @@ public:
      * \brief Return the type of object (i.e. Mesh/Camera/etc.) 
      * provided by this instance
      * */
-    EClassType getClassType() const { return ECamera; }
+    EClassType getClassType() const { return EClassType::ECamera; }
+
 protected:
     Vector2i m_outputSize;
     ReconstructionFilter *m_rfilter;

@@ -41,7 +41,7 @@ struct BSDFQueryRecord {
 
     /// Create a new record for sampling the BSDF
     BSDFQueryRecord(const Vector3f &wi)
-        : wi(wi), measure(EUnknownMeasure) { }
+        : wi(wi), measure(EMeasure::EUnknownMeasure) { }
 
     /// Create a new record for querying the BSDF
     BSDFQueryRecord(const Vector3f &wi,
@@ -102,7 +102,7 @@ public:
      * \brief Return the type of object (i.e. Mesh/BSDF/etc.)
      * provided by this instance
      * */
-    EClassType getClassType() const { return EBSDF; }
+    EClassType getClassType() const { return EClassType::EBSDF; }
 
     /**
      * \brief Return whether or not this BRDF is diffuse. This

@@ -49,7 +49,7 @@ public:
      * \brief Return the type of object (i.e. Mesh/Camera/etc.) 
      * provided by this instance
      * */
-    EClassType getClassType() const { return EReconstructionFilter; }
+    EClassType getClassType() const { return EClassType::EReconstructionFilter; }
 protected:
     float m_radius;
 };

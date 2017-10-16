@@ -57,7 +57,7 @@ public:
      * \brief Return the type of object (i.e. Mesh/BSDF/etc.) 
      * provided by this instance
      * */
-    EClassType getClassType() const { return EIntegrator; }
+    EClassType getClassType() const { return EClassType::EIntegrator; }
 };
 
 NORI_NAMESPACE_END

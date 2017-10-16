@@ -111,7 +111,7 @@ public:
 
     void addChild(NoriObject *obj) {
         switch (obj->getClassType()) {
-            case EReconstructionFilter:
+			case EClassType::EReconstructionFilter:
                 if (m_rfilter)
                     throw NoriException("Camera: tried to register multiple reconstruction filters!");
                 m_rfilter = static_cast<ReconstructionFilter *>(obj);

@@ -171,7 +171,7 @@ public:
 	* \brief Return the type of object (i.e. Mesh/BSDF/etc.)
 	* provided by this instance
 	* */
-	virtual EClassType getClassType() const { return EShape; }
+	virtual EClassType getClassType() const { return EClassType::EShape; }
 
 protected:
 	/// Create an empty Object

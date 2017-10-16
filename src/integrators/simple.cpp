@@ -30,7 +30,7 @@ Color3f SimpleIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 		// If point is visible from light source
 		Ray3f visibilityRay(its.p, eqr.wi); 
 		if (!scene->rayIntersect(visibilityRay)) { 
-			BSDFQueryRecord bqr(its.toLocal(eqr.wi), its.toLocal(-ray.d), ESolidAngle); 
+			BSDFQueryRecord bqr(its.toLocal(eqr.wi), its.toLocal(-ray.d), EMeasure::ESolidAngle);
 
 			float cosTheta = zeroClamp(n.dot(eqr.wi));
 

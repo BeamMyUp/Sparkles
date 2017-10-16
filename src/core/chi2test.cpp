@@ -80,7 +80,7 @@ public:
 
     void addChild(NoriObject *obj) {
         switch (obj->getClassType()) {
-            case EBSDF:
+            case EMeasure::EBSDF:
                 m_bsdfs.push_back(static_cast<BSDF *>(obj));
                 break;
 
@@ -163,7 +163,7 @@ public:
                                         (float) (sinTheta * sinPhi),
                                         (float) cosTheta);
 
-                            BSDFQueryRecord bRec(wi, wo, ESolidAngle);
+                            BSDFQueryRecord bRec(wi, wo, EMeasure::ESolidAngle);
                             return bsdf->pdf(bRec);
                         };
 
@@ -213,7 +213,7 @@ public:
         );
     }
 
-    EClassType getClassType() const { return ETest; }
+    EClassType getClassType() const { return EClassType::ETest; }
 private:
     int m_cosThetaResolution;
     int m_phiResolution;

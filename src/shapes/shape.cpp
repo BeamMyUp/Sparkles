@@ -44,21 +44,21 @@ void Shape::activate() {
 void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &sample, const Point3f* const x /*= nullptr*/) const {
 	switch (measure)
 	{
-	case nori::EUnknownMeasure:
+	case EMeasure::EUnknownMeasure:
 		throw NoriException("Measure received by Shape::sample was nori::EUnknownMeasure. Cannot sample according to the measure");
 		break;
-	case nori::ESolidAngle:
+	case EMeasure::ESolidAngle:
 		if (!x)
 			throw NoriException("Cannot sample Solid angle without point x (current point to shade)");
 		sampleSolidAngle(outSQR, sample, *x);
 		break;
-	case nori::EDiscrete:
+	case EMeasure::EDiscrete:
 		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
 		break;
-	case nori::EArea:
+	case EMeasure::EArea:
 		sampleArea(outSQR, sample);
 		break;
-	case nori::EHemisphere:
+	case EMeasure::EHemisphere:
 		throw NoriException("Measure received by Shape::sample was nori::EHemisphere which is no yet implemented");
 		break;
 	default:
@@ -70,19 +70,19 @@ void Shape::sample(SampleQueryRecord& outSQR, EMeasure measure, const Point2f &s
 float Shape::pdf(EMeasure measure, const Point3f &sample, const Point3f* const x /*= nullptr*/) const {
 	switch (measure)
 	{
-	case nori::EUnknownMeasure:
+	case EMeasure::EUnknownMeasure:
 		throw NoriException("Measure received by Shape::sample was nori::EUnknownMeasure. Cannot sample according to the measure");
 		break;
-	case nori::ESolidAngle:
+	case EMeasure::ESolidAngle:
 		if (!x)
 			throw NoriException(NoriException("Cannot get pdf Solid angle without point x (current point to shade)"));
 		return pdfSolidAngle(sample, *x);
-	case nori::EDiscrete:
+	case EMeasure::EDiscrete:
 		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
 		break;
-	case nori::EArea:
+	case EMeasure::EArea:
 		return pdfArea(sample);
-	case nori::EHemisphere:
+	case EMeasure::EHemisphere:
 		throw NoriException("Measure received by Shape::sample was nori::EDiscrete which is no yet implemented");
 		break;
 	default:
@@ -98,14 +98,14 @@ Point3f Shape::getCentroid() const {
 
 void Shape::addChild(NoriObject *obj) {
 	switch (obj->getClassType()) {
-	case EBSDF:
+	case EClassType::EBSDF:
 		if (m_bsdf)
 			throw NoriException(
 				"Shape: tried to register multiple BSDF instances!");
 		m_bsdf = static_cast<BSDF *>(obj);
 		break;
 
-	case EEmitter: {
+	case EClassType::EEmitter: {
 		Emitter *emitter = static_cast<Emitter *>(obj);
 		if (m_emitter)
 			throw NoriException(

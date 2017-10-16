@@ -57,20 +57,20 @@ NoriObject *loadFromXML(const std::string &filename) {
     /* Set of supported XML tags */
     enum ETag {
         /* Object classes */
-        EScene                = NoriObject::EScene,
-        EShape                = NoriObject::EShape,
-        EBSDF                 = NoriObject::EBSDF,
-        EPhaseFunction        = NoriObject::EPhaseFunction,
-        EEmitter              = NoriObject::EEmitter,
-        EMedium               = NoriObject::EMedium,
-        ECamera               = NoriObject::ECamera,
-        EIntegrator           = NoriObject::EIntegrator,
-        ESampler              = NoriObject::ESampler,
-        ETest                 = NoriObject::ETest,
-        EReconstructionFilter = NoriObject::EReconstructionFilter,
+        EScene                = NoriObject::EClassType::EScene,
+        EShape                = NoriObject::EClassType::EShape,
+        EBSDF                 = NoriObject::EClassType::EBSDF,
+        EPhaseFunction        = NoriObject::EClassType::EPhaseFunction,
+        EEmitter              = NoriObject::EClassType::EEmitter,
+        EMedium               = NoriObject::EClassType::EMedium,
+        ECamera               = NoriObject::EClassType::ECamera,
+        EIntegrator           = NoriObject::EClassType::EIntegrator,
+        ESampler              = NoriObject::EClassType::ESampler,
+        ETest                 = NoriObject::EClassType::ETest,
+        EReconstructionFilter = NoriObject::EClassType::EReconstructionFilter,
 
         /* Properties */
-        EBoolean = NoriObject::EClassTypeCount,
+        EBoolean = NoriObject::EClassType::EClassTypeCount,
         EInteger,
         EFloat,
         EString,
@@ -151,8 +151,8 @@ NoriObject *loadFromXML(const std::string &filename) {
 
         /* Perform some safety checks to make sure that the XML tree really makes sense */
         bool hasParent            = parentTag != EInvalid;
-        bool parentIsObject       = hasParent && parentTag < NoriObject::EClassTypeCount;
-        bool currentIsObject      = tag < NoriObject::EClassTypeCount;
+        bool parentIsObject       = hasParent && parentTag < static_cast<int>(NoriObject::EClassType::EClassTypeCount);
+        bool currentIsObject      = tag < static_cast<int>(NoriObject::EClassType::EClassTypeCount);
         bool parentIsTransform    = parentTag == ETransform;
         bool currentIsTransformOp = tag == ETranslate || tag == ERotate || tag == EScale || tag == ELookAt || tag == EMatrix;
 
@@ -193,7 +193,7 @@ NoriObject *loadFromXML(const std::string &filename) {
                     propList
                 );
 
-                if (result->getClassType() != (int) tag) {
+                if (static_cast<int>(result->getClassType()) != (int) tag) {
                     throw NoriException(
                         "Unexpectedly constructed an object "
                         "of type <%s> (expected type <%s>): %s",

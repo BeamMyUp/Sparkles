@@ -9,7 +9,7 @@ AmbientOcclusion::AmbientOcclusion(const PropertyList &props)
 	: m_nSamples(props.getInteger("nSamples", 1)){
 	std::string samplingMethod = props.getString("warp-type", ""); 
 
-	m_warpType = Warp::getWarpType(EHemisphere, samplingMethod); 
+	m_warpType = Warp::getWarpType(EMeasure::EHemisphere, samplingMethod);
 }
 
 Color3f AmbientOcclusion::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {

@@ -454,7 +454,7 @@ public:
 				if (warpType == Warp::EWarpType::EMicrofacetBRDF) {
 					BSDFQueryRecord bRec(m_bRec);
 					bRec.wo = v;
-					bRec.measure = nori::ESolidAngle;
+					bRec.measure = nori::EMeasure::ESolidAngle;
 					return m_brdf->pdf(bRec);
 				}
 

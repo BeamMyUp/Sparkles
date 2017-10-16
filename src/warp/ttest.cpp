@@ -86,11 +86,11 @@ public:
 
     void addChild(NoriObject *obj) {
         switch (obj->getClassType()) {
-            case EBSDF:
+            case EClassType::EBSDF:
                 m_bsdfs.push_back(static_cast<BSDF *>(obj));
                 break;
 
-            case EScene:
+            case EClassType::EScene:
                 m_scenes.push_back(static_cast<Scene *>(obj));
                 break;
 
@@ -207,7 +207,7 @@ public:
         );
     }
 
-    EClassType getClassType() const { return ETest; }
+    EClassType getClassType() const { return EClassType::ETest; }
 private:
     std::vector<BSDF *> m_bsdfs;
     std::vector<Scene *> m_scenes;
