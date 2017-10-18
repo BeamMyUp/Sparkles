@@ -59,7 +59,7 @@ public:
     }
 
     /// Sample the BRDF
-    Color3f sample(BSDFQueryRecord &bRec, const Point2f &_sample) const {
+    Color3f sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const {
     	throw NoriException("MicrofacetBRDF::sample(): not implemented!");
 
         // Note: Once you have implemented the part that computes the scattered

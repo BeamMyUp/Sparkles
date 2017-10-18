@@ -127,7 +127,7 @@ public:
                     double mean=0, variance = 0;
                     for (int k=0; k<m_sampleCount; ++k) {
                         Point2f sample(random.nextFloat(), random.nextFloat());
-                        double result = (double) bsdf->sample(bRec, sample).getLuminance();
+                        double result = (double) bsdf->sample(bRec, SampleQueryRecord(), sample).getLuminance();
 
                         /* Numerically robust online variance estimation using an
                            algorithm proposed by Donald Knuth (TAOCP vol.2, 3rd ed., p.232) */

@@ -42,7 +42,7 @@ public:
         return 0.0f;
     }
 
-    Color3f sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
+    Color3f sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const {
         throw NoriException("Unimplemented!");
     }
 

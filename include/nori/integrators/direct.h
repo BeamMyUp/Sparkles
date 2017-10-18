@@ -5,6 +5,7 @@
 
 NORI_NAMESPACE_BEGIN
 
+class MIS; 
 
 class DirectIntegrator : public Integrator {
 public:
@@ -26,11 +27,17 @@ public:
 	std::string toString() const override;
 
 	DirectIntegrator(const PropertyList &props);
+	DirectIntegrator(EMeasure measure, Warp::EWarpType warpType, const MIS* mis, bool isFirst);
 
 protected:
+	// Direct Integrator members
 	uint32_t m_nSamples;
 	EMeasure m_measure;
 	Warp::EWarpType m_warpType;
+
+	// MIS members - used only when directIntegrator is initialized by directMIS.
+	const MIS* m_mis; 
+	bool m_isFirst; 
 };
 
 NORI_NAMESPACE_END

@@ -16,6 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <nori/shapes/object.h>
 #include <nori/warp/warp.h>
 #include <nori/bsdfs/bsdf.h>
 #include <nanogui/screen.h>
@@ -86,7 +87,7 @@ public:
         switch (warpType) {
             case Warp::EWarpType::EMicrofacetBRDF: {
                 BSDFQueryRecord bRec(m_bRec);
-                float value = m_brdf->sample(bRec, sample).getLuminance();
+                float value = m_brdf->sample(bRec, nori::SampleQueryRecord(), sample).getLuminance();
                 return std::make_pair(bRec.wo, value == 0 ? 0.f : m_brdf->eval(bRec)[0]);
              }
 			default:

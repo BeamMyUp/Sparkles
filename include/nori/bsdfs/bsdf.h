@@ -40,8 +40,8 @@ struct BSDFQueryRecord {
     EMeasure measure;
 
     /// Create a new record for sampling the BSDF
-    BSDFQueryRecord(const Vector3f &wi)
-        : wi(wi), measure(EMeasure::EUnknownMeasure) { }
+    BSDFQueryRecord(const Vector3f &wo)
+        : wo(wo), measure(EMeasure::EUnknownMeasure) { }
 
     /// Create a new record for querying the BSDF
     BSDFQueryRecord(const Vector3f &wi,
@@ -68,7 +68,7 @@ public:
      *         when this is appropriate. A zero value means that sampling
      *         failed.
      */
-    virtual Color3f sample(BSDFQueryRecord &bRec, const Point2f &sample) const = 0;
+    virtual Color3f sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const = 0;
 
     /**
      * \brief Evaluate the BSDF for a pair of directions and measure

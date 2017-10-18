@@ -125,7 +125,7 @@ public:
                 BSDFQueryRecord bRec(wi);
                 for (int i=0; i<m_sampleCount; ++i) {
                     Point2f sample(random.nextFloat(), random.nextFloat());
-                    Color3f result = bsdf->sample(bRec, sample);
+                    Color3f result = bsdf->sample(bRec, SampleQueryRecord(), sample);
 
                     if ((result.array() == 0).all())
                         continue;

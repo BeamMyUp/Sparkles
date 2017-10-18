@@ -1,37 +1,41 @@
 #include <nori/integrators/directMIS.h>
+#include <nori/core/scene.h>
+#include <nori/shapes/shape.h>
+#include <nori/emitters/emitter.h>
+#include <nori/bsdfs/bsdf.h>
 
 NORI_NAMESPACE_BEGIN
 
-DirectMISIntegrator::DirectMISIntegrator(const PropertyList &props)
-	: m_nSamples1(props.getInteger("nSamples1", 1))
-	, m_nSamples2(props.getInteger("nSamples2", 1))
-	, m_heuristic(MIS::getHeuristic(props.getString("heuristic", ""))){
-
-	std::string measure1 = props.getString("measure1", "");
-	std::string measure2 = props.getString("measure2", "");
-
-	m_measure1 = getMeasure(measure1);
-	m_measure2 = getMeasure(measure2);
+DirectMISIntegrator::DirectMISIntegrator(const PropertyList &props){
+	uint32_t nSamples1 = props.getInteger("nSamples1", 1);
+	uint32_t nSamples2 = props.getInteger("nSamples2", 1);
+	std::string heuristic = props.getString("heuristic", ""); 
+	EMeasure measure1 = getMeasure(props.getString("measure1", ""));
+	EMeasure measure2 = getMeasure(props.getString("measure2", ""));
 
 	assert(m_measure1 != m_measure2 && "DirectMISIntegrator::DirectMISIntegrator : The given measures are the same. Use direct integrator instead");
 
-	std::string warpType1 = "", warpType2 = "";
-	if (m_measure1 == EMeasure::EHemisphere)
-		warpType1 = props.getString("warp-type1", "");
+	Warp::EWarpType warpType1, warpType2;
+	if (measure1 == EMeasure::EHemisphere)
+		warpType1 = Warp::getWarpType(measure1, props.getString("warp-type1", ""));
 
-	if (m_measure2 == EMeasure::EHemisphere)
-		warpType2 = props.getString("warp-type2", "");
+	if (measure2 == EMeasure::EHemisphere)
+		warpType2 = Warp::getWarpType(measure2, props.getString("warp-type2", ""));
 
-	m_warpType1 = Warp::getWarpType(m_measure1, warpType1);
-	m_warpType1 = Warp::getWarpType(m_measure2, warpType2);
+	m_mis = MIS(nSamples1, nSamples2, measure1, measure2, warpType1, warpType2, heuristic);
+
+	m_integrator1 = new DirectIntegrator(measure1, warpType1, &m_mis, true); 
+	m_integrator2 = new DirectIntegrator(measure1, warpType2, &m_mis, false);
 }
 
 Color3f DirectMISIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {
-	Color3f Li(0.f);
 
-	// ECSE689: Implement MIS integrator (the class is made generic but you can assume only Emitter IS + BSDF IS for the assignment)
+	Color3f weightedColor1 = m_integrator1->Li(scene, sampler, ray);
+	Color3f weightedColor2 = m_integrator2->Li(scene, sampler, ray);
 
-	return Li;
+	Color3f res = weightedColor1 + weightedColor2; 
+
+	return res; 
 }
 
 std::string DirectMISIntegrator::toString() const {
@@ -40,5 +44,5 @@ std::string DirectMISIntegrator::toString() const {
 	);
 }
 
-NORI_REGISTER_CLASS(DirectMISIntegrator, "directMIS");
+NORI_REGISTER_CLASS(DirectMISIntegrator, "direct-mis");
 NORI_NAMESPACE_END

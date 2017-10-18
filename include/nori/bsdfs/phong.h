@@ -6,7 +6,7 @@ NORI_NAMESPACE_BEGIN
 class Phong : public BSDF{
 public:
 
-		Color3f sample(BSDFQueryRecord &bRec, const Point2f &sample) const override;
+		Color3f sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const override;
 		Color3f eval(const BSDFQueryRecord &bRec) const override;
 		float pdf(const BSDFQueryRecord &bRec) const override;
 		std::string toString() const;

@@ -5,10 +5,11 @@
     </sampler>
 
     <!-- Use a direct illumination integrator -->
-    <integrator type="direct">
-        <string name="samplingMethod" value="mis"/>
-        <integer name="emitterSamples" value="1"/>
-        <integer name="brdfSamples" value="1"/>
+    <integrator type="direct-mis">
+        <integer name="nSamples1" value="1"/>
+        <integer name="nSamples2" value="1"/>
+		<string name="measure1" value="solid-angle"/>
+		<string name="measure2" value="bsdf"/>
         <string name="heuristic" value="balance"/>
     </integrator>
 
@@ -83,9 +84,9 @@
         <string name="filename" value="plate1.obj"/>
 
         <bsdf type="phong">
-            <color name="diffuseReflectance" value="0.07,0.09,0.13"/>
-            <color name="specularReflectance" value="0.93,0.91,0.87"/>
-            <float name="shininess" value="10000"/>
+            <color name="diffuse-coefficients" value="0.07,0.09,0.13"/>
+            <color name="specular-coefficients" value="0.93,0.91,0.87"/>
+            <integer name="exponent" value="10000"/>
         </bsdf>
     </shape>
 
@@ -94,9 +95,9 @@
         <string name="filename" value="plate2.obj"/>
 
         <bsdf type="phong">
-            <color name="diffuseReflectance" value="0.07,0.09,0.13"/>
-            <color name="specularReflectance" value="0.93,0.91,0.87"/>
-            <float name="shininess" value="1000"/>
+            <color name="diffuse-coefficients" value="0.07,0.09,0.13"/>
+            <color name="specular-coefficients" value="0.93,0.91,0.87"/>
+            <integer name="exponent" value="1000"/>
         </bsdf>
     </shape>
 
@@ -105,9 +106,9 @@
         <string name="filename" value="plate3.obj"/>
 
         <bsdf type="phong">
-            <color name="diffuseReflectance" value="0.07,0.09,0.13"/>
-            <color name="specularReflectance" value="0.93,0.91,0.87"/>
-            <float name="shininess" value="100"/>
+            <color name="diffuse-coefficients" value="0.07,0.09,0.13"/>
+            <color name="specular-coefficients" value="0.93,0.91,0.87"/>
+            <integer name="exponent" value="100"/>
         </bsdf>
     </shape>
 
@@ -116,9 +117,9 @@
         <string name="filename" value="plate4.obj"/>
 
         <bsdf type="phong">
-            <color name="diffuseReflectance" value="0.07,0.09,0.13"/>
-            <color name="specularReflectance" value="0.93,0.91,0.87"/>
-            <float name="shininess" value="80"/>
+            <color name="diffuse-coefficients" value="0.07,0.09,0.13"/>
+            <color name="specular-coefficients" value="0.93,0.91,0.87"/>
+            <integer name="exponent" value="80"/>
         </bsdf>
     </shape>
 

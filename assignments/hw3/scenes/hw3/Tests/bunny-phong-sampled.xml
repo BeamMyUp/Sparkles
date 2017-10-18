@@ -27,7 +27,7 @@
             <rotate axis="1,0,0" angle="90"/>
             <rotate axis="0,0,1" angle="120"/>
             <translate value="-0.3,0,-0.8"/>
-        </transform>z
+        </transform>
 		<bsdf type="phong">
             <color name="diffuse-coefficients" value="0.2,0.2,0.8"/>
             <color name="specular-coefficients" value="1.0,1.0,1.0"/>

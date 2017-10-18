@@ -36,7 +36,7 @@ public:
         return 0.0f;
     }
 
-    Color3f sample(BSDFQueryRecord &bRec, const Point2f &) const {
+    Color3f sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const {
         if (Frame::cosTheta(bRec.wo) <= 0) 
             return Color3f(0.0f);
 
@@ -50,6 +50,9 @@ public:
 
         /* Relative index of refraction: no change */
         bRec.eta = 1.0f;
+
+		sRec.sample.v = bRec.wi;
+		sRec.pdf = pdf(bRec); 
 
         return Color3f(1.0f);
     }

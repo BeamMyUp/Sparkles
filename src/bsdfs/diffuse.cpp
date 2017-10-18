@@ -64,7 +64,7 @@ public:
     }
 
     /// Draw a a sample from the BRDF model
-    Color3f sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
+    Color3f sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const {
         if (Frame::cosTheta(bRec.wo) <= 0)
             return Color3f(0.0f);
 
@@ -74,7 +74,9 @@ public:
            to a direction on a cosine-weighted hemisphere */
 		Warp::WarpQueryRecord wqr; 
 		Warp::warp(wqr, Warp::EWarpType::ECosineHemisphere, sample); 
-        bRec.wi = wqr.warpedPoint;
+        bRec.wi = sRec.sample.v = wqr.warpedPoint;
+
+		sRec.pdf = pdf(bRec);
 
         /* Relative index of refraction: no change */
         bRec.eta = 1.0f;

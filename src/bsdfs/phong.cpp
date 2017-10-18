@@ -25,7 +25,7 @@ Phong::Phong(const PropertyList& propList)
 	m_samplingRatio = sAvg / (dAvg + sAvg);
 }
 
-Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
+Color3f Phong::sample(BSDFQueryRecord &bRec, SampleQueryRecord& sRec, const Point2f &sample) const {
 	bool hasSpec = m_ks.x() > 0 || m_ks.y() > 0 || m_ks.z() > 0;
 	bool hasDiff = m_kd.x() > 0 || m_kd.y() > 0 || m_kd.z() > 0;
 
@@ -74,11 +74,13 @@ Color3f Phong::sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
 
 	bRec.eta = 1.f;
 
-	float _pdf = pdf(bRec);
-	if (_pdf == 0)
+	sRec.sample.v = bRec.wi; 
+	sRec.pdf = pdf(bRec);
+	
+	if (sRec.pdf == 0)
 		return Color3f(0.0f); 
 
-	return eval(bRec) / _pdf;
+	return eval(bRec);
 }
 
 Vector3f Phong::reflect(const Vector3f &wo) const {
