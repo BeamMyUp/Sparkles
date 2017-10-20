@@ -15,8 +15,8 @@ Phong::Phong(const PropertyList& propList)
 	float maxVal = std::max({sumK.x(), sumK.y(), sumK.z()});
 
 	if (maxVal != 0) {
-		m_kd /= maxVal;
-		m_ks /= maxVal;
+		m_kd *= 0.99 / maxVal;
+		m_ks *= 0.99 / maxVal;
 	}
 
 	// Compute weights that steer samples towards the specular of diffuse components
@@ -129,14 +129,7 @@ float Phong::pdf(const BSDFQueryRecord &bRec) const {
 			specProb = std::pow(alpha, m_exponent) * (m_exponent + 1.0f) / (2.0f * M_PI); 
 	}
 
-	if (hasDiff && hasSpec)
-		return m_samplingRatio * specProb + (1 - m_samplingRatio) * diffuseProb;
-	else if (hasDiff)
-		return diffuseProb;
-	else if (hasSpec)
-		return specProb;
-	else
-		return 0.0f;
+	return m_samplingRatio * specProb + (1 - m_samplingRatio) * diffuseProb;
 }
 
 

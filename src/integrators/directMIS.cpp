@@ -25,7 +25,7 @@ DirectMISIntegrator::DirectMISIntegrator(const PropertyList &props){
 	m_mis = MIS(nSamples1, nSamples2, measure1, measure2, warpType1, warpType2, heuristic);
 
 	m_integrator1 = new DirectIntegrator(measure1, warpType1, &m_mis, true); 
-	m_integrator2 = new DirectIntegrator(measure1, warpType2, &m_mis, false);
+	m_integrator2 = new DirectIntegrator(measure2, warpType2, &m_mis, false);
 }
 
 Color3f DirectMISIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {

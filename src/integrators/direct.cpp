@@ -73,7 +73,7 @@ Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 			else if (m_measure == EMeasure::EBSDF) {
 				BSDFQueryRecord bRec(Vector3f(0.f), its.toLocal(-ray.d), EMeasure::ESolidAngle);
 				f = its.shape->getBSDF()->sample(bRec, sqr, sample);
-				sqr.sample.v = its.toWorld(bRec.wi); // TODO: delete
+				sqr.sample.v = its.toWorld(bRec.wi);
 			}
 			
 			// Check Pdf validity
@@ -114,6 +114,7 @@ Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 				}
 				case EMeasure::EHemisphere:
 				case EMeasure::ESolidAngle:
+				case EMeasure::EBSDF:
 					weight = zeroClamp(wi.dot(its.shFrame.n)); 
 					break;
 				}
@@ -121,7 +122,7 @@ Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 				// Evaluate rendering equation
 				if (m_measure != EMeasure::EBSDF) {
 					BSDFQueryRecord bsr(wiLocal, woLocal, EMeasure::ESolidAngle);
-					f = weight * its.shape->getBSDF()->eval(bsr);
+					f = its.shape->getBSDF()->eval(bsr);
 				}
 
 				// If used for MIS, calculate heuristic
@@ -131,7 +132,7 @@ Color3f DirectIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &
 					f *= m_mis->eval(sqr.pdf, pdf2); 
 				}
 
-				Li += eqr.Le * f / sqr.pdf;
+				Li += weight * eqr.Le * f / sqr.pdf;
 			}
 		}
 	}
