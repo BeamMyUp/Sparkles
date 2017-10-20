@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <nori/shapes/object.h>
+#include <nori/core/object.h>
 
 NORI_NAMESPACE_BEGIN
 

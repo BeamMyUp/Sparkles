@@ -1,0 +1,40 @@
+<scene>
+    <!-- Independent sample generator, one sample per pixel -->
+	<sampler type="independent">
+		<integer name="sampleCount" value="4"/>
+	</sampler>
+
+    <!-- Render the sphere with a basic shading -->
+       <integrator type="direct">
+		<integer name="nSamples"     value="1"/>
+		<string  name="measure"  	 value="area"/>
+		<string  name="warp"		 value="cosine"/>
+	</integrator>
+
+    <!-- Create a unit Sphere -->
+	<shape type="sphere">
+		<bsdf type="diffuse"/>
+		<point name="center" value="0, 0, 0"/>
+		<float name="radius" value="0.05"/>
+		<emitter type="area">
+			<color name="radiance" value="100.0,100.0,100.0"/>
+		</emitter>
+	</shape>
+	
+	<!-- Render the scene viewed by a perspective camera -->
+	<camera type="perspective">
+        <!-- 3D origin, target point, and 'up' vector -->
+		<transform name="toWorld">
+            <lookat target="0.0, 0.0, 0.0"
+                    origin="0, 0.5, -1"
+                    up="0, 1, 0"/>
+		</transform>
+
+		<!-- Field of view: 30 degrees -->
+		<float name="fov" value="16"/>
+
+		<!-- 768 x 768 pixels -->
+		<integer name="width" value="768"/>
+		<integer name="height" value="768"/>
+	</camera>
+</scene>

@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <nori/shapes/object.h>
+#include <nori/core/object.h>
 
 /// Reconstruction filters will be tabulated at this resolution
 #define NORI_FILTER_RESOLUTION 32

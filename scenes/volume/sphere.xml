@@ -1,0 +1,51 @@
+<scene>
+    <!-- Independent sample generator, one sample per pixel -->
+	<sampler type="independent">
+		<integer name="sampleCount" value="4"/>
+	</sampler>
+
+    <!-- Render the sphere with a basic shading -->
+    <integrator type="simple"/>
+
+    <!-- Create a unit Sphere -->
+	<shape type="sphere">
+		<bsdf type="diffuse"/>
+		<point name="center" value="0, 0, 0"/>
+		<float name="radius" value="0.05"/>
+	</shape>
+	
+	<!-- Create a Plane -->
+	<shape type= "obj">
+		<string name="filename" value="plane.obj"/>
+		<bsdf type="diffuse">
+			<color name="albedo" value="1.0,1.0,1.0"/>
+		</bsdf>
+
+		<transform name="toWorld">
+			<scale value="0.2,0.1,0.2"/>
+			<translate value="0, -0.05, 0"/>
+		</transform>
+	</shape>
+	
+	<emitter type="point">
+		<point name="position" value="1.0, 1.0, 0"/>
+		<color name="radiance" value="5, 5, 5"/>
+	</emitter>
+	
+	<!-- Render the scene viewed by a perspective camera -->
+	<camera type="perspective">
+        <!-- 3D origin, target point, and 'up' vector -->
+		<transform name="toWorld">
+            <lookat target="0.0, 0.0, 0.0"
+                    origin="0, 0.5, -1"
+                    up="0, 1, 0"/>
+		</transform>
+
+		<!-- Field of view: 30 degrees -->
+		<float name="fov" value="16"/>
+
+		<!-- 768 x 768 pixels -->
+		<integer name="width" value="768"/>
+		<integer name="height" value="768"/>
+	</camera>
+</scene>

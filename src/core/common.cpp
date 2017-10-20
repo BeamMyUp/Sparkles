@@ -16,7 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <nori/shapes/object.h>
+#include <nori/core/object.h>
 #include <Eigen/Geometry>
 #include <Eigen/LU>
 #include <filesystem/resolver.h>

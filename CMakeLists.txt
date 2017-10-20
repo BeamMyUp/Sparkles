@@ -52,6 +52,7 @@ add_executable(sparkles
   include/nori/core/frame.h
   include/nori/core/gui.h
   include/nori/core/math.h
+  include/nori/core/object.h
   include/nori/core/parser.h
   include/nori/core/proplist.h
   include/nori/core/ray.h
@@ -70,9 +71,9 @@ add_executable(sparkles
   include/nori/integrators/integrator.h
   include/nori/integrators/normals.h
   include/nori/integrators/simple.h
+  include/nori/integrators/volPath.h
   include/nori/samplers/sampler.h
   include/nori/shapes/mesh.h
-  include/nori/shapes/object.h
   include/nori/shapes/shape.h
   include/nori/shapes/sphere.h
   include/nori/warp/mis.h
@@ -94,6 +95,7 @@ add_executable(sparkles
   src/core/gui.cpp
   src/core/main.cpp
   src/core/math.cpp
+  src/core/object.cpp
   src/core/parser.cpp
   src/core/proplist.cpp
   src/core/rfilter.cpp
@@ -107,10 +109,10 @@ add_executable(sparkles
   src/integrators/directMIS.cpp
   src/integrators/normals.cpp
   src/integrators/simple.cpp
+  src/integrators/volPath.cpp
   src/samplers/independent.cpp
   src/shapes/mesh.cpp
   src/shapes/obj.cpp
-  src/shapes/object.cpp
   src/shapes/shape.cpp
   src/shapes/sphere.cpp
   src/warp/ttest.cpp

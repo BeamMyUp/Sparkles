@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nori/shapes/object.h>
+#include <nori/core/object.h>
 #include <nori/core/frame.h>
 #include <nori/core/bbox.h>
 
