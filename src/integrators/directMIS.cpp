@@ -13,7 +13,7 @@ DirectMISIntegrator::DirectMISIntegrator(const PropertyList &props){
 	EMeasure measure1 = getMeasure(props.getString("measure1", ""));
 	EMeasure measure2 = getMeasure(props.getString("measure2", ""));
 
-	assert(m_measure1 != m_measure2 && "DirectMISIntegrator::DirectMISIntegrator : The given measures are the same. Use direct integrator instead");
+	assert(measure1 != measure2 && "DirectMISIntegrator::DirectMISIntegrator : The given measures are the same. Use direct integrator instead");
 
 	Warp::EWarpType warpType1, warpType2;
 	if (measure1 == EMeasure::EHemisphere)

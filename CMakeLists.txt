@@ -1,10 +1,10 @@
 cmake_minimum_required (VERSION 2.8.3)
-project(nori)
+project(sparkles)
 
 add_subdirectory(ext ext_build)
 
 include_directories(
-  # Nori include files
+  # Sparkles include files
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   # tinyformat string formatting library
   ${TFM_INCLUDE_DIR}
@@ -34,8 +34,8 @@ include_directories(
 )
 
 # The following lines build the main executable. If you add a source
-# code file to Nori, be sure to include it in this list.
-add_executable(nori
+# code file to Sparkles, be sure to include it in this list.
+add_executable(sparkles
 
   # Header files
   include/nori/accelerators/accel.h
@@ -131,7 +131,7 @@ add_executable(warptest
   src/core/common.cpp
 )
 
-target_link_libraries(nori tbb_static pugixml IlmImf nanogui ${NANOGUI_EXTRA_LIBS})
+target_link_libraries(sparkles tbb_static pugixml IlmImf nanogui ${NANOGUI_EXTRA_LIBS})
 target_link_libraries(warptest tbb_static nanogui ${NANOGUI_EXTRA_LIBS})
 
 # vim: set et ts=2 sw=2 ft=cmake nospell:
