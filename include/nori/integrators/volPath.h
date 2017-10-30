@@ -3,6 +3,7 @@
 #include <nori/integrators/direct.h>
 #include <nori/warp/warp.h>
 #include <nori/warp/mis.h>
+#include <nori/mediums/medium.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -25,10 +26,15 @@ public:
 	/// Return a brief string summary of the instance (for debugging purpose)
 	std::string toString() const override;
 
+	Color3f uniformSampleOneLight(const Scene &scene, Sampler *sampler, bool handleMedia) const;
+
 	VolumePathIntegrator(const PropertyList &props);
+	~VolumePathIntegrator();
 
 protected:
 
+	Medium* m_medium; 
+	uint32_t m_maxDepth; 
 };
 
 NORI_NAMESPACE_END

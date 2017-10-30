@@ -1,11 +1,11 @@
 <scene>
     <!-- Independent sample generator, one sample per pixel -->
 	<sampler type="independent">
-		<integer name="sampleCount" value="4"/>
+		<integer name="sampleCount" value="1024"/>
 	</sampler>
 
     <!-- Render the sphere with a basic shading -->
-       <integrator type="direct">
+    <integrator type="volume">
 		<integer name="nSamples"     value="1"/>
 		<string  name="measure"  	 value="area"/>
 		<string  name="warp"		 value="cosine"/>
@@ -17,7 +17,7 @@
 		<point name="center" value="0, 0, 0"/>
 		<float name="radius" value="0.05"/>
 		<emitter type="area">
-			<color name="radiance" value="100.0,100.0,100.0"/>
+			<color name="radiance" value="30.0,30.0,30.0"/>
 		</emitter>
 	</shape>
 	

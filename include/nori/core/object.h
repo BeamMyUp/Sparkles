@@ -32,6 +32,7 @@ struct SampleQueryRecord {
 	union Sample {
 		Vector3f v;		//< Direction resulting from the sampling	
 		Point3f  p;		//< Position of the surface point (final sample)
+		Color3f	 c;		//< Color sampled
 
 		Sample() { memset(this, 0, sizeof(Sample)); }; 
 	};
@@ -120,15 +121,18 @@ public:
     /// Turn a class type into a human-readable string
     static std::string classTypeName(EClassType type) {
         switch (type) {
-            case EClassType::EScene:      return "scene";
-            case EClassType::EShape:      return "shape";
-            case EClassType::EBSDF:       return "bsdf";
-            case EClassType::EEmitter:    return "emitter";
-            case EClassType::ECamera:     return "camera";
-            case EClassType::EIntegrator: return "integrator";
-            case EClassType::ESampler:    return "sampler";
-            case EClassType::ETest:       return "test";
-            default:          return "<unknown>";
+
+            case EClassType::EScene:			return "scene";
+            case EClassType::EShape:			return "shape";
+            case EClassType::EBSDF:				return "bsdf";
+			case EClassType::EPhaseFunction:	return "phase";
+            case EClassType::EEmitter:			return "emitter";
+			case EClassType::EMedium:			return "medium";
+            case EClassType::ECamera:			return "camera";
+            case EClassType::EIntegrator:		return "integrator";
+            case EClassType::ESampler:			return "sampler";
+            case EClassType::ETest:				return "test";
+            default:							return "<unknown>";
         }
     }
 };
