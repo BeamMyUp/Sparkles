@@ -116,6 +116,7 @@ public:
     std::string toString() const;
 
     EClassType getClassType() const { return EClassType::EScene; }
+
 private:
     std::vector<Shape*> m_shapes;
 	std::vector<Emitter*> m_emitters; 

@@ -8,8 +8,8 @@
 
 NORI_NAMESPACE_BEGIN
 
-VolumePathIntegrator::VolumePathIntegrator(const PropertyList &props){
-	m_medium = new HomogeneousMedium(props);
+VolumePathIntegrator::VolumePathIntegrator(const PropertyList &props)
+	: m_medium(nullptr){
 
 }
 
@@ -46,7 +46,7 @@ Color3f VolumePathIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray
 	}
 
 	Point3f x = _ray.o + _ray.d * t;
-	Emitter* const light = scene->getEmitters()[0];
+	const Emitter* const light = chooseOneLight(*scene, sampler);
 	
 	SampleQueryRecord emitterSampling;
 	light->sample(emitterSampling, EMeasure::ESolidAngle, sampler->next2D(), &x); 
@@ -55,9 +55,12 @@ Color3f VolumePathIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray
 	Ray3f lightRay(x, emitterSampling.sample.v); 
 	scene->rayIntersect(lightRay, lightZ);
 
+	Vector3f wo = -ray.d;
+	Vector3f wi(0.f); 
+
 	Color3f tr_tz = m_medium->Tr(lightZ.t); 
 	Color3f Li = tr_tz * light->getRadiance(); 
-	Color3f Ls = /*m_medium->getPhaseFunction()->eval(wo, wi)*/ INV_FOURPI * tr_ot * Li;
+	Color3f Ls = m_medium->getPhaseFunction()->eval(wo, wi) * tr_ot * Li;
 	Color3f L = Ls /  emitterSampling.pdf;
 
 	return L;
@@ -79,21 +82,31 @@ Color3f VolumePathIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray
 	//return L;
 }
 
-Color3f VolumePathIntegrator::uniformSampleOneLight(const Scene &scene, Sampler *sampler, bool handleMedia) const {
-	//int nLights = scene.getEmitters().size(); 
-	//if (nLights == 0) 
-	//	return Color3f(0.f);
-	//
-	//int lightNum = std::min(static_cast<int>(sampler->next1D() * nLights), nLights - 1);
-	//const Emitter* light = scene.getEmitters()[lightNum];
-	//
-	//Point2f uLight = sampler->next2D();
-	//Point2f uScattering = sampler->next2D(); 
-	//
-	//return nLights * estimateDirect
+const nori::Emitter* VolumePathIntegrator::chooseOneLight(const Scene &scene, Sampler *sampler) const {
+	int nLights = scene.getEmitters().size(); 
+	if (nLights == 0)
+		return nullptr;
+	
+	int lightNum = std::min(static_cast<int>(sampler->next1D() * nLights), nLights - 1);
+	const Emitter* light = scene.getEmitters()[lightNum];
 
-	return Color3f(); 
+	return light; 
 }
+
+void VolumePathIntegrator::addChild(NoriObject *child) {
+	switch (child->getClassType()) {
+	case EClassType::EMedium:
+		if (m_medium)
+			throw NoriException(
+				"Medium: tried to register multiple medium instances!");
+		m_medium = static_cast<Medium *>(child);
+		break;
+
+	default:
+		throw NoriException("Shape::addChild(<%s>) is not supported!",
+			classTypeName(child->getClassType()));
+	}
+};
 
 std::string VolumePathIntegrator::toString() const {
 	return tfm::format(

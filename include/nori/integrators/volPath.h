@@ -23,10 +23,14 @@ public:
 	*/
 	virtual Color3f Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const override;
 
+	/// randomly choose one light that can be used then to sample
+	const nori::Emitter* VolumePathIntegrator::chooseOneLight(const Scene &scene, Sampler *sampler) const;
+
 	/// Return a brief string summary of the instance (for debugging purpose)
 	std::string toString() const override;
 
-	Color3f uniformSampleOneLight(const Scene &scene, Sampler *sampler, bool handleMedia) const;
+	/// Register a child object (e.g. a BSDF) with the object
+	virtual void addChild(NoriObject *child);
 
 	VolumePathIntegrator(const PropertyList &props);
 	~VolumePathIntegrator();

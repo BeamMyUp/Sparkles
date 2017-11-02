@@ -1,5 +1,6 @@
 #include <nori/mediums/homogeneous.h>
 #include <nori/samplers/sampler.h>
+#include <nori/phases/phaseFunction.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -52,4 +53,5 @@ std::string HomogeneousMedium::toString() const {
 	);
 }
 
+NORI_REGISTER_CLASS(HomogeneousMedium, "homogeneous");
 NORI_NAMESPACE_END

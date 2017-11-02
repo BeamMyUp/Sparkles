@@ -1,14 +1,18 @@
 <scene>
     <!-- Independent sample generator, one sample per pixel -->
 	<sampler type="independent">
-		<integer name="sampleCount" value="1024"/>
+		<integer name="sampleCount" value="200"/>
 	</sampler>
 
-    <!-- Render the sphere with a basic shading -->
-    <integrator type="volume">
-		<integer name="nSamples"     value="1"/>
-		<string  name="measure"  	 value="area"/>
-		<string  name="warp"		 value="cosine"/>
+  <!-- Render the sphere with a basic shading -->
+  <integrator type="volume">
+		<integer name="nSamples" value="1"/>
+    <medium type="homogeneous">
+      <color name="sigmaA" value="0,0,0"/>
+      <color name="sigmaS" value="0.8, 0.8, 0.8"/>
+      <phase type="isotropic"/>
+    </medium>
+  
 	</integrator>
 
     <!-- Create a unit Sphere -->

@@ -4,16 +4,11 @@
 
 NORI_NAMESPACE_BEGIN
 
+class PhaseFunction;
 
 class Medium : public NoriObject {
 
 public:
-
-	/**
-	* \brief Return the type of object (i.e. Mesh/Emitter/etc.)
-	* provided by this instance
-	* */
-	EClassType getClassType() const override { return EClassType::EMedium; }
 
 	virtual Color3f Tr(float t) const = 0;
 
@@ -24,6 +19,13 @@ public:
 	virtual float pdf(EMeasure measure, const Point3f& sample, const Point3f* const x = nullptr) const = 0;
 
 	const PhaseFunction* const getPhaseFunction() const { return m_phaseFunction; }
+
+	EClassType getClassType() const { return EClassType::EMedium; }
+
+	/// Register a child object (e.g. a BSDF) with the object
+	virtual void addChild(NoriObject *child);
+
+	Medium();
 
 protected:
 	PhaseFunction* m_phaseFunction; 

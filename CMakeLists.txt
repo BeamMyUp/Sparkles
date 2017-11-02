@@ -73,8 +73,9 @@ add_executable(sparkles
   include/nori/integrators/simple.h
   include/nori/integrators/volPath.h
   include/nori/mediums/medium.h
-  include/nori/mediums/homogeneous.h 
-  include/nori/mediums/phaseFunction.h
+  include/nori/mediums/homogeneous.h
+  include/nori/phases/phaseFunction.h
+  include/nori/phases/isotropic.h
   include/nori/samplers/sampler.h
   include/nori/shapes/mesh.h
   include/nori/shapes/shape.h
@@ -114,7 +115,7 @@ add_executable(sparkles
   src/integrators/simple.cpp
   src/integrators/volPath.cpp
   src/mediums/homogeneous.cpp
-  src/mediums/phaseFunction.cpp
+  src/phases/isotropic.cpp
   src/samplers/independent.cpp
   src/shapes/mesh.cpp
   src/shapes/obj.cpp
