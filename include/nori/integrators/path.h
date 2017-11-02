@@ -1,13 +1,10 @@
 #pragma once
 
-#include <nori/integrators/direct.h>
-#include <nori/warp/warp.h>
-#include <nori/warp/mis.h>
-#include <nori/mediums/medium.h>
+#include <nori/integrators/integrator.h>
 
 NORI_NAMESPACE_BEGIN
 
-class VolumePathIntegrator : public Integrator {
+class PathIntegrator : public Integrator {
 public:
 	/**
 	* \brief Sample the incident radiance along a ray
@@ -26,15 +23,11 @@ public:
 	/// Return a brief string summary of the instance (for debugging purpose)
 	std::string toString() const override;
 
-	/// Register a child object (e.g. a BSDF) with the object
-	virtual void addChild(NoriObject *child);
-
-	VolumePathIntegrator(const PropertyList &props);
+	PathIntegrator(const PropertyList &props);
 
 protected:
 
-	Medium* m_medium; 
-	uint32_t m_maxDepth; 
+	uint32_t m_maxDepth;
 };
 
 NORI_NAMESPACE_END

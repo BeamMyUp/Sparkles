@@ -70,6 +70,7 @@ add_executable(sparkles
   include/nori/integrators/directMIS.h
   include/nori/integrators/integrator.h
   include/nori/integrators/normals.h
+  include/nori/integrators/path.h
   include/nori/integrators/simple.h
   include/nori/integrators/volPath.h
   include/nori/mediums/medium.h
@@ -112,8 +113,10 @@ add_executable(sparkles
   src/integrators/direct.cpp
   src/integrators/directMIS.cpp
   src/integrators/normals.cpp
+  src/integrators/path.cpp
   src/integrators/simple.cpp
   src/integrators/volPath.cpp
+  src/mediums/medium.cpp
   src/mediums/homogeneous.cpp
   src/phases/isotropic.cpp
   src/samplers/independent.cpp

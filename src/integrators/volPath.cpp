@@ -13,11 +13,6 @@ VolumePathIntegrator::VolumePathIntegrator(const PropertyList &props)
 
 }
 
-VolumePathIntegrator::~VolumePathIntegrator() {
-	delete m_medium;
-	m_medium = nullptr;
-}
-
 Color3f VolumePathIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {
 	Ray3f _ray(ray); 
 	
@@ -80,17 +75,6 @@ Color3f VolumePathIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray
 	//}
 
 	//return L;
-}
-
-const nori::Emitter* VolumePathIntegrator::chooseOneLight(const Scene &scene, Sampler *sampler) const {
-	int nLights = scene.getEmitters().size(); 
-	if (nLights == 0)
-		return nullptr;
-	
-	int lightNum = std::min(static_cast<int>(sampler->next1D() * nLights), nLights - 1);
-	const Emitter* light = scene.getEmitters()[lightNum];
-
-	return light; 
 }
 
 void VolumePathIntegrator::addChild(NoriObject *child) {

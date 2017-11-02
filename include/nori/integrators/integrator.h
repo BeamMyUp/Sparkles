@@ -53,6 +53,9 @@ public:
      */
     virtual Color3f Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const = 0;
 
+	/// randomly choose one light that can be used then to sample
+	static const nori::Emitter* chooseOneLight(const Scene &scene, Sampler *sampler);
+
     /**
      * \brief Return the type of object (i.e. Mesh/BSDF/etc.) 
      * provided by this instance
