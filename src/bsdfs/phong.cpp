@@ -11,10 +11,10 @@ Phong::Phong(const PropertyList& propList)
 	, m_samplingRatio(0.f)
 {
 	// Ensure Energy conservation
-	Color3f sumK = m_kd + m_ks; 
-	float maxVal = std::max({sumK.x(), sumK.y(), sumK.z()});
+	Color3f sumK = m_kd + m_ks;
+	float maxVal = std::max({ sumK.x(), sumK.y(), sumK.z() });
 
-	if (maxVal != 0) {
+	if (maxVal > 1.0f) {
 		m_kd *= 0.99 / maxVal;
 		m_ks *= 0.99 / maxVal;
 	}
