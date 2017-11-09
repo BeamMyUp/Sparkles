@@ -1,24 +1,15 @@
 <scene>
 	<sampler type="independent">
-		<integer name="sampleCount" value="1"/>
+		<integer name="sampleCount" value="256"/>
 	</sampler>
 
-	<integrator type="direct">
-		<integer name="nSamples" value="2"/>
-		<string name="measure"  value="solidangle"/>
-		<string name="warp" 	  value="cone"/>
+	<integrator type="path">
+		<float name="termination-param" value="4"/>
+		<string name="termination"    value="max-depth"/>
+		<boolean name="isExplicit"    value="false"/>
+		<string name="indirect-measure" value="hemisphere"/>
+		<string name="indirect-warp"  value="cosine-hemisphere"/>
 	</integrator>
-	
-	<!--<integrator type="path">
-		<integer name="bounceSamples" value="1"/>
-		<string name="termination"    value="pathDepth"/>
-		<float name="termParam"     value="1"/>
-		<boolean name="isExplicit"    value="true"/>
-		<integer name="directSamples" value="2"/>
-		<string name="directMeasure"  value="solidangle"/>
-		<string name="directWarp" 	  value="cone"/>
-		<string name="pathWarp"       value="cosine"/>
-	</integrator>-->
 
 	<!-- Sphere Area Light -->
 	<shape type="sphere">

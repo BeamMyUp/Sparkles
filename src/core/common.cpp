@@ -181,8 +181,10 @@ EMeasure getMeasure(std::string measure) {
 		res = EMeasure::EHemisphere;
 	else if (measure == "bsdf")
 		res = EMeasure::EBSDF;
+	else if (measure == "none")
+		res = EMeasure::EUnknownMeasure;
 	else
-		throw NoriException("DirectMISIntegrator::DirectMISIntegrator : Cannot support given measure2");
+		throw NoriException("common.cpp, getmeasure() : Cannot support given measure2");
 
 	return res;
 }
