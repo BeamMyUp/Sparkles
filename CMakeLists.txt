@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8.3)
-project(sparkles)
+project(sparkles CXX)
 
 add_subdirectory(ext ext_build)
 
@@ -33,10 +33,7 @@ include_directories(
   ${FILESYSTEM_INCLUDE_DIR}
 )
 
-# The following lines build the main executable. If you add a source
-# code file to Sparkles, be sure to include it in this list.
-add_executable(sparkles
-
+set(SPARKLES_FILES
   # Header files
   include/nori/accelerators/accel.h
   include/nori/accelerators/bvh.h
@@ -112,6 +109,7 @@ add_executable(sparkles
   src/integrators/ao.cpp
   src/integrators/direct.cpp
   src/integrators/directMIS.cpp
+  src/integrators/integrator.cpp
   src/integrators/normals.cpp
   src/integrators/path.cpp
   src/integrators/simple.cpp
@@ -127,20 +125,42 @@ add_executable(sparkles
   src/warp/ttest.cpp
   src/warp/mis.cpp
   src/warp/warp.cpp
-)
+ )
 
-add_definitions(${NANOGUI_EXTRA_DEFS})
-
-# The following lines build the warping test application
-add_executable(warptest
+set(WARP_FILES
   include/nori/warp/warp.h
   src/warp/warp.cpp
   src/warp/warptest.cpp
   src/bsdfs/microfacet.cpp
-  src/shapes/object.cpp
+  src/shapes/obj.cpp
   src/core/proplist.cpp
   src/core/common.cpp
 )
+ 
+add_executable(sparkles ${SPARKLES_FILES})
+add_executable(warptest ${WARP_FILES})
+
+add_definitions(${NANOGUI_EXTRA_DEFS})
+
+foreach(FILE ${SPARKLES_FILES}) 
+  get_filename_component(PARENT_DIR "${FILE}" PATH)
+
+  # skip src or include and changes /'s to \\'s
+  string(REGEX REPLACE "(\\./)?(src|include/nori)/?" "" GROUP "${PARENT_DIR}")
+  string(REPLACE "/" "\\" GROUP "${GROUP}")
+
+  source_group("${GROUP}" FILES "${FILE}")
+endforeach()
+
+foreach(FILE ${WARP_FILES}) 
+  get_filename_component(PARENT_DIR "${FILE}" PATH)
+
+  # skip src or include and changes /'s to \\'s
+  string(REGEX REPLACE "(\\./)?(src|include/nori)/?" "" GROUP "${PARENT_DIR}")
+  string(REPLACE "/" "\\" GROUP "${GROUP}")
+
+  source_group("${GROUP}" FILES "${FILE}")
+endforeach()
 
 target_link_libraries(sparkles tbb_static pugixml IlmImf nanogui ${NANOGUI_EXTRA_LIBS})
 target_link_libraries(warptest tbb_static nanogui ${NANOGUI_EXTRA_LIBS})
