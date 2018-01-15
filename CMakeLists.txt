@@ -129,10 +129,12 @@ set(SPARKLES_FILES
 
 set(WARP_FILES
   include/nori/warp/warp.h
+  include/nori/core/object.h
+
   src/warp/warp.cpp
   src/warp/warptest.cpp
   src/bsdfs/microfacet.cpp
-  src/shapes/obj.cpp
+  src/core/object.cpp
   src/core/proplist.cpp
   src/core/common.cpp
 )
