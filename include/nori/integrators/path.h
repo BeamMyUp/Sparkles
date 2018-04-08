@@ -6,6 +6,8 @@
 
 NORI_NAMESPACE_BEGIN
 
+struct Intersection; 
+
 class PathIntegrator : public Integrator {
 public:
 	/**
@@ -27,6 +29,9 @@ public:
 
 	// Explicit Path Tracing
 	virtual Color3f explicitLi(const Scene* scene, Sampler* sampler, const Ray3f &ray) const;
+
+	// Simplified Direct Integrator (For Explicit)
+	virtual Color3f simplifiedDirect(const Scene* scene, Sampler* sampler, const Ray3f &ray, const Intersection& its) const;
 
 	// Implements stopping condition (Russian Roulette or max Depth)
 	bool stopPath(uint32_t currentDepth) const;

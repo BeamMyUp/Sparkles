@@ -16,7 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <nori/shapes/object.h>
+#include <nori/core/object.h>
 #include <nori/warp/warp.h>
 #include <nori/bsdfs/bsdf.h>
 #include <nanogui/screen.h>

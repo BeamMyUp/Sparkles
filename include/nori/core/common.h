@@ -37,6 +37,8 @@
 /* Convenience definitions */
 #define NORI_NAMESPACE_BEGIN namespace nori {
 #define NORI_NAMESPACE_END }
+#define VIEWER_NAMESPACE_BEGIN namespace viewer {
+#define VIEWER_NAMESPACE_END }
 
 #if defined(__NORI_APPLE__NORI_)
 #define PLATFORM_MACOS
@@ -128,6 +130,7 @@ using std::endl;
 
 typedef Eigen::Matrix<float,    Eigen::Dynamic, Eigen::Dynamic> MatrixXf;
 typedef Eigen::Matrix<uint32_t, Eigen::Dynamic, Eigen::Dynamic> MatrixXu;
+typedef Eigen::Matrix<float, 4, 4> Matrix4f; 
 
 /// Simple exception class, which stores a human-readable error description
 class NoriException : public std::runtime_error {

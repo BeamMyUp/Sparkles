@@ -3,6 +3,8 @@ project(sparkles CXX)
 
 add_subdirectory(ext ext_build)
 
+find_package(GLEW REQUIRED)
+
 include_directories(
   # Sparkles include files
   ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -24,6 +26,8 @@ include_directories(
   ${GLFW_INCLUDE_DIR}
   # GLEW library for accessing OpenGL functions
   ${GLEW_INCLUDE_DIR}
+  # GLM library for glviewer math 
+  ${GLM_INCLUDE_DIR}
   # NanoVG drawing library
   ${NANOVG_INCLUDE_DIR}
   # NanoGUI user interface library
@@ -40,6 +44,7 @@ set(SPARKLES_FILES
   include/nori/bsdfs/bsdf.h
   include/nori/bsdfs/phong.h
   include/nori/cameras/camera.h
+  include/nori/cameras/perspective.h
   include/nori/core/bbox.h
   include/nori/core/bitmap.h
   include/nori/core/block.h
@@ -138,8 +143,20 @@ set(WARP_FILES
   src/core/proplist.cpp
   src/core/common.cpp
 )
+
+set(VIEWER_FILES
+  include/glviewer/camera.h
+  include/glviewer/shader.h
+  include/glviewer/shaderProgram.h
+  include/glviewer/viewer.h
+
+  src/glviewer/camera.cpp
+  src/glviewer/shader.cpp
+  src/glviewer/shaderProgram.cpp
+  src/glviewer/viewer.cpp
+)
  
-add_executable(sparkles ${SPARKLES_FILES})
+add_executable(sparkles ${SPARKLES_FILES} ${VIEWER_FILES})
 add_executable(warptest ${WARP_FILES})
 
 add_definitions(${NANOGUI_EXTRA_DEFS})
@@ -149,6 +166,16 @@ foreach(FILE ${SPARKLES_FILES})
 
   # skip src or include and changes /'s to \\'s
   string(REGEX REPLACE "(\\./)?(src|include/nori)/?" "" GROUP "${PARENT_DIR}")
+  string(REPLACE "/" "\\" GROUP "${GROUP}")
+
+  source_group("${GROUP}" FILES "${FILE}")
+endforeach()
+
+foreach(FILE ${VIEWER_FILES}) 
+  get_filename_component(PARENT_DIR "${FILE}" PATH)
+
+  # skip src or include and changes /'s to \\'s
+  string(REGEX REPLACE "(\\./)?(src|include)/?" "" GROUP "${PARENT_DIR}")
   string(REPLACE "/" "\\" GROUP "${GROUP}")
 
   source_group("${GROUP}" FILES "${FILE}")
@@ -164,7 +191,7 @@ foreach(FILE ${WARP_FILES})
   source_group("${GROUP}" FILES "${FILE}")
 endforeach()
 
-target_link_libraries(sparkles tbb_static pugixml IlmImf nanogui ${NANOGUI_EXTRA_LIBS})
+target_link_libraries(sparkles tbb_static pugixml IlmImf nanogui ${GLEW_LIBRARIES} ${NANOGUI_EXTRA_LIBS})
 target_link_libraries(warptest tbb_static nanogui ${NANOGUI_EXTRA_LIBS})
 
 # vim: set et ts=2 sw=2 ft=cmake nospell:

@@ -90,9 +90,93 @@ Color3f PathIntegrator::implicitLi(const Scene* scene, Sampler* sampler, const R
 
 // Explicit Path Tracing
 Color3f PathIntegrator::explicitLi(const Scene* scene, Sampler* sampler, const Ray3f &ray) const {
-		
+	Color3f Lacc(1.f);
+	Ray3f _ray(ray);
 
-	return Color3f(0.f);
+	Intersection its;
+	bool hit = scene->rayIntersect(_ray, its);
+
+	if (hit) {
+		// If the ray hit the light, get Le's contribution and terminate path
+		if (its.shape->isEmitter()) {
+			return its.shape->getEmitter()->getRadiance();
+		}
+
+		// Loop until the path escapes or is forced to terminate
+		for (uint32_t nDepth = 0; ;) {
+			// TODO;
+		}
+	}
+}
+
+Color3f PathIntegrator::simplifiedDirect(const Scene* scene, Sampler* sampler, const Ray3f &ray, const Intersection& its) const {
+	Color3f Li(0.f);
+
+	// Get the extents of the scene
+	float maxt = scene->getBoundingBox().getExtents().norm();
+
+	// Assumes only one direct ray is cast
+	for (auto emitter : scene->getEmitters()) {
+		Color3f f(0.f);
+
+		// Sample
+		Point2f sample = sampler->next2D();
+		SampleQueryRecord sqr;
+
+		// If EArea or ESolidAngle, sample the emitter
+		if (m_directMeasure == EMeasure::EArea || m_directMeasure == EMeasure::ESolidAngle)
+			emitter->sample(sqr, m_directMeasure, sample, &its.p);
+
+		// Check Pdf validity
+		if (sqr.pdf == 0 /* && !deltaPDF*/) // TODO: code Delta pdf concept (have isDelta in bsdf)
+			return Color3f(0.0f);
+
+		// Query Emitter's radiance and wi. If solid-angle, wi is the sample directly
+		EmitterQueryRecord eqr;
+		emitter->eval(eqr, its.p, &sqr.sample.p);
+
+		Vector3f wi = sqr.sample.v;
+		if (m_directMeasure == EMeasure::EArea) // Update sampled direction if Area Sampling
+			wi = eqr.wi;
+
+		// Visibility test
+		Ray3f lightRay = Ray3f(its.p, wi, Epsilon, maxt);
+		Intersection itsLight;
+		bool intersects = scene->rayIntersect(lightRay, itsLight);
+
+		// If point is visible, calculate final color
+		if (intersects && emitter == itsLight.shape->getEmitter()) {
+
+			// Calculate Local Coordinates
+			Vector3f woLocal(its.toLocal(-ray.d));
+			Vector3f wiLocal(its.toLocal(wi));
+
+			// Calculate the weight of the light
+			float weight = 0;
+			switch (m_directMeasure)
+			{
+			case EMeasure::EArea: {
+				// Weight by geometry term
+				float d2 = (sqr.sample.p - its.p).squaredNorm();
+				float cosThetaO = zeroClamp(wi.dot(sqr.n));
+				float cosThetaI = zeroClamp(wi.dot(its.shFrame.n));
+				weight = (cosThetaI * cosThetaO) / d2;
+				break;
+			}
+			case EMeasure::ESolidAngle:
+				weight = zeroClamp(wi.dot(its.shFrame.n));
+				break;
+			}
+
+			// Evaluate rendering equation
+			BSDFQueryRecord bsr(wiLocal, woLocal, EMeasure::ESolidAngle);
+			f = its.shape->getBSDF()->eval(bsr);
+
+			Li += weight * eqr.Le * f / sqr.pdf;
+		}
+	}
+
+	return Li;
 }
 
 Color3f PathIntegrator::Li(const Scene *scene, Sampler *sampler, const Ray3f &ray) const {

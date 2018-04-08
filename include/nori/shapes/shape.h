@@ -143,6 +143,18 @@ public:
 	/// Return Centroid of the Shape
 	virtual Point3f getCentroid() const; 
 
+	/*/// Return a buffer containing all vertices
+	virtual std::vector<Vector3f> getVertices() const = 0; 
+
+	/// Return a buffer containing all normals 
+	virtual std::vector<Vector3f> getNormals() const = 0;
+
+	/// Return a buffer containing all texture coordinates
+	virtual std::vector<Vector2f> getTextureCoord() const = 0;
+
+	/// Return a buffer containing indices
+	virtual std::vector<uint32_t> getIndices() const = 0; 
+*/
 	/// Return whether the Shape is a mesh or not
 	virtual bool isMesh() const { return false; }
 
