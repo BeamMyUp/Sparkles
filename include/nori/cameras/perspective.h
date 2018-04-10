@@ -62,6 +62,8 @@ public:
 
 	void addChild(NoriObject *obj);
 
+	void resetCamera(const viewer::Camera* const camera) override;
+
 	/// Return a human-readable summary
 	std::string toString() const;
 

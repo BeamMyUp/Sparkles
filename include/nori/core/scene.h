@@ -20,6 +20,10 @@
 
 #include <nori/core/object.h>
 
+VIEWER_NAMESPACE_BEGIN
+class Camera;
+VIEWER_NAMESPACE_END
+
 NORI_NAMESPACE_BEGIN
 
 class Accel;
@@ -52,6 +56,9 @@ public:
 
     /// Return a pointer to the scene's camera
     const Camera *getCamera() const { return m_camera; }
+
+	/// Set the camera to the parameters of the viewer cam
+	void resetCamera(const viewer::Camera* const camera);
 
     /// Return a pointer to the scene's sample generator (const version)
     const Sampler *getSampler() const { return m_sampler; }

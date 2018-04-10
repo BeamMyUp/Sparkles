@@ -18,6 +18,8 @@
 
 #include <nori/cameras/perspective.h>
 #include <glviewer/viewer.h>
+#include <glviewer/camera.h>
+#include <glm/gtc/type_ptr.hpp>
 
 NORI_NAMESPACE_BEGIN
 
@@ -93,6 +95,13 @@ void PerspectiveCamera::addChild(NoriObject *obj) {
             throw NoriException("Camera::addChild(<%s>) is not supported!",
                 classTypeName(obj->getClassType()));
     }
+}
+
+
+void PerspectiveCamera::resetCamera(const viewer::Camera* const camera) {
+	m_fov = camera->getFovy(); 
+	Eigen::Matrix4f mat(glm::value_ptr(camera->GetViewMatrix())); 
+	m_cameraToWorld = Transform(mat); 
 }
 
 std::string PerspectiveCamera::toString() const {

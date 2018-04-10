@@ -215,7 +215,7 @@ void Viewer::createWindow(const nori::Camera& camera)
 void Viewer::setCallbacks()
 {
 	glfwSetErrorCallback(error_callback);
-	//glfwSetKeyCallback(m_screen->glfwWindow(), key_callback);
+	glfwSetKeyCallback(m_screen->glfwWindow(), key_callback);
 	//glfwSetWindowSizeCallback(m_screen->glfwWindow(), window_size_callback);
 	//glfwSetCursorPosCallback(m_screen->glfwWindow(), mouse_callback);
 	glfwSetMouseButtonCallback(m_screen->glfwWindow(), mouse_button_callback);
@@ -266,8 +266,9 @@ void Viewer::setCamera(const nori::Transform& transform, const nori::Perspective
 
 		glm::mat4 initMat = toGLM(transform);
 
-		m_camera = new viewer::Camera(initMat, camera.getFOV(), float(m_width) / float(m_height), camera.getNearClip(), camera.getFarClip());
-	
+		//m_camera = new viewer::Camera(initMat, camera.getFOV(), float(m_width) / float(m_height), camera.getNearClip(), camera.getFarClip());
+		m_camera = new viewer::Camera(GLfloat(m_width) / GLfloat(m_height), GLfloat(camera.getNearClip()), GLfloat(camera.getFarClip()), &glm::vec3(0, 0, 1), &glm::vec3(0, -4, 1), &glm::vec3(0, 0, 1));
+
 		createWindow(camera); 
 	}
 }
@@ -296,6 +297,8 @@ void Viewer::interaction()
 		m_camera->zoom(0.001);
 	if (m_keys[GLFW_KEY_X])
 		m_camera->zoom(-0.001);
+	if (m_keys[GLFW_KEY_R] && m_isRuntime)
+		launchFinalRender(); 
 }
 
 Viewer& Viewer::getInstance()
@@ -314,7 +317,7 @@ Viewer::Viewer()
 	, m_camera(nullptr)
 	, m_wireFrameEnabled(false)
 	, m_mouseIsClicked(false)
-	, m_isRuntime(true)
+	, m_isRuntime(false)
 {
 	// GLFW initialization
 	if (!glfwInit())
@@ -335,10 +338,12 @@ Viewer::~Viewer()
 }
 
 void Viewer::render(std::string filename) {
+	m_filename = filename;
+	
 	if (m_isRuntime)
 		renderOnline();
 	else
-		renderOffline(filename);
+		renderOffline();
 }
 
 void Viewer::renderOfflineBlock(nori::ImageBlock& block, nori::Sampler* sampler) {
@@ -372,7 +377,7 @@ void Viewer::renderOfflineBlock(nori::ImageBlock& block, nori::Sampler* sampler)
 	}
 }
 
-void Viewer::renderOffline(std::string filename) {
+void Viewer::renderOffline() {
 	const nori::Camera *camera = m_scene->getCamera();
 
 	/* Do the following in parallel and asynchronously */
@@ -428,7 +433,7 @@ void Viewer::renderOffline(std::string filename) {
 	std::unique_ptr<nori::Bitmap> bitmap(m_image->toBitmap());
 
 	/* Determine the filename of the output bitmap */
-	std::string outputName = filename;
+	std::string outputName = m_filename;
 	size_t lastdot = outputName.find_last_of(".");
 	if (lastdot != std::string::npos)
 		outputName.erase(lastdot, std::string::npos);
@@ -447,7 +452,7 @@ void Viewer::renderOnline() {
 			}
 			else if (glfwWindowShouldClose(m_screen->glfwWindow())) {
 				m_screen->setVisible(false);
-				continue;
+				break;
 			}
 
 			m_screen->clear();
@@ -461,6 +466,14 @@ void Viewer::renderOnline() {
 
 	/* Process events once more */
 	glfwPollEvents();
+}
+
+void Viewer::launchFinalRender()
+{
+	m_isRuntime = false; 
+	m_screen->clear(); 
+	
+	renderOffline(); 
 }
 
 GLuint Viewer::getShaderProgram(nori::BSDF::EBSDFType bsdfType)
@@ -498,13 +511,13 @@ GLuint Viewer::getShaderProgram(nori::BSDF::EBSDFType bsdfType)
 
 void Viewer::updateFrame()
 {
-	//GLfloat currentFrameTime = glfwGetTime();
-	//m_deltaTime = currentFrameTime - m_lastFrameTime;
-	//m_lastFrameTime = currentFrameTime;
+	GLfloat currentFrameTime = glfwGetTime();
+	m_deltaTime = currentFrameTime - m_lastFrameTime;
+	m_lastFrameTime = currentFrameTime;
 
 	//// Check and call events
-	//glfwPollEvents();
-	//interaction();
+	glfwPollEvents();
+	interaction();
 
 	m_screen->clear();
 
@@ -518,14 +531,14 @@ void Viewer::updateFrame()
 
 		// WARNING : ONLY DIFFUSE IS SUPPORTED FOR NOW
 		const nori::BSDF* bsdf = obj->getBSDF();
-		assert(bsdf->getBSDFType() == BSDF::EBSDFType::EDiffuse && "ONLY DIFFIUSE IS SUPPORTED FOR NOW");
+		assert(bsdf->getBSDFType() == nori::BSDF::EBSDFType::EDiffuse && "ONLY DIFFIUSE IS SUPPORTED FOR NOW");
 		const nori::Diffuse* diff = static_cast<const nori::Diffuse*>(bsdf); 
 
 		GLuint shaderID = getShaderProgram(obj->getBSDF()->getBSDFType());
 		glUseProgram(shaderID);
 
 		glm::mat4 objToWorld = toGLM(obj->toWorld()); 
-		glm::mat4 viewMatrix = m_camera->GetViewMatrix(); 
+		glm::mat4 viewMatrix = m_camera->GetViewMatrix(); // TOFIX: this calculates toworld() but we initialize Camera with toworld() and signs change! 
 		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(viewMatrix * objToWorld)));
 		glm::mat4 projection = glm::perspective(m_camera->getFovy(), m_camera->getAspect(), m_camera->getNear(), m_camera->getFar()); 
 		nori::Color3f albedo = diff->albedo();
@@ -561,18 +574,11 @@ void Viewer::updateFrame()
 	m_screen->drawAll();
 	glfwSwapBuffers(m_screen->glfwWindow());
 
-
 		////draw(); 
-
-
 }
 
 glm::mat4 Viewer::toGLM(const nori::Transform& trans) {
-	glm::mat4 matrix;
-	for (int y = 0; y < 4; ++y)
-		for (int x = 0; x < 4; ++x)
-			matrix[x][y] = trans.getMatrix()(x, y); 
-
+	glm::mat4 matrix = glm::make_mat4(trans.getMatrix().data()); 
 	return matrix; 
 }
 

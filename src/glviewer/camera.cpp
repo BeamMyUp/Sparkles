@@ -43,7 +43,7 @@ Camera::Camera(GLfloat aspect, GLfloat nearPlane, GLfloat farPlane, glm::vec3* u
 	//computePitchAndYaw();
 }
 
-Camera::Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect, GLfloat nearPlane, GLfloat farPlane)
+Camera::Camera(const glm::mat4& toWorld, GLfloat fovy, GLfloat aspect, GLfloat nearPlane, GLfloat farPlane)
 	: m_mvtSpeed(15.0f)
 	, m_rotSpeed(0.001f)
 	, m_fovy(fovy)
@@ -52,11 +52,13 @@ Camera::Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect, G
 	, m_near(nearPlane)
 	, m_far(farPlane)
 {
-	m_transform = transformMatrix;
-	m_worldUp = transformMatrix[1].xyz(); 
+	m_transform = toWorld;
+	m_worldUp = toWorld[1].xyz(); 
+
+
 }
 
-glm::mat4 Camera::GetViewMatrix()
+glm::mat4 Camera::GetViewMatrix() const
 {
 	// If inheratage of transform is implemented, change 
 	// m_transform in these calculations for the world transform. 

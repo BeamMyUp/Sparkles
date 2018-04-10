@@ -63,7 +63,7 @@ private :
 	
 	// Rendering methods
 	void updateFrame();
-	void renderOffline(std::string filename);
+	void renderOffline();
 	void renderOfflineBlock(nori::ImageBlock& block, nori::Sampler* sampler);
 	void renderOnline();
 	GLuint getShaderProgram(nori::BSDF::EBSDFType bsdfType);
@@ -72,6 +72,7 @@ private :
 	void interaction();
 	//void setMatrices();
 	//void draw();
+	void launchFinalRender();
 
 	// Utility methods
 	glm::mat4 toGLM(const nori::Transform& trans);
@@ -103,7 +104,8 @@ private :
 	nori::Scene* m_scene; 
 	viewer::Camera* m_camera;
 	nori::BlockGenerator* m_blockGenerator;
-	nori::ImageBlock* m_image; 
+	nori::ImageBlock* m_image;
+	std::string m_filename; 
 };
 
 VIEWER_NAMESPACE_END

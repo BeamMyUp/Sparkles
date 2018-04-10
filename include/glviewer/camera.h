@@ -19,14 +19,14 @@ public:
 	};
 
 	Camera(GLfloat aspect, GLfloat nearPlane, GLfloat farPlane, glm::vec3* upVector = nullptr, glm::vec3* initialPosition = nullptr, glm::vec3* initalTarget = nullptr);
-	Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect, GLfloat nearPlane, GLfloat farPlane);
+	Camera(const glm::mat4& toWorld, GLfloat fovy, GLfloat aspect, GLfloat nearPlane, GLfloat farPlane);
 	~Camera() = default;
 
 	void move(CameraDirection displacement, GLfloat deltaTime); 
 	void rotate(GLdouble xoffset, GLdouble yoffset, GLboolean constrainPitch = true);
 	void zoom(GLdouble yoffest);
 	void saveWorldCoordinates(); 
-	glm::mat4 GetViewMatrix();
+	glm::mat4 GetViewMatrix() const;
 
 	GLfloat getFovy() const { return m_fovy; }
 	GLfloat getAspect() const { return m_aspect;}

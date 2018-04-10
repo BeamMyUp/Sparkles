@@ -20,6 +20,10 @@
 
 #include <nori/core/object.h>
 
+VIEWER_NAMESPACE_BEGIN
+class Camera;
+VIEWER_NAMESPACE_END
+
 NORI_NAMESPACE_BEGIN
 
 /**
@@ -62,6 +66,8 @@ public:
 
     /// Return the camera's reconstruction filter in image space
     const ReconstructionFilter *getReconstructionFilter() const { return m_rfilter; }
+
+	virtual void resetCamera(const viewer::Camera* const camera) = 0; 
 
     /**
      * \brief Return the type of object (i.e. Mesh/Camera/etc.) 

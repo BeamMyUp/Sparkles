@@ -24,7 +24,9 @@
 #include <nori/samplers/sampler.h>
 #include <nori/shapes/shape.h>
 #include <nori/cameras/camera.h>
+#include <nori/cameras/perspective.h>
 #include <nori/emitters/emitter.h>
+#include <glviewer/camera.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -116,6 +118,10 @@ void Scene::addChild(NoriObject *obj) {
             throw NoriException("Scene::addChild(<%s>) is not supported!",
                 classTypeName(obj->getClassType()));
     }
+}
+
+void Scene::resetCamera(const viewer::Camera* const camera) {
+	m_camera->resetCamera(camera);
 }
 
 std::string Scene::toString() const {
