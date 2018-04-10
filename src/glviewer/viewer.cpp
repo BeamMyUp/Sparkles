@@ -119,6 +119,11 @@ void Viewer::key_callback_impl(GLFWwindow* window, int key, int scancode, int ac
 		}
 			
 	}
+
+	if (key == GLFW_KEY_R && action == GLFW_PRESS && m_isRuntime)
+	{
+		launchFinalRender();
+	}
 	
 	// Realtime (key held) interaction management
 	if (key >= 0 && key < 1024)
@@ -297,8 +302,6 @@ void Viewer::interaction()
 		m_camera->zoom(0.001);
 	if (m_keys[GLFW_KEY_X])
 		m_camera->zoom(-0.001);
-	if (m_keys[GLFW_KEY_R] && m_isRuntime)
-		launchFinalRender(); 
 }
 
 Viewer& Viewer::getInstance()
@@ -317,7 +320,7 @@ Viewer::Viewer()
 	, m_camera(nullptr)
 	, m_wireFrameEnabled(false)
 	, m_mouseIsClicked(false)
-	, m_isRuntime(false)
+	, m_isRuntime(true)
 {
 	// GLFW initialization
 	if (!glfwInit())
@@ -455,6 +458,9 @@ void Viewer::renderOnline() {
 				break;
 			}
 
+			glfwPollEvents();
+			interaction();
+
 			m_screen->clear();
 			updateFrame();
 			m_screen->drawWidgets();
@@ -464,7 +470,6 @@ void Viewer::renderOnline() {
 			glfwWaitEvents();
 		}
 
-	/* Process events once more */
 	glfwPollEvents();
 }
 
@@ -515,12 +520,6 @@ void Viewer::updateFrame()
 	m_deltaTime = currentFrameTime - m_lastFrameTime;
 	m_lastFrameTime = currentFrameTime;
 
-	//// Check and call events
-	glfwPollEvents();
-	interaction();
-
-	m_screen->clear();
-
 	auto objects = m_scene->getShapes(); 
 	
 	for (auto obj : objects) {
@@ -569,12 +568,6 @@ void Viewer::updateFrame()
 		glBindVertexArray(0);
 
 	}
-
-	//// Swap the buffers
-	m_screen->drawAll();
-	glfwSwapBuffers(m_screen->glfwWindow());
-
-		////draw(); 
 }
 
 glm::mat4 Viewer::toGLM(const nori::Transform& trans) {
