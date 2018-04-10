@@ -11,12 +11,15 @@ VIEWER_NAMESPACE_BEGIN
 class ShaderProgram
 {
 public:
+	ShaderProgram() : m_isValid{ false }{};
 	ShaderProgram(std::string vertexShaderName, std::string fragmentShaderName);
-	GLuint getId(){ return m_programId; }
+	GLuint getId() const { return m_programId; }
+	bool isValid() const { return m_isValid; }
 
 private:
-
 	GLuint m_programId;
+	bool m_isValid;
+
 	bool link();
 	bool compileShader(GLenum shaderType, const std::string& filename, GLuint& outShaderId); 
 };

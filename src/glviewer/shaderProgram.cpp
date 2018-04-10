@@ -62,8 +62,9 @@ bool ShaderProgram::link()
 }
 
 ShaderProgram::ShaderProgram(std::string vertexShaderName, std::string fragmentShaderName) 
-	: m_programId(glCreateProgram())
 {
+	m_programId = glCreateProgram();
+
 	assert(vertexShaderName.size() > 0, "Attempted to create a Shader program without valid vertex shader filename");
 	assert(vertexShaderName.size() > 0, "Attempted to create a Shader program without valid fragment shader filename ");
 
@@ -82,6 +83,8 @@ ShaderProgram::ShaderProgram(std::string vertexShaderName, std::string fragmentS
 	
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	m_isValid = true;
 }
 
 VIEWER_NAMESPACE_END

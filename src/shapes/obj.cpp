@@ -16,6 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <gl/glew.h>
 #include <nori/shapes/mesh.h>
 #include <nori/core/timer.h>
 #include <filesystem/resolver.h>
@@ -29,7 +30,8 @@ NORI_NAMESPACE_BEGIN
  */
 class WavefrontOBJ : public Mesh {
 public:
-    WavefrontOBJ(const PropertyList &propList) {
+    WavefrontOBJ(const PropertyList &propList)
+	 : Mesh(propList){
         typedef std::unordered_map<OBJVertex, uint32_t, OBJVertexHash> VertexMap;
 
         filesystem::path filename =
@@ -129,6 +131,27 @@ public:
              << memString(m_F.size() * sizeof(uint32_t) +
                           sizeof(float) * (m_V.size() + m_N.size() + m_UV.size()))
              << ")" << endl;
+
+		glGenBuffers(1, &m_VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, &m_EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+
+		glGenVertexArrays(1, &m_VAO);
+		glBindVertexArray(m_VAO);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat))); 
+
+		glBindVertexArray(0);
+
+		m_nIndices = indices.size(); 
     }
 
 protected:

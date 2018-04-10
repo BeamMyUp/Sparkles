@@ -76,6 +76,8 @@ public:
         return true;
     }
 
+	EBSDFType getBSDFType() const override { return EBSDFType::EMicrofacet; }
+
     std::string toString() const {
         return tfm::format(
             "Microfacet[\n"

@@ -18,31 +18,25 @@ public:
 		eRight = 0x08
 	};
 
-	Camera(GLfloat aspect, glm::vec3* upVector = nullptr, glm::vec3* initialPosition = nullptr, glm::vec3* initalTarget = nullptr);
-	Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect); 
+	Camera(GLfloat aspect, GLfloat nearPlane, GLfloat farPlane, glm::vec3* upVector = nullptr, glm::vec3* initialPosition = nullptr, glm::vec3* initalTarget = nullptr);
+	Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect, GLfloat nearPlane, GLfloat farPlane);
 	~Camera() = default;
 
-	virtual void move(CameraDirection displacement, GLfloat deltaTime); 
-	virtual void rotate(GLdouble xoffset, GLdouble yoffset, GLboolean constrainPitch = true);
-	virtual void zoom(GLdouble yoffest);
-	virtual void saveWorldCoordinates(); 
-	virtual glm::mat4 GetViewMatrix();
+	void move(CameraDirection displacement, GLfloat deltaTime); 
+	void rotate(GLdouble xoffset, GLdouble yoffset, GLboolean constrainPitch = true);
+	void zoom(GLdouble yoffest);
+	void saveWorldCoordinates(); 
+	glm::mat4 GetViewMatrix();
 
-	virtual GLfloat getFovy() const
-	{
-		return m_fovy; 
-	}
-	 
-	virtual GLfloat getAspect() const
-	{
-		return m_aspect;
-	}
+	GLfloat getFovy() const { return m_fovy; }
+	GLfloat getAspect() const { return m_aspect;}
+	GLfloat getNear() const { return m_near; }
+	GLfloat getFar() const { return m_far; }
 
-	virtual void setFovy(GLfloat fovy) { m_fovy = fovy; }
-	virtual void setAspect(GLfloat aspect) { m_aspect = aspect; }
+	void setFovy(GLfloat fovy) { m_fovy = fovy; }
 
-	virtual glm::mat4 getLocalMatrix() const { return m_transform; }
-	virtual void setLocalMatrix(const glm::mat4& aMatrix) { m_transform = aMatrix; }
+	glm::mat4 getLocalMatrix() const { return m_transform; }
+	void setLocalMatrix(const glm::mat4& aMatrix) { m_transform = aMatrix; }
 
 protected:
 
@@ -57,6 +51,8 @@ protected:
 	GLfloat m_rotSpeed;
 	GLfloat m_aspect; 
 	GLfloat m_fovy;  
+	GLfloat m_near;
+	GLfloat m_far;
 };
 
 VIEWER_NAMESPACE_END

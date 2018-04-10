@@ -46,6 +46,8 @@ public:
         throw NoriException("Unimplemented!");
     }
 
+	EBSDFType getBSDFType() const override { return EBSDFType::EDielectric; }
+
     std::string toString() const {
         return tfm::format(
             "Dielectric[\n"

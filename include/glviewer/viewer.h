@@ -1,11 +1,12 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include <GL/glew.h>
 #include <nori/core/vector.h>
 #include <nori/core/common.h>
 #include <glviewer/camera.h>
 #include <nori/core/transform.h>
 #include <nori/cameras/perspective.h>
+#include <nori/bsdfs/bsdf.h>
 
 #include <Eigen/Geometry>
 
@@ -45,11 +46,7 @@ public :
 	void setCamera(const nori::Transform& transform, const nori::PerspectiveCamera& cam);
 
 	// Rendering methods
-	void updateFrame();
 	void render(std::string filename);
-	void renderOffline(std::string filename);
-	void renderOfflineBlock(nori::ImageBlock& block, nori::Sampler* sampler);
-	void renderOnline(); 
 
 	~Viewer();
 
@@ -63,14 +60,24 @@ private :
 	void setupViewport(); 
 	void destroy();
 	
-	// Display information
-	bool m_isRuntime; 
-	bool m_mainLoopActive; 
+	// Rendering methods
+	void updateFrame();
+	void renderOffline(std::string filename);
+	void renderOfflineBlock(nori::ImageBlock& block, nori::Sampler* sampler);
+	void renderOnline();
+	GLuint getShaderProgram(nori::BSDF::EBSDFType bsdfType);
 
 	// Runtime methods
 	void interaction();
 	//void setMatrices();
 	//void draw();
+
+	// Utility methods
+	glm::mat4 toGLM(const nori::Transform& trans);
+
+	// Display information
+	bool m_isRuntime;
+	bool m_mainLoopActive;
 
 	// Windows information
 	nori::NoriScreen* m_screen; 

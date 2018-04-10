@@ -57,6 +57,8 @@ public:
         return Color3f(1.0f);
     }
 
+	EBSDFType getBSDFType() const override { return EBSDFType::EMirror; }
+
     std::string toString() const {
         return "Mirror[]";
     }

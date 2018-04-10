@@ -26,6 +26,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 NORI_NAMESPACE_BEGIN
 
+Shape::Shape(const PropertyList& propList)
+	: m_toWorld(propList.getTransform("toWorld", Transform())) {
+
+}
+
 Shape::~Shape() {
 	delete m_bsdf;
 	delete m_emitter;

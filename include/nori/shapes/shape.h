@@ -1,5 +1,6 @@
 #pragma once
 
+#include <gl/glew.h>
 #include <nori/core/object.h>
 #include <nori/core/frame.h>
 #include <nori/core/bbox.h>
@@ -87,7 +88,7 @@ public:
 	/*---------------------*/
 
 	/// Calculate/Update the axis-aligned bounding box of the object
-	virtual void calculateBoundingBox() = 0; 
+	virtual void calculateBoundingBox() = 0;
 
 	/** \brief Intersection test
 	*
@@ -132,7 +133,7 @@ public:
 
 	/// Returns a pdf of a 3D point on the shape using subtended solid angle sampling
 	virtual float pdfSolidAngle(const Point3f &sample, const Point3f& x) const = 0;
-	
+
 	/*-----------------*/
 	/* Utility methods */
 	/*-----------------*/
@@ -141,21 +142,23 @@ public:
 	virtual const BoundingBox3f &getBoundingBox() const { return m_bbox; }
 
 	/// Return Centroid of the Shape
-	virtual Point3f getCentroid() const; 
+	virtual Point3f getCentroid() const;
 
-	/*/// Return a buffer containing all vertices
-	virtual std::vector<Vector3f> getVertices() const = 0; 
+	///// Return a buffer containing all vertices
+	//virtual std::vector<Vector3f> vertices() const = 0;
 
-	/// Return a buffer containing all normals 
-	virtual std::vector<Vector3f> getNormals() const = 0;
+	///// Return a buffer containing all normals
+	//virtual std::vector<Vector3f> normals() const = 0;
 
-	/// Return a buffer containing all texture coordinates
-	virtual std::vector<Vector2f> getTextureCoord() const = 0;
+	///// Return a buffer containing all texture coordinates
+	//virtual std::vector<Vector2f> textureCoord() const = 0;
 
-	/// Return a buffer containing indices
-	virtual std::vector<uint32_t> getIndices() const = 0; 
-*/
-	/// Return whether the Shape is a mesh or not
+	///// Return a buffer containing indices
+	//virtual std::vector<uint32_t> indices() const = 0;
+
+	Transform toWorld() const { return m_toWorld; }
+
+/// Return whether the Shape is a mesh or not
 	virtual bool isMesh() const { return false; }
 
 	/// Is this object an area emitter?
@@ -179,6 +182,11 @@ public:
 	/// Return a human-readable summary of this instance
 	virtual std::string toString() const;
 
+	virtual GLuint getVBO() const { return m_VBO; }
+	virtual GLuint getVAO() const { return m_VAO; }
+	virtual GLuint getEBO() const { return m_EBO; }
+	virtual GLuint getNIndices() const { return m_nIndices; }
+
 	/**
 	* \brief Return the type of object (i.e. Mesh/BSDF/etc.)
 	* provided by this instance
@@ -188,6 +196,7 @@ public:
 protected:
 	/// Create an empty Object
 	Shape() {}
+	Shape(const PropertyList& propList); 
 
 protected:
 	std::string m_name;                  ///< Identifying name
@@ -195,6 +204,13 @@ protected:
 	BSDF         *m_bsdf = nullptr;      ///< BSDF of the surface
 	Emitter      *m_emitter = nullptr;   ///< Associated emitter, if any
 	BoundingBox3f m_bbox;                ///< Bounding box of the object
+	
+	// Realtime display information
+	Transform	  m_toWorld;			 ///< World transform
+	GLuint		  m_VBO;
+	GLuint        m_VAO;
+	GLuint		  m_EBO;
+	GLuint		  m_nIndices;
 };
 
 

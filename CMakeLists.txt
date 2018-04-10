@@ -42,6 +42,7 @@ set(SPARKLES_FILES
   include/nori/accelerators/accel.h
   include/nori/accelerators/bvh.h
   include/nori/bsdfs/bsdf.h
+  include/nori/bsdfs/diffuse.h
   include/nori/bsdfs/phong.h
   include/nori/cameras/camera.h
   include/nori/cameras/perspective.h
@@ -154,6 +155,8 @@ set(VIEWER_FILES
   src/glviewer/shader.cpp
   src/glviewer/shaderProgram.cpp
   src/glviewer/viewer.cpp
+  src/glviewer/shaders/Diffuse.vx.glsl
+  src/glviewer/shaders/Diffuse.fg.glsl
 )
  
 add_executable(sparkles ${SPARKLES_FILES} ${VIEWER_FILES})

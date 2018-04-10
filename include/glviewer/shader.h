@@ -8,8 +8,7 @@
 
 VIEWER_NAMESPACE_BEGIN
 
-class Shader
-{
+class Shader{
 
 private:
 	std::string m_code;

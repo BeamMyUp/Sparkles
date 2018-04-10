@@ -11,16 +11,22 @@
 
 #include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <glviewer/viewer.h>
 #include <glviewer/camera.h>
 
+#include <nori/bsdfs/bsdf.h>
+#include <nori/bsdfs/phong.h>
+#include <nori/bsdfs/diffuse.h>
 #include <nori/cameras/camera.h>
 #include <nori/core/bitmap.h>
 #include <nori/core/block.h>
 #include <nori/core/common.h>
 #include <nori/core/gui.h>
 #include <nori/core/scene.h>
+#include <nori/shapes/shape.h>
+#include <nori/shapes/mesh.h>
 #include <nori/core/timer.h>
 #include <nori/integrators/integrator.h>
 #include <nori/samplers/sampler.h>
@@ -233,6 +239,15 @@ void Viewer::initialize(nori::Scene* scene)
 	m_scene = scene;
 	m_scene->getIntegrator()->preprocess(m_scene);
 	setCallbacks();
+
+	// GLEW initialization
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+	{
+		throw std::runtime_error("glewInit failed");
+		exit(EXIT_FAILURE);
+	}
+
 }
 
 void Viewer::setCamera(const nori::Transform& transform, const nori::PerspectiveCamera& camera) {
@@ -243,15 +258,9 @@ void Viewer::setCamera(const nori::Transform& transform, const nori::Perspective
 		m_width = size(0);
 		m_height = size(1); 
 
-		auto matrix = transform.getMatrix();
-		glm::mat4 initMat;
+		glm::mat4 initMat = toGLM(transform);
 
-		for (int y = 0; y < 4; ++y) {
-			for (int x = 0; x < 4; ++x)
-				initMat[x][y] = matrix(x,y); 
-		}
-
-		m_camera = new viewer::Camera(initMat, camera.getFOV(), float(m_width) / float(m_height));
+		m_camera = new viewer::Camera(initMat, camera.getFOV(), float(m_width) / float(m_height), camera.getNearClip(), camera.getFarClip());
 	
 		createWindow(camera); 
 	}
@@ -299,7 +308,7 @@ Viewer::Viewer()
 	, m_camera(nullptr)
 	, m_wireFrameEnabled(false)
 	, m_mouseIsClicked(false)
-	, m_isRuntime(false)
+	, m_isRuntime(true)
 {
 	// GLFW initialization
 	if (!glfwInit())
@@ -307,14 +316,6 @@ Viewer::Viewer()
 		throw std::runtime_error("glfwInit failed");
 		exit(EXIT_FAILURE);
 	}
-
-	//// GLEW initialization
-	//glewExperimental = GL_TRUE;
-	//if (glewInit() != GLEW_OK)
-	//{
-	//	throw std::runtime_error("glewInit failed");
-	//	exit(EXIT_FAILURE);
-	//}
 
 	glfwSwapInterval(1);
 
@@ -445,6 +446,7 @@ void Viewer::renderOnline() {
 			}
 
 			m_screen->clear();
+			updateFrame();
 			m_screen->drawWidgets();
 			glfwSwapBuffers(m_screen->glfwWindow());
 
@@ -456,32 +458,117 @@ void Viewer::renderOnline() {
 	glfwPollEvents();
 }
 
+GLuint Viewer::getShaderProgram(nori::BSDF::EBSDFType bsdfType)
+{
+	GLuint sp = -1; 
+
+	switch (bsdfType)
+	{
+	case nori::BSDF::EBSDFType::EDielectric:
+		throw nori::NoriException("bsdf::getShader : no shader program associated with Dielectric BSDF");
+		break;
+	case nori::BSDF::EBSDFType::EDiffuse: { // TODO: Implement diffuse shader
+		static viewer::ShaderProgram phong("../src/glviewer/shaders/Diffuse.vx.glsl", "../src/glviewer/shaders/Diffuse.fg.glsl");
+		sp = phong.getId();
+		break;
+	}
+	case nori::BSDF::EBSDFType::EMicrofacet:
+		throw nori::NoriException("bsdf::getShader : no shader program associated with Microfacet BSDF");
+		break;
+	case nori::BSDF::EBSDFType::EMirror:
+		throw nori::NoriException("bsdf::getShader : no shader program associated with Mirror BSDF");
+		break;
+	case nori::BSDF::EBSDFType::EPhong: {
+		static viewer::ShaderProgram phong("../src/glviewer/shaders/Phong.vs.glsl", "../src/glviewer/shaders/Phong.fg.glsl");
+		sp = phong.getId();
+		break;
+	}
+	case nori::BSDF::EBSDFType::ENone:
+	default:
+		break;
+	}
+
+	return sp; 
+}
+
 void Viewer::updateFrame()
 {
-		//GLfloat currentFrameTime = glfwGetTime();
-		//m_deltaTime = currentFrameTime - m_lastFrameTime;
-		//m_lastFrameTime = currentFrameTime;
+	//GLfloat currentFrameTime = glfwGetTime();
+	//m_deltaTime = currentFrameTime - m_lastFrameTime;
+	//m_lastFrameTime = currentFrameTime;
 
-		//// Check and call events
-		//glfwPollEvents();
-		//interaction();
+	//// Check and call events
+	//glfwPollEvents();
+	//interaction();
 
-		//// Clear the colorbuffer
-		//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_screen->clear();
 
-		//// Coordinate system matrices 
-		//glm::mat4 view = m_camera->GetViewMatrix();
-		//glm::mat4 projection = glm::perspective(m_camera->getFovy(), m_width / m_height, 0.1f, 100.0f); 
+	auto objects = m_scene->getShapes(); 
+	
+	for (auto obj : objects) {
 
-		////m_scene->setViewMatrix(view);
-		////m_scene->setProjectionMatrix(projection);
+		// Only manage normal meshes for now (no area lights neither analytic shapes)
+		if(obj->isEmitter() || !obj->isMesh())
+			continue;
+
+		// WARNING : ONLY DIFFUSE IS SUPPORTED FOR NOW
+		const nori::BSDF* bsdf = obj->getBSDF();
+		assert(bsdf->getBSDFType() == BSDF::EBSDFType::EDiffuse && "ONLY DIFFIUSE IS SUPPORTED FOR NOW");
+		const nori::Diffuse* diff = static_cast<const nori::Diffuse*>(bsdf); 
+
+		GLuint shaderID = getShaderProgram(obj->getBSDF()->getBSDFType());
+		glUseProgram(shaderID);
+
+		glm::mat4 objToWorld = toGLM(obj->toWorld()); 
+		glm::mat4 viewMatrix = m_camera->GetViewMatrix(); 
+		glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(viewMatrix * objToWorld)));
+		glm::mat4 projection = glm::perspective(m_camera->getFovy(), m_camera->getAspect(), m_camera->getNear(), m_camera->getFar()); 
+		nori::Color3f albedo = diff->albedo();
+
+		// Get Uniforms location
+		GLuint modelLoc = glGetUniformLocation(shaderID, "model");
+		GLuint viewLoc = glGetUniformLocation(shaderID, "view");
+		GLuint projectionLoc = glGetUniformLocation(shaderID, "projection");
+		GLuint normalMatrixLoc = glGetUniformLocation(shaderID, "normalMatrix");
+		GLuint objectColorLoc = glGetUniformLocation(shaderID, "objectColor");
+		GLuint emitterRadianceLoc = glGetUniformLocation(shaderID, "emitterRadiance");
+		GLuint emitterPositionLoc = glGetUniformLocation(shaderID, "emitterPosition");
+		GLuint objectDiffuseLoc = glGetUniformLocation(shaderID, "objectMaterial.diffuseCoefs");
+		GLuint objectSpecularLoc = glGetUniformLocation(shaderID, "objectMaterial.specularCoefs");
+		GLuint objectShininessLoc = glGetUniformLocation(shaderID, "objectMaterial.shininess");
+		
+		// Assign Uniforms Values
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(objToWorld));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix3fv(normalMatrixLoc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+		//glUniform3f(lightPositionLoc, lightPosition.x, lightPosition.y, lightPosition.z);
+		glUniform3f(objectDiffuseLoc, albedo.x(), albedo.y(), albedo.z());
+
+		glBindVertexArray(obj->getVAO());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->getEBO());
+		glDrawElements(GL_TRIANGLES, obj->getNIndices(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+
+	}
+
+	//// Swap the buffers
+	m_screen->drawAll();
+	glfwSwapBuffers(m_screen->glfwWindow());
+
 
 		////draw(); 
 
-		//// Swap the buffers
-		//glfwSwapBuffers(m_window);
-		m_screen->drawAll(); 
+
+}
+
+glm::mat4 Viewer::toGLM(const nori::Transform& trans) {
+	glm::mat4 matrix;
+	for (int y = 0; y < 4; ++y)
+		for (int x = 0; x < 4; ++x)
+			matrix[x][y] = trans.getMatrix()(x, y); 
+
+	return matrix; 
 }
 
 VIEWER_NAMESPACE_END

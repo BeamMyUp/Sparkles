@@ -19,6 +19,7 @@
 #pragma once
 
 #include <nori/core/object.h>
+#include <glviewer/shaderProgram.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -54,6 +55,15 @@ struct BSDFQueryRecord {
  */
 class BSDF : public NoriObject {
 public:
+	enum class EBSDFType {
+		ENone,
+		EDielectric,
+		EDiffuse,
+		EMicrofacet,
+		EMirror,
+		EPhong
+	};
+
     /**
      * \brief Sample the BSDF and return the importance weight (i.e. the
      * value of the BSDF * cos(theta_o) divided by the probability density
@@ -103,6 +113,7 @@ public:
      * provided by this instance
      * */
     EClassType getClassType() const { return EClassType::EBSDF; }
+	virtual EBSDFType getBSDFType() const = 0; 
 
     /**
      * \brief Return whether or not this BRDF is diffuse. This

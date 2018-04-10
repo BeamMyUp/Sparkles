@@ -135,6 +135,7 @@ public:
 protected:
 	/// Create an empty mesh
 	Mesh();
+	Mesh(const PropertyList& propList) : Shape(propList){}
 
 protected:
 	std::string m_name;                  ///< Identifying name

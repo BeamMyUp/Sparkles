@@ -1,6 +1,7 @@
 #include <nori/bsdfs/phong.h>
 #include <nori/core/frame.h>
 #include <nori/warp/warp.h>
+#include <glviewer/shaderProgram.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -131,7 +132,6 @@ float Phong::pdf(const BSDFQueryRecord &bRec) const {
 
 	return m_samplingRatio * specProb + (1 - m_samplingRatio) * diffuseProb;
 }
-
 
 std::string Phong::toString() const {
 	return "Phong[]";

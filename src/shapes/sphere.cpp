@@ -9,7 +9,8 @@
 NORI_NAMESPACE_BEGIN
 
 Sphere::Sphere(const PropertyList &propList)
-	: m_center(propList.getPoint("center", Point3f()))
+	: Shape(propList)
+	, m_center(propList.getPoint("center", Point3f()))
 	, m_radius(propList.getFloat("radius", 1.f)){
 
 	m_invSurfaceArea = 1.f / (4.f * M_PI * m_radius * m_radius); 

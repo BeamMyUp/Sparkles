@@ -25,8 +25,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 NORI_NAMESPACE_BEGIN
 
-Mesh::Mesh() { }
-
 float Mesh::surfaceArea(uint32_t index) const {
 	uint32_t i0 = m_F(0, index), i1 = m_F(1, index), i2 = m_F(2, index);
 

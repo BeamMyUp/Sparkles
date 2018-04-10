@@ -5,12 +5,14 @@
 
 VIEWER_NAMESPACE_BEGIN
 
-Camera::Camera(GLfloat aspect, glm::vec3* upVector, glm::vec3* initialPosition, glm::vec3* initialTarget)
+Camera::Camera(GLfloat aspect, GLfloat nearPlane, GLfloat farPlane, glm::vec3* upVector, glm::vec3* initialPosition, glm::vec3* initialTarget)
 	: m_mvtSpeed(5.0f)
 	, m_rotSpeed(0.001f)
 	, m_fovy(45.0f)
 	, m_aspect(aspect)
 	, responsibleForDelete(true)
+	, m_near(nearPlane)
+	, m_far(farPlane)
 {
 	if (upVector)
 		m_worldUp = *upVector;
@@ -41,12 +43,14 @@ Camera::Camera(GLfloat aspect, glm::vec3* upVector, glm::vec3* initialPosition, 
 	//computePitchAndYaw();
 }
 
-Camera::Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect)
+Camera::Camera(const glm::mat4& transformMatrix, GLfloat fovy, GLfloat aspect, GLfloat nearPlane, GLfloat farPlane)
 	: m_mvtSpeed(15.0f)
 	, m_rotSpeed(0.001f)
 	, m_fovy(fovy)
 	, m_aspect(aspect)
 	, responsibleForDelete(false)
+	, m_near(nearPlane)
+	, m_far(farPlane)
 {
 	m_transform = transformMatrix;
 	m_worldUp = transformMatrix[1].xyz(); 
