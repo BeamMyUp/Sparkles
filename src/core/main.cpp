@@ -47,12 +47,12 @@ int main(int argc, char **argv) {
                file resolver. That way, the XML file can reference
                resources (OBJ files, textures) using relative paths */
             getFileResolver()->prepend(path.parent_path());
+			viewer::Viewer& viewer = viewer::Viewer::getInstance();
 
             std::unique_ptr<NoriObject> root(loadFromXML(argv[1]));
 
             /* When the XML root object is a scene, start rendering it .. */
-			if (root->getClassType() == NoriObject::EClassType::EScene) {
-				viewer::Viewer& viewer = viewer::Viewer::getInstance();
+			if (root->getClassType() == NoriObject::EClassType::EScene) {	
 				viewer.initialize(static_cast<Scene *>(root.get()));
 				viewer.render(argv[1]);
 			}

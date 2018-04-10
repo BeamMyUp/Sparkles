@@ -30,6 +30,8 @@ public:
 	/// Return Centroid of the Shape
 	virtual Point3f getCentroid() const override { return m_center; }
 
+	virtual void initializeBuffers() override { throw NoriException("Sphere::initializeBuffers not implemented"); }
+
 	/// Return a human-readable summary of this instance
 	std::string toString() const override;
 

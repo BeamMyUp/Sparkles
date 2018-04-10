@@ -242,12 +242,18 @@ void Viewer::initialize(nori::Scene* scene)
 
 	// GLEW initialization
 	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
+	auto glewE = glewInit();
+	if (glewE != GLEW_OK)
 	{
 		throw std::runtime_error("glewInit failed");
 		exit(EXIT_FAILURE);
 	}
 
+	// TODO: fix WARNING: Only supports Meshes for now
+	for (auto obj : m_scene->getShapes()) {
+		if (obj->isMesh())
+			obj->initializeBuffers();
+	}
 }
 
 void Viewer::setCamera(const nori::Transform& transform, const nori::PerspectiveCamera& camera) {
@@ -318,7 +324,6 @@ Viewer::Viewer()
 	}
 
 	glfwSwapInterval(1);
-
 }
 
 Viewer::~Viewer()

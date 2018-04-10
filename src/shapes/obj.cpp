@@ -49,8 +49,6 @@ public:
         std::vector<Vector3f>   positions;
         std::vector<Vector2f>   texcoords;
         std::vector<Vector3f>   normals;
-        std::vector<uint32_t>   indices;
-        std::vector<OBJVertex>  vertices;
         VertexMap vertexMap;
 
         std::string line_str;
@@ -96,33 +94,33 @@ public:
                     const OBJVertex &v = verts[i];
                     VertexMap::const_iterator it = vertexMap.find(v);
                     if (it == vertexMap.end()) {
-                        vertexMap[v] = (uint32_t) vertices.size();
-                        indices.push_back((uint32_t) vertices.size());
-                        vertices.push_back(v);
+                        vertexMap[v] = (uint32_t) m_vertices.size();
+                        m_indices.push_back((uint32_t) m_vertices.size());
+                        m_vertices.push_back(v);
                     } else {
-                        indices.push_back(it->second);
+                        m_indices.push_back(it->second);
                     }
                 }
             }
         }
 
-        m_F.resize(3, indices.size()/3);
-        memcpy(m_F.data(), indices.data(), sizeof(uint32_t)*indices.size());
+        m_F.resize(3, m_indices.size()/3);
+        memcpy(m_F.data(), m_indices.data(), sizeof(uint32_t)*m_indices.size());
 
-        m_V.resize(3, vertices.size());
-        for (uint32_t i=0; i<vertices.size(); ++i)
-            m_V.col(i) = positions.at(vertices[i].p-1);
+        m_V.resize(3, m_vertices.size());
+        for (uint32_t i=0; i<m_vertices.size(); ++i)
+            m_V.col(i) = positions.at(m_vertices[i].p-1);
 
         if (!normals.empty()) {
-            m_N.resize(3, vertices.size());
-            for (uint32_t i=0; i<vertices.size(); ++i)
-                m_N.col(i) = normals.at(vertices[i].n-1);
+            m_N.resize(3, m_vertices.size());
+            for (uint32_t i=0; i<m_vertices.size(); ++i)
+                m_N.col(i) = normals.at(m_vertices[i].n-1);
         }
 
         if (!texcoords.empty()) {
-            m_UV.resize(2, vertices.size());
-            for (uint32_t i=0; i<vertices.size(); ++i)
-                m_UV.col(i) = texcoords.at(vertices[i].uv-1);
+            m_UV.resize(2, m_vertices.size());
+            for (uint32_t i=0; i<m_vertices.size(); ++i)
+                m_UV.col(i) = texcoords.at(m_vertices[i].uv-1);
         }
 
         m_name = filename.str();
@@ -131,27 +129,6 @@ public:
              << memString(m_F.size() * sizeof(uint32_t) +
                           sizeof(float) * (m_V.size() + m_N.size() + m_UV.size()))
              << ")" << endl;
-
-		glGenBuffers(1, &m_VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
-
-		glGenBuffers(1, &m_EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
-
-		glGenVertexArrays(1, &m_VAO);
-		glBindVertexArray(m_VAO);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat))); 
-
-		glBindVertexArray(0);
-
-		m_nIndices = indices.size(); 
     }
 
 protected:
@@ -192,6 +169,34 @@ protected:
             return hash;
         }
     };
+
+	void initializeBuffers() override {
+		glGenBuffers(1, &m_VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(GLfloat), &m_vertices[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, &m_EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(GLuint), &m_indices[0], GL_STATIC_DRAW);
+
+		glGenVertexArrays(1, &m_VAO);
+		glBindVertexArray(m_VAO);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+
+		glBindVertexArray(0);
+
+		m_nIndices = m_indices.size();
+		m_indices.clear();
+		m_vertices.clear();
+	}
+
+	std::vector<uint32_t>   m_indices;
+	std::vector<OBJVertex>  m_vertices;
 };
 
 NORI_REGISTER_CLASS(WavefrontOBJ, "obj");

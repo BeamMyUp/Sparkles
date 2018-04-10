@@ -42,6 +42,7 @@ public :
 	bool getInitWithRuntime() { return m_isRuntime; }
 
 	// Initialization methods
+	void preInit();
 	void initialize(nori::Scene* scene);
 	void setCamera(const nori::Transform& transform, const nori::PerspectiveCamera& cam);
 

@@ -182,6 +182,7 @@ public:
 	/// Return a human-readable summary of this instance
 	virtual std::string toString() const;
 
+	virtual void initializeBuffers() = 0; 
 	virtual GLuint getVBO() const { return m_VBO; }
 	virtual GLuint getVAO() const { return m_VAO; }
 	virtual GLuint getEBO() const { return m_EBO; }
